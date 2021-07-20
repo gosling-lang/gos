@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+
+.ipynb_checkpoints
+Untitled*.ipynb
+*.egg-info
+*.DS_Store
+
+.vscode
