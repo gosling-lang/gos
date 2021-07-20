@@ -1,0 +1,29 @@
+{
+  "name": "jupyter-gosling",
+  "version": "0.0.0",
+  "author": "",
+  "scripts": {
+    "format": "prettier --write 'src/*.ts'",
+    "lint": "prettier --check 'src/*.ts'",
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+  "dependencies": {
+    "@jupyter-widgets/base": "^4.0.0",
+    "gosling.js": "^0.8.9",
+    "pixi.js": "^6.0.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "private": true,
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.4",
+    "@rollup/plugin-commonjs": "^19.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "esbuild": "^0.12.15",
+    "rollup": "^2.53.2",
+    "rollup-plugin-esbuild": "^4.5.0",
+    "typescript": "^4.3.5"
+  }
+}
