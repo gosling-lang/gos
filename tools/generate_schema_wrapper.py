@@ -1,8 +1,7 @@
-import sys 
+import sys
 import os
 import json
 import pathlib
-import re
 from urllib import request
 from typing import Optional, TypeVar
 
@@ -17,7 +16,7 @@ from schemapi.utils import (
     resolve_references,
 )
 
-T = TypeVar('T')      # Declare type variable
+T = TypeVar("T")
 
 HEADER = """\
 # The contents of this file are automatically written by
@@ -46,20 +45,24 @@ SCHEMA_VERSION = {
     "gosling": {"v0": ""},
 }
 
-reLink = re.compile(r"(?<=\[)([^\]]+)(?=\]\([^\)]+\))", re.M)
-reSpecial = re.compile(r"[*_]{2,3}|`", re.M)
-
 SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/gosling.js/master/schema/gosling.schema.json"
+
 
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
+
 
 def schema_url(library: str, version: str):
     version = SCHEMA_VERSION[library][version]
     return SCHEMA_URL_TEMPLATE.format(library=library, version=version)
 
 
-def download_schemafile(library: str, version: str, schemapath: pathlib.Path, skip_download: Optional[bool] = False) -> pathlib.Path:
+def download_schemafile(
+    library: str,
+    version: str,
+    schemapath: pathlib.Path,
+    skip_download: Optional[bool] = False,
+) -> pathlib.Path:
     url = schema_url(library, version)
     if not schemapath.exists():
         os.makedirs(schemapath)
@@ -67,7 +70,7 @@ def download_schemafile(library: str, version: str, schemapath: pathlib.Path, sk
     if not skip_download:
         request.urlretrieve(url, filename)
     elif not filename.exists():
-        raise ValueError("Cannot skip download: {} does not exist".format(filename))
+        raise ValueError(f"Cannot skip download: {filename} does not exist")
     return filename
 
 
@@ -112,27 +115,29 @@ def copy_schemapi_util():
     if not destination_path.exists():
         os.makedirs(destination_path.parent)
 
-    print("Copying\n {}\n  -> {}".format(source_path, destination_path))
+    print(f"Copying\n {source_path}\n  -> {destination_path}")
     with open(source_path, "r", encoding="utf8") as source:
         with open(destination_path, "w", encoding="utf8") as dest:
             dest.write(HEADER)
             dest.writelines(source.readlines())
 
     # Copy the schemapi test file
-    source_path = current_dir / "schemapi" / "tests" /  "test_schemapi.py"
-    destination_path = current_dir / ".." / "gosling" / "utils" / "tests" / "test_schemapi.py"
+    source_path = current_dir / "schemapi" / "tests" / "test_schemapi.py"
+    destination_path = (
+        current_dir / ".." / "gosling" / "utils" / "tests" / "test_schemapi.py"
+    )
 
     if not destination_path.exists():
         os.makedirs(destination_path.parent)
 
-    print("Copying\n {}\n  -> {}".format(source_path, destination_path))
+    print(f"Copying\n {source_path}\n  -> {destination_path}")
     with open(source_path, "r", encoding="utf8") as source:
         with open(destination_path, "w", encoding="utf8") as dest:
             dest.write(HEADER)
             dest.writelines(source.readlines())
 
 
-def generate_gosling_schema_wrapper(schema_file):
+def generate_gosling_schema_wrapper(schema_file: pathlib.Path):
     """Generate a schema wrapper at the given path."""
     # TODO: generate simple tests for each wrapper
     basename = "GoslingSchema"
@@ -152,7 +157,7 @@ def generate_gosling_schema_wrapper(schema_file):
             schemarepr=defschema_repr,
             rootschema=rootschema,
             basename=basename,
-            rootschemarepr=CodeSnippet("{}._rootschema".format(basename)),
+            rootschemarepr=CodeSnippet(f"{basename}._rootschema"),
         )
 
     graph = {}
@@ -179,7 +184,7 @@ def generate_gosling_schema_wrapper(schema_file):
             "Root",
             schema=rootschema,
             basename=basename,
-            schemarepr=CodeSnippet("{}._rootschema".format(basename)),
+            schemarepr=CodeSnippet(f"{basename}._rootschema"),
         )
     )
 
@@ -189,7 +194,8 @@ def generate_gosling_schema_wrapper(schema_file):
     contents.append("")  # end with newline
     return "\n".join(contents)
 
-def gosling_main(skip_download=False):
+
+def gosling_main(skip_download: Optional[bool] = False):
     library = "gosling"
 
     for version in SCHEMA_VERSION[library]:
@@ -212,10 +218,11 @@ def gosling_main(skip_download=False):
 
         # Generate the core schema wrappers
         outfile = schemapath / "core.py"
-        print("Generating\n {}\n  ->{}".format(schemafile, outfile))
+        print(f"Generating\n {schemafile}\n  ->{outfile}")
         file_contents = generate_gosling_schema_wrapper(schemafile)
         with open(outfile, "w", encoding="utf8") as f:
             f.write(file_contents)
+
 
 if __name__ == "__main__":
     copy_schemapi_util()
