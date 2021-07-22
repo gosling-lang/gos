@@ -1,4 +1,4 @@
-# goslingpy-experimental
+# ipygosling
 
 ```bash
 python tools/generate_schema_wrapper.py # generates gosling/schema/*
