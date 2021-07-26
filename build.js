@@ -3,11 +3,11 @@ import { resolve } from 'path';
 
 const banner = (external) => {
     if (external.length === 0) {
-      return 'define(["exports"], (exports) => { "use strict";'
+      return 'define(["exports"], (exports) => {'
     }
     const mods = ['exports', ...external];
     return `\
-define(${JSON.stringify(mods)}, (exports, ...__imports) => { 'use strict';
+define(${JSON.stringify(mods)}, (exports, ...__imports) => {
 var __mods = Object.fromEntries(${JSON.stringify(mods.slice(1))}.map((n, i) => [n, i]));
 var require = (name) => __imports[__mods[name]];
 `

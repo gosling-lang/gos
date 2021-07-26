@@ -24,7 +24,7 @@ Options = TypedDict(
 
 
 @dataclass
-class Gosling:
+class render:
     spec: Root
     opt: Optional[Options] = None
 

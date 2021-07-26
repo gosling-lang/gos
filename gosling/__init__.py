@@ -1,6 +1,6 @@
 from gosling.schema import *
-
-from .base import Gosling
+from gosling.base import render
+from gosling.widget import GoslingWidget
 
 
 def _jupyter_nbextension_paths():
