@@ -4,8 +4,8 @@
   "author": "",
   "type": "module",
   "scripts": {
-    "format": "prettier --write 'src/*.ts' rollup.config.js",
-    "lint": "prettier --check 'src/*.ts' rollup.config.js",
+    "format": "prettier --write 'src/*.ts' build.js",
+    "lint": "prettier --check 'src/*.ts' build.js",
     "build": "node build"
   },
   "dependencies": {
