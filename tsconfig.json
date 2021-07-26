@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "paths": {
+      "nbextensions/jupyter-gosling/index": ["./src/index.ts"]
+    }
+  }
+}
