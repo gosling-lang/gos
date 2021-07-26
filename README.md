@@ -1,19 +1,26 @@
 # ipygosling
 
-### Generate python bindings
+> CAUTION! This project is experimental and requires that you build both the schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`).
+
+## Generate source code 
+
+#### Python schema bindings
 
 ```bash
 python tools/generate_schema_wrapper.py # generates gosling/schema/*
 pip install -e .
 ```
 
-### Build extension/widget source
+#### JavScript Jupyter extension/widget
+
 ```bash
-yarn install && yarn build
+yarn install && yarn build # generates gosling/static/{widget.js, index.js}
 
 jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
 jupyter nbextension enable gosling --py --sys-prefix
 ```
+
+## Usage
 
 ```python
 import gosling as gos
