@@ -1,8 +1,18 @@
 # ipygosling
 
+### Generate python bindings
+
 ```bash
 python tools/generate_schema_wrapper.py # generates gosling/schema/*
 pip install -e .
+```
+
+### Build extension/widget source
+```bash
+npm install && npm run build
+
+jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
+jupyter nbextension enable gosling --py --sys-prefix
 ```
 
 ```python
@@ -77,4 +87,13 @@ print(spec.to_json())
 #     }
 #   ]
 # }
+```
+
+```python
+gos.render(spec) # render spec!
+```
+
+```python
+widget = gos.GoslingWidget(spec) # create widget
+widget.spec = new_spec # update view
 ```
