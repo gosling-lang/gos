@@ -3,7 +3,6 @@ import type { GoslingSpec } from 'gosling.js/dist/src';
 
 //@ts-ignore
 import css from './hglib@1.11.3.css';
-
 const style = document.createElement('style');
 style.innerText = css;
 document.head.appendChild(style).setAttribute('type', 'text/css');
