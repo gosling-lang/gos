@@ -9,7 +9,7 @@ pip install -e .
 
 ### Build extension/widget source
 ```bash
-npm install && npm run build
+yarn install && yarn build
 
 jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
 jupyter nbextension enable gosling --py --sys-prefix
