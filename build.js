@@ -34,7 +34,7 @@ const build = () => {
 
 	const configs = [
 		{
-			entry: 'src/index.ts',
+			entry: 'src/index.tsx',
 			plugins: [
 				{
 					name: 'resolve-gosling',

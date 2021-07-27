@@ -6,8 +6,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
+    "jsx": "react",
     "paths": {
-      "nbextensions/jupyter-gosling/index": ["./src/index.ts"]
+      "nbextensions/jupyter-gosling/index": ["./src/index.tsx"]
     }
   }
 }
