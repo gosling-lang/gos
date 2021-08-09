@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "paths": {
-      "nbextensions/jupyter-gosling/index": ["./src/index.ts"]
+      "nbextensions/jupyter-gosling/*": ["./src/*"]
     }
   }
 }
