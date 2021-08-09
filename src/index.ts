@@ -2,7 +2,7 @@ import { embed } from 'gosling.js/dist/src';
 import type { GoslingSpec } from 'gosling.js/dist/src';
 
 //@ts-ignore
-import css from './hglib@1.11.3.css';
+import css from 'higlass/dist/hglib.css';
 const style = document.createElement('style');
 style.innerText = css;
 document.head.appendChild(style).setAttribute('type', 'text/css');
