@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@jupyter-widgets/base": "^4.0.0",
+    "@types/react": "^17.0.16",
+    "@types/react-dom": "^17.0.9",
     "gosling.js": "^0.9.0",
     "pixi.js": "^6.0.4",
     "react": "^17.0.2",
