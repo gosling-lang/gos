@@ -54,7 +54,7 @@ function imageIndex(selector: string, outputs: JupyterOutput[]) {
 }
 
 function showError(el: HTMLElement, error: Error) {
-	el.innerHTML = `<div class="error">
+	el.innerHTML = `<div style="color:firebrick;font-size:14px">
 	<p>Javascript Error: ${error.message}</p>
 	<p>This usually means there's a typo in your chart specification. See the JavaScript console for the full traceback.</p>
 </div>`;
