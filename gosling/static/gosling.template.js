@@ -2,6 +2,8 @@ const spec = {spec};
 const opt = {opt};
 const id = "{id}";
 
+const output_area = this;
+
 require(["nbextensions/jupyter-gosling/index"], function(gos) {{
 	const target = document.createElement("div");
 	target.id = id;
@@ -21,7 +23,7 @@ require(["nbextensions/jupyter-gosling/index"], function(gos) {{
 	element[0].appendChild(target);
 	element[0].appendChild(style);
 
-	gos.render("#" + id, spec, opt);
+	gos.render("#" + id, spec, opt, output_area);
 }}, (err) => {{
 	if (err.requireType !== "scripterror") throw(err);
 }});
