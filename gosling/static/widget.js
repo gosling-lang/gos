@@ -2,57 +2,6 @@ define(["exports","@jupyter-widgets/base","nbextensions/jupyter-gosling/index"],
 var __mods = Object.fromEntries(["@jupyter-widgets/base","nbextensions/jupyter-gosling/index"].map((n, i) => [n, i]));
 var require = (name) => __imports[__mods[name]];
 
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
-var __export = (target, all) => {
-  __markAsModule(target);
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __reExport = (target, module2, desc) => {
-  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
-    for (let key of __getOwnPropNames(module2))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
-        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
-  }
-  return target;
-};
-var __toModule = (module2) => {
-  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
-};
-
-// src/widget.ts
-__export(exports, {
-  GoslingWidget: () => GoslingWidget
-});
-var import_base = __toModule(require("@jupyter-widgets/base"));
-var import_jupyter_gosling = __toModule(require("nbextensions/jupyter-gosling/index"));
-var GoslingWidget = class extends import_base.DOMWidgetView {
-  viewElement = document.createElement("div");
-  errorElement = document.createElement("div");
-  render() {
-    this.el.appendChild(this.viewElement);
-    this.errorElement.style.color = "red";
-    this.el.appendChild(this.errorElement);
-    const reembed = () => {
-      this.embed().catch((err) => console.error(err));
-    };
-    this.model.on("change:_spec_source", reembed);
-    this.model.on("change:_opt_source", reembed);
-    reembed();
-  }
-  async embed() {
-    const spec = JSON.parse(this.model.get("_spec_source"));
-    const opt = JSON.parse(this.model.get("_opt_source")) || {};
-    if (spec == null)
-      return;
-    (0, import_jupyter_gosling.goslingEmbed)(this.viewElement, spec, opt);
-  }
-};
+var p=Object.create;var o=Object.defineProperty;var c=Object.getOwnPropertyDescriptor;var a=Object.getOwnPropertyNames;var h=Object.getPrototypeOf,E=Object.prototype.hasOwnProperty;var n=e=>o(e,"__esModule",{value:!0});var g=(e,t)=>{n(e);for(var s in t)o(e,s,{get:t[s],enumerable:!0})},b=(e,t,s)=>{if(t&&typeof t=="object"||typeof t=="function")for(let r of a(t))!E.call(e,r)&&r!=="default"&&o(e,r,{get:()=>t[r],enumerable:!(s=c(t,r))||s.enumerable});return e},i=e=>b(n(o(e!=null?p(h(e)):{},"default",e&&e.__esModule&&"default"in e?{get:()=>e.default,enumerable:!0}:{value:e,enumerable:!0})),e);g(exports,{GoslingWidget:()=>l});var m=i(require("@jupyter-widgets/base")),d=i(require("nbextensions/jupyter-gosling/index")),l=class extends m.DOMWidgetView{viewElement=document.createElement("div");errorElement=document.createElement("div");render(){this.el.appendChild(this.viewElement),this.errorElement.style.color="red",this.el.appendChild(this.errorElement);let t=()=>{this.embed().catch(s=>console.error(s))};this.model.on("change:_spec_source",t),this.model.on("change:_opt_source",t),t()}async embed(){let t=JSON.parse(this.model.get("_spec_source")),s=JSON.parse(this.model.get("_opt_source"))||{};t!=null&&(0,d.goslingEmbed)(this.viewElement,t,s)}};
 
 });

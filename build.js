@@ -13,12 +13,14 @@ var require = (name) => __imports[__mods[name]];
 `;
 };
 
+
 const amd = ({ entry, outdir = 'gosling/static', external = [], plugins = [] }) => {
 	return {
 		entryPoints: [entry],
 		outdir: outdir,
 		bundle: true,
 		format: 'cjs',
+		minify: process.env.NODE_ENV === 'production',
 		external: external,
 		banner: { js: banner(external) },
 		footer: { js: '\n});' },
