@@ -1,6 +1,5 @@
 import json
 import uuid
-from dataclasses import dataclass
 from typing import Optional, Union, TypedDict
 import pathlib
 
@@ -22,19 +21,19 @@ Options = TypedDict(
     },
 )
 
+class Gosling:
 
-@dataclass
-class render:
-    spec: Root
-    opt: Optional[Options] = None
+    def __init__(self, spec: Union[dict, Root], opt: Optional[Options]=None):
+        self.spec = spec if not isinstance(spec, Root) else spec.to_dict()
+        self.opt = opt or {}
 
-    def _generate_js(self, id):
+    def _generate_js(self, id, **kwrgs):
         with open(JS_TEMPLATE, encoding='utf-8') as f:
             template = f.read()
         payload = template.format(
             id=id,
-            spec=self.spec.to_json(),
-            opt=json.dumps(self.opt),
+            spec=json.dumps(self.spec, **kwrgs),
+            opt=json.dumps(self.opt, **kwrgs),
         )
         return payload
 
