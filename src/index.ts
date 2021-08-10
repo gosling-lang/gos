@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 
 /**
- * Inejct Higlass CSS. Esbuild is configured to inline the .css as text.
+ * Inject Higlass CSS. Esbuild is configured to inline the .css as text.
  */
 // @ts-ignore
 import css from 'higlass/dist/hglib.css';
@@ -81,7 +81,7 @@ type EmbedOptions = Exclude<Parameters<typeof GoslingComponent>[0], 'spec' | 're
 
 /**
  * Custom `embed` function. Renders an instance of the `GoslingComponent` and returns a
- * promise for the componement API.
+ * Promise for the componement API.
  */
 function embed(
 	root: HTMLElement,
