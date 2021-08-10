@@ -1,7 +1,7 @@
 import json
-import uuid
-from typing import Optional, Union, TypedDict
 import pathlib
+import uuid
+from typing import Optional, TypedDict, Union
 
 from IPython.display import display
 
@@ -21,14 +21,14 @@ Options = TypedDict(
     },
 )
 
-class Gosling:
 
-    def __init__(self, spec: Union[dict, Root], opt: Optional[Options]=None):
+class Gosling:
+    def __init__(self, spec: Union[dict, Root], opt: Optional[Options] = None):
         self.spec = spec if not isinstance(spec, Root) else spec.to_dict()
         self.opt = opt or {}
 
     def _generate_js(self, id, **kwrgs):
-        with open(JS_TEMPLATE, encoding='utf-8') as f:
+        with open(JS_TEMPLATE, encoding="utf-8") as f:
             template = f.read()
         payload = template.format(
             id=id,
