@@ -97,7 +97,7 @@ print(spec.to_json())
 ```
 
 ```python
-gos.render(spec) # render spec!
+gos.Gosling(spec) # render spec!
 ```
 
 ```python

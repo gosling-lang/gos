@@ -1,5 +1,5 @@
+from gosling.base import Gosling
 from gosling.schema import *
-from gosling.base import render
 from gosling.widget import GoslingWidget
 
 
@@ -13,6 +13,6 @@ def _jupyter_nbextension_paths():
             # directory in the `nbextension/` namespace
             dest="jupyter-gosling",
             # _also_ in the `nbextension/` namespace
-            require="jupyter-gosling/index"
+            require="jupyter-gosling/index",
         )
     ]
