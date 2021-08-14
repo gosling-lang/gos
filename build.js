@@ -1,7 +1,7 @@
-import esbuild from 'esbuild';
-import { resolve } from 'path';
+import * as esbuild from 'esbuild';
 
-const banner = (external) => {
+/** @param {string[]} external */
+const banner = (external = []) => {
 	if (external.length === 0) {
 		return 'define(["exports"], (exports) => {';
 	}
@@ -13,46 +13,39 @@ var require = (name) => __imports[__mods[name]];
 `;
 };
 
+const footer = '\n});';
 
-const amd = ({ entry, outdir = 'gosling/static', external = [], plugins = [] }) => {
-	return {
-		entryPoints: [entry],
-		outdir: outdir,
-		bundle: true,
-		format: 'cjs',
-		minify: process.env.NODE_ENV === 'production',
-		external: external,
-		banner: { js: banner(external) },
-		footer: { js: '\n});' },
-		plugins: plugins,
-		loader: {
-			'.css': 'text',
-		},
-	};
-};
+/**
+ * Support AMD output with esbuild: https://github.com/evanw/esbuild/issues/819
+ * `banner(external) + cjsOutput + footer` === AMD module.
+ *
+ * @param {{ entry: string } & Omit<import('esbuild').BuildOptions, 'entryPoints' | 'bundle' | 'format' | 'banner' | 'footer'>} config
+ * @returns {import('esbuild').BuildOptions}
+ */
+const amd = ({ entry, ...config }) => ({
+	entryPoints: [entry],
+	...config,
+	bundle: true,
+	format: 'cjs',
+	banner: { js: banner(config.external) },
+	footer: { js: footer },
+});
 
-const build = () => {
-	const path = resolve('node_modules/gosling.js/dist/gosling.js');
+const isProd = process.env.NODE_ENV === 'production';
 
-	const configs = [
-		{
-			entry: 'src/index.ts',
-			plugins: [
-				{
-					name: 'resolve-gosling',
-					setup(build) {
-						build.onResolve({ filter: /^gosling.js\/dist\/src$/ }, (_) => ({ path }));
-					},
-				},
-			],
-		},
-		{
-			entry: 'src/widget.ts',
-			external: ['@jupyter-widgets/base', 'nbextensions/jupyter-gosling/index'],
-		},
-	].map(amd);
+const configs = [
+	{
+		entry: 'src/index.ts',
+		outdir: 'gosling/static',
+		loader: { '.css': 'text' },
+		minify: isProd,
+	},
+	{
+		entry: 'src/widget.ts',
+		outdir: 'gosling/static',
+		external: ['@jupyter-widgets/base', 'nbextensions/jupyter-gosling/index'],
+		minify: isProd,
+	},
+];
 
-	configs.map(esbuild.build);
-};
-
-build();
+configs.map(amd).map(esbuild.build);
