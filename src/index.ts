@@ -10,15 +10,22 @@ const style = document.createElement('style');
 style.innerText = css;
 document.head.appendChild(style).setAttribute('type', 'text/css');
 
+
 /**
- * Utils from https://github.com/vega/ipyvega/blob/master/src/index.ts
+ * Types
  */
 type JupyterOutput = {
 	metadata?: Record<string, unknown>;
 	data: Record<string, unknown>;
 	output_type: string;
 };
+type OutputArea = { outputs: JupyterOutput[] };
+type EmbedOptions = Parameters<typeof embed>[2];
 
+
+/**
+ * Utils from https://github.com/vega/ipyvega/blob/master/src/index.ts
+ */
 function javascriptIndex(selector: string, outputs: JupyterOutput[]) {
 	// Return the index in the output array of the JS repr of this viz
 	for (let i = 0; i < outputs.length; i++) {
@@ -60,12 +67,7 @@ function showError(el: HTMLElement, error: Error) {
 
 const wait = (ms: number) => new Promise<void>((res) => setTimeout(res, ms));
 
-export function render(
-	selector: string,
-	spec: GoslingSpec,
-	opts?: Parameters<typeof embed>[2],
-	output_area?: { outputs: JupyterOutput[] }
-): void {
+export function render(selector: string, spec: GoslingSpec, opts?: EmbedOptions, output_area?: OutputArea): void {
 
 	// Find the indices of this visualizations JS and PNG representation.
 	if (output_area) {
@@ -82,10 +84,8 @@ export function render(
 	embed(root, spec, opts)
 		.then(async api => {
 			if (!output_area) return;
-
 			// TODO: any way to wait for full canvas render?
 			await wait(200);
-
 			const { canvas } = api.getCanvas({ resolution: 1 });
 			const type = 'image/png';
 			const output: JupyterOutput = {
