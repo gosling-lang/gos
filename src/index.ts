@@ -24,36 +24,14 @@ type EmbedOptions = Parameters<typeof embed>[2];
 
 
 /**
- * Utils from https://github.com/vega/ipyvega/blob/master/src/index.ts
+ * Adapted from https://github.com/vega/ipyvega/blob/master/src/index.ts
  */
-function javascriptIndex(selector: string, outputs: JupyterOutput[]) {
-	// Return the index in the output array of the JS repr of this viz
-	for (let i = 0; i < outputs.length; i++) {
-		const item = outputs[i];
-		if (
-			item.metadata &&
-			item.metadata['jupyter-gosling'] === selector &&
-			item.data['application/javascript'] !== undefined
-		) {
-			return i;
-		}
-	}
-	return -1;
-}
-
-function imageIndex(selector: string, outputs: JupyterOutput[]) {
-	// Return the index in the output array of the PNG repr of this viz
-	for (let i = 0; i < outputs.length; i++) {
-		const item = outputs[i];
-		if (
-			item.metadata &&
-			item.metadata['jupyter-gosling'] === selector &&
-			item.data['image/png'] !== undefined
-		) {
-			return i;
-		}
-	}
-	return -1;
+function goslingIndex(selector: string, outputs: JupyterOutput[], mimeType: string) {
+	// Return the index in the output array of the mimetype repr of this viz
+	return outputs.findIndex(item =>
+		item?.metadata?.['jupyter-gosling'] === selector &&
+		item.data?.[mimeType] !== undefined
+	);
 }
 
 function showError(el: HTMLElement, error: Error) {
@@ -71,8 +49,8 @@ export function render(selector: string, spec: GoslingSpec, opts?: EmbedOptions,
 
 	// Find the indices of this visualizations JS and PNG representation.
 	if (output_area) {
-		const imgIndex = imageIndex(selector, output_area.outputs);
-		const jsIndex = javascriptIndex(selector, output_area.outputs);
+		const imgIndex = goslingIndex(selector, output_area.outputs, 'application/javascript');
+		const jsIndex = goslingIndex(selector, output_area.outputs, 'image/png');
 		// If we have already rendered a static image, don't render
 		// the JS version or append a new PNG version
 		if (imgIndex > -1 && jsIndex > -1) {

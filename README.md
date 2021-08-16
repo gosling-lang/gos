@@ -1,6 +1,7 @@
 # ipygosling
 
-> CAUTION! This project is experimental and requires that you build both the schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`).
+> CAUTION! This project is experimental and requires that you build both the
+> schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`).
 
 ## Generate source code 
 
