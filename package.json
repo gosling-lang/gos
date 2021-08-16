@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --write 'src/*.ts' build.js",
     "lint": "prettier --check 'src/*.ts' build.js",
-    "build": "node build"
+    "build": "NODE_ENV=production node build"
   },
   "dependencies": {
     "@jupyter-widgets/base": "^4.0.0",

@@ -39,6 +39,9 @@ const configs = [
 		outdir: 'gosling/static',
 		loader: { '.css': 'text' },
 		minify: isProd,
+		define: {
+			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+		}
 	},
 	{
 		entry: 'src/widget.ts',

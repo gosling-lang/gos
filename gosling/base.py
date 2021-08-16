@@ -1,50 +1,38 @@
-import json
-import pathlib
-import uuid
-from typing import Optional, TypedDict, Union
-
-from IPython.display import display
-
+from typing import Union
 from gosling.schema import Root
+from gosling.display import JSRenderer  # , HTMLRenderer
 
-JS_TEMPLATE = pathlib.Path(__file__).parent / "static" / "gosling.template.js"
+GOSLING_VERSION = "0.9.1"
+HIGLASS_VERSION = "1.11.3"
+REACT_VERSION = "16"
+REACT_DOM_VERSION = "16"
+PIXIJS_VERSION = "5"
 
-Options = TypedDict(
-    "Options",
-    {
-        "padding": Optional[float],
-        "margin": Optional[Union[str, float]],
-        "border": Optional[str],
-        "id": Optional[str],
-        "className": Optional[str],
-        # TODO: "theme":
-    },
-)
+renderers = {
+    # "html": HTMLRenderer(
+    #     gosling_version=GOSLING_VERSION,
+    #     higlass_version=HIGLASS_VERSION,
+    #     react_version=REACT_VERSION,
+    #     react_dom_version=REACT_DOM_VERSION,
+    #     pixijs_version=PIXIJS_VERSION,
+    # ),
+    "js": JSRenderer(),
+}
 
 
 class Gosling:
-    def __init__(self, spec: Union[dict, Root], opt: Optional[Options] = None):
-        self.spec = spec if not isinstance(spec, Root) else spec.to_dict()
-        self.opt = opt or {}
+    def __init__(self, spec: Union[dict, Root]):
+        self.spec = spec
 
-    def _generate_js(self, id, **kwrgs):
-        with open(JS_TEMPLATE, encoding="utf-8") as f:
-            template = f.read()
-        payload = template.format(
-            id=id,
-            spec=json.dumps(self.spec, **kwrgs),
-            opt=json.dumps(self.opt, **kwrgs),
-        )
-        return payload
+    def to_dict(self):
+        return self.spec if isinstance(self.spec, dict) else self.spec.to_dict()
 
     def _repr_mimebundle_(self, include=None, exclude=None):
-        """Display the visualization in the Jupyter notebook."""
-        id = uuid.uuid4()
-        return (
-            {"application/javascript": self._generate_js(id)},
-            {"jupyter-gosling": "#{0}".format(id)},
-        )
+        dct = self.to_dict()
+        renderer = renderers.get("js")
+        return renderer(dct) if renderer else {}
 
     def display(self):
-        """Render the visualization."""
+        from IPython.display import display
+
         display(self)
