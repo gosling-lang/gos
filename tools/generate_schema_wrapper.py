@@ -6,7 +6,9 @@ from urllib import request
 from typing import Optional, TypeVar
 
 # import schemapi from here
-sys.path.insert(0, pathlib.Path.cwd())
+here = pathlib.Path(__file__)
+sys.path.insert(0, str(here.parent))
+
 from schemapi import codegen
 from schemapi.codegen import CodeSnippet
 from schemapi.utils import (
@@ -66,7 +68,7 @@ def download_schemafile(
     url = schema_url(library, version)
     if not schemapath.exists():
         os.makedirs(schemapath)
-    filename = schemapath / "{library}-schema.json".format(library=library)
+    filename = schemapath / f"{library}-schema.json"
     if not skip_download:
         request.urlretrieve(url, filename)
     elif not filename.exists():
@@ -74,7 +76,7 @@ def download_schemafile(
     return filename
 
 
-def toposort(graph: dict[list[T]]) -> list[T]:
+def toposort(graph: dict[str, list[T]]) -> list[T]:
     """Topological sort of a directed acyclic graph.
 
     Parameters
@@ -106,8 +108,7 @@ def copy_schemapi_util():
     """
     Copy the schemapi utility and its test file into altair/utils/
     """
-    current_dir = pathlib.Path(__file__).parent
-
+    current_dir = here.parent
     # copy the schemapi utility file
     source_path = current_dir / "schemapi" / "schemapi.py"
     destination_path = current_dir / ".." / "gosling" / "utils" / "schemapi.py"
@@ -199,7 +200,7 @@ def gosling_main(skip_download: Optional[bool] = False):
     library = "gosling"
 
     for version in SCHEMA_VERSION[library]:
-        schemapath = pathlib.Path(__file__).parent / ".." / "gosling" / "schema"
+        schemapath = here.parent / ".." / "gosling" / "schema"
         schemafile = download_schemafile(
             library=library,
             version=version,
