@@ -134,20 +134,13 @@ class ValueSchemaGenerator(codegen.SchemaGenerator):
     )
 
 
-# Map of version name to github branch name.
-SCHEMA_VERSION = {
-    "gosling": {"v0": ""},
-}
-
-SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/gosling.js/107ab0cd43f96e3f8eaac44205ef9ab5c5111ee0/schema/gosling.schema.json"
-
+SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/v{version}/schema/gosling.schema.json"
 
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
 
 
 def schema_url(library: str, version: str):
-    version = SCHEMA_VERSION[library][version]
     return SCHEMA_URL_TEMPLATE.format(library=library, version=version)
 
 
@@ -160,7 +153,7 @@ def download_schemafile(
     url = schema_url(library, version)
     if not schemapath.exists():
         os.makedirs(schemapath)
-    filename = schemapath / f"{library}-schema.json"
+    filename = schemapath / f"{library.rstrip('.js')}-schema.json"
     if not skip_download:
         request.urlretrieve(url, filename)
     elif not filename.exists():
@@ -386,54 +379,54 @@ def generate_mark_mixin(
 
 
 def main(skip_download: Optional[bool] = False):
-    library = "gosling"
+    library = "gosling.js"
+    version = "0.9.2"
 
-    for version in SCHEMA_VERSION[library]:
-        schemapath = here.parent / ".." / "gosling" / "schema"
-        schemafile = download_schemafile(
-            library=library,
-            version=version,
-            schemapath=schemapath,
-            skip_download=skip_download,
-        )
+    schemapath = here.parent / ".." / "gosling" / "schema"
+    schemafile = download_schemafile(
+        library=library,
+        version=version,
+        schemapath=schemapath,
+        skip_download=skip_download,
+    )
 
-        # Generate __init__.py file
-        outfile = schemapath / "__init__.py"
-        print(f"Writing {outfile}")
-        with open(outfile, "w", encoding="utf8") as f:
-            f.write("# flake8: noqa\n")
-            f.write("from .core import *\n")
-            f.write(f"SCHEMA_VERSION = {SCHEMA_VERSION[library][version]!r}\n")
-            f.write(f"SCHEMA_URL = {schema_url(library, version)!r}\n")
+    # Generate __init__.py file
+    outfile = schemapath / "__init__.py"
+    print(f"Writing {outfile}")
+    with open(outfile, "w", encoding="utf8") as f:
+        f.write("# flake8: noqa\n")
+        f.write("from .core import *\n")
+        f.write(f"SCHEMA_VERSION = {version!r}\n")
+        f.write(f"SCHEMA_URL = {schema_url(library, version)!r}\n")
 
-        # Generate the core schema wrappers
-        outfile = schemapath / "core.py"
-        print(f"Generating\n {schemafile}\n  ->{outfile}")
-        file_contents = generate_schema_wrapper(schemafile)
-        with open(outfile, "w", encoding="utf8") as f:
-            f.write(file_contents)
+    # Generate the core schema wrappers
+    outfile = schemapath / "core.py"
+    print(f"Generating\n {schemafile}\n  ->{outfile}")
+    file_contents = generate_schema_wrapper(schemafile)
+    with open(outfile, "w", encoding="utf8") as f:
+        f.write(file_contents)
 
-        # Generate the channel wrappers
-        outfile = schemapath / "channels.py"
-        print("Generating\n {}\n  ->{}".format(schemafile, outfile))
-        code = generate_channel_wrappers(schemafile)
-        with open(outfile, "w", encoding="utf8") as f:
-            f.write(code)
+    # Generate the channel wrappers
+    outfile = schemapath / "channels.py"
+    print("Generating\n {}\n  ->{}".format(schemafile, outfile))
+    code = generate_channel_wrappers(schemafile)
+    with open(outfile, "w", encoding="utf8") as f:
+        f.write(code)
 
-        # generate the mark mixin
-        outfile = schemapath / "mixins.py"
-        print("Generating\n {}\n  ->{}".format(schemafile, outfile))
-        mark_imports, mark_mixin = generate_mark_mixin(
-            schemafile,
-            mark_enum="MarkType",
-            style_def="Style",
-        )
-        imports = sorted(set(mark_imports))
-        with open(outfile, "w", encoding="utf8") as f:
-            f.write(HEADER)
-            f.write("\n".join(imports))
-            f.write("\n\n\n")
-            f.write(mark_mixin)
+    # generate the mark mixin
+    outfile = schemapath / "mixins.py"
+    print("Generating\n {}\n  ->{}".format(schemafile, outfile))
+    mark_imports, mark_mixin = generate_mark_mixin(
+        schemafile,
+        mark_enum="MarkType",
+        style_def="Style",
+    )
+    imports = sorted(set(mark_imports))
+    with open(outfile, "w", encoding="utf8") as f:
+        f.write(HEADER)
+        f.write("\n".join(imports))
+        f.write("\n\n\n")
+        f.write(mark_mixin)
 
 
 if __name__ == "__main__":
