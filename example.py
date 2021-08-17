@@ -1,7 +1,7 @@
 import gosling as gos
 from rich import print
 
-multivec = gos.DataDeep(
+multivec = gos.Data(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
     type="multivec",
     row="sample",

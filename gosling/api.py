@@ -4,6 +4,8 @@ from gosling.utils import infer_encoding_types
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 180
 
+# create alias for DataDeep type
+Data = core.DataDeep
 
 class _EncodingMixin:
     def encode(self, *args, **kwargs):
