@@ -1,9 +1,11 @@
 # ipygosling
 
-> CAUTION! This project is experimental and requires that you build both the
-> schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`).
 
 ## Generate source code 
+
+The schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`)
+are automatically generated using the following scripts. Please do not edit these
+files directly.
 
 #### Python schema bindings
 
@@ -92,7 +94,7 @@ print(spec.to_json())
 ```
 
 ```python
-gos.Gosling(spec) # render spec!
+spec # render spec in jupyter cell!
 ```
 
 ```python
