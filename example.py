@@ -1,4 +1,5 @@
 import gosling as gos
+from rich import print
 
 multivec = gos.DataDeep(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
@@ -44,16 +45,15 @@ track4 = base.encode(
     x=gos.Channel("position:G", axis="top"),
     y="peak:Q",
     row="sample:N",
-    color=gos.Channel("sampleN", legend=True),
+    color=gos.Channel("sample:N", legend=True),
     tooltip=tooltip,
 ).properties(
     alignment="overlay",
     tracks=[
-        {"mark": "line"},
-        {
-            "mark": "point",
-            "size": {"field": "peak", "type": "quantitative", "range": [0, 2]},
-        },
+        gos.PartialTrack().mark_line(),
+        gos.PartialTrack().mark_point().encode(
+            size=gos.Channel("peak:Q", range=[0, 2]),
+        )
     ],
 )
 
@@ -112,7 +112,7 @@ spec = gos.Root(
             track1,
             track2,
             track3,
-          #  track4,
+            track4,
             track5,
             track6,
             track7,
@@ -121,5 +121,4 @@ spec = gos.Root(
     ],
 )
 
-with open('spec-test.json', mode='w') as f:
-    f.write(spec.to_json())
+print(spec.to_dict())
