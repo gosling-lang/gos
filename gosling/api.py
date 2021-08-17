@@ -10,7 +10,6 @@ class _EncodingMixin:
         # Convert args to kwargs based on their types.
         copy = self.copy()
         kwargs = infer_encoding_types(args, kwargs, channels)
-        print(kwargs)
         for key, value in kwargs.items():
             copy[key] = value
         return copy

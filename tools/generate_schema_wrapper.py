@@ -69,11 +69,7 @@ class FieldChannelMixin(object):
             type_required = 'type' in self._kwds
             type_in_shorthand = 'type' in parsed
             type_defined_explicitly = self._get('type') is not Undefined
-            if not type_required:
-                # Secondary field names don't require a type argument in gosling 3+.
-                # We still parse it out of the shorthand, but drop it here.
-                parsed.pop('type', None)
-            elif not (type_in_shorthand or type_defined_explicitly):
+            if not (type_in_shorthand or type_defined_explicitly):
                 if isinstance(context.get('data', None), pd.DataFrame):
                     raise ValueError("{} encoding field is specified without a type; "
                                      "the type cannot be inferred because it does not "
@@ -224,7 +220,7 @@ def copy_schemapi_util():
             dest.writelines(source.readlines())
 
 
-def generate_gosling_schema_wrapper(schema_file: pathlib.Path):
+def generate_schema_wrapper(schema_file: pathlib.Path):
     """Generate a schema wrapper at the given path."""
     # TODO: generate simple tests for each wrapper
     basename = "GoslingSchema"
@@ -282,7 +278,7 @@ def generate_gosling_schema_wrapper(schema_file: pathlib.Path):
     return "\n".join(contents)
 
 
-def generate_gosling_channel_wrappers(schemafile, imports=None):
+def generate_channel_wrappers(schemafile, imports=None):
     # TODO: generate __all__ for top of file
     with open(schemafile, encoding="utf8") as f:
         schema = json.load(f)
@@ -351,7 +347,7 @@ def mark_{mark}({def_arglist}):
 '''
 
 
-def generate_gosling_mark_mixin(
+def generate_mark_mixin(
     schemafile: pathlib.Path, mark_enum: str, style_def: str
 ):
     with open(schemafile, encoding="utf8") as f:
@@ -394,7 +390,7 @@ def generate_gosling_mark_mixin(
     return imports, "\n".join(code)
 
 
-def gosling_main(skip_download: Optional[bool] = False):
+def main(skip_download: Optional[bool] = False):
     library = "gosling"
 
     for version in SCHEMA_VERSION[library]:
@@ -418,21 +414,21 @@ def gosling_main(skip_download: Optional[bool] = False):
         # Generate the core schema wrappers
         outfile = schemapath / "core.py"
         print(f"Generating\n {schemafile}\n  ->{outfile}")
-        file_contents = generate_gosling_schema_wrapper(schemafile)
+        file_contents = generate_schema_wrapper(schemafile)
         with open(outfile, "w", encoding="utf8") as f:
             f.write(file_contents)
 
         # Generate the channel wrappers
         outfile = schemapath / "channels.py"
         print("Generating\n {}\n  ->{}".format(schemafile, outfile))
-        code = generate_gosling_channel_wrappers(schemafile)
+        code = generate_channel_wrappers(schemafile)
         with open(outfile, "w", encoding="utf8") as f:
             f.write(code)
 
         # generate the mark mixin
         outfile = schemapath / "mixins.py"
         print("Generating\n {}\n  ->{}".format(schemafile, outfile))
-        mark_imports, mark_mixin = generate_gosling_mark_mixin(
+        mark_imports, mark_mixin = generate_mark_mixin(
             schemafile,
             mark_enum="MarkType",
             style_def="Style",
@@ -447,4 +443,4 @@ def gosling_main(skip_download: Optional[bool] = False):
 
 if __name__ == "__main__":
     copy_schemapi_util()
-    gosling_main()
+    main()
