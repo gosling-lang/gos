@@ -1,5 +1,10 @@
 # ipygosling
 
+**Here be dragons 🐉**
+
+> This is an *experimental* project that is planned to merge with 
+> [`gosling.py`](https://github.com/gosling-lang/gosling.py). Feedback is 
+> much appreciated and most welcomed. _Please use with caution_.
 
 ## Generate source code 
 
