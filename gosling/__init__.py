@@ -1,5 +1,7 @@
-from gosling.base import Gosling
 from gosling.schema import *
+from gosling.api import *
+
+from gosling.base import Gosling
 from gosling.widget import GoslingWidget
 
 

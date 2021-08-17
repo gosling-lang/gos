@@ -26,34 +26,33 @@ jupyter nbextension enable gosling --py --sys-prefix
 ```python
 import gosling as gos
 
-spec = gos.Root(
-    title="Basic Marks: Bar",
-    subtitle="Tutorial Examples",
-    tracks=[
-        gos.Track(
-            layout="linear",
-            width=800,
-            height=180,
-            data=gos.DataDeep(
-                url="https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
-                type="multivec",
-                row="sample",
-                column="position",
-                value="peak",
-                categories=["sample 1"],
-                binSize=5
-            ),
-            mark="bar",
-            y=gos.Channel(field="peak", type="quantitative"),
-            x=gos.Channel(field="start", type="genomic"),
-            xe=gos.Channel(field="end", type="genomic"),
-            stroke=gos.Channel(value=0.5),
-            strokeWidth=gos.Channel(value=0.5),
-        )
-    ]
+data = gos.Data(
+    url="https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
+    type="multivec",
+    row="sample",
+    column="position",
+    value="peak",
+    categories=["sample 1"],
+    binSize=5,
 )
 
+track = (
+    gos.Track(data=data, layout="linear")
+    .mark_bar()
+    .encode(
+        y="peak:Q",
+        x="start:G",
+        xe="end:G",
+        stroke=gos.Channel(value=0.5),
+        strokeWidth=gos.Channel(value=0.5),
+    )
+    .properties(width=180)
+)
+
+spec = track.chart(title="Basic Marks: Bar", subtitle="Tutorial Examples")
+
 print(spec.to_json())
+
 # {
 #   "subtitle": "Tutorial Examples",
 #   "title": "Basic Marks: Bar",
@@ -79,7 +78,7 @@ print(spec.to_json())
 #       "strokeWidth": {
 #         "value": 0.5
 #       },
-#       "width": 800,
+#       "width": 180,
 #       "x": {
 #         "field": "start",
 #         "type": "genomic"

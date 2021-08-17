@@ -1,5 +1,6 @@
-import uuid
 import json
+import uuid
+
 import jinja2
 
 HTML_TEMPLATE = jinja2.Template(

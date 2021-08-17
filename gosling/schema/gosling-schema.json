@@ -1,0 +1,4161 @@
+{
+  "$ref": "#/definitions/GoslingSpec",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Aggregate": {
+      "enum": [
+        "max",
+        "min",
+        "mean",
+        "bin",
+        "count"
+      ],
+      "type": "string"
+    },
+    "Assembly": {
+      "enum": [
+        "hg38",
+        "hg19",
+        "hg18",
+        "hg17",
+        "hg16",
+        "mm10",
+        "mm9",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "AxisPosition": {
+      "enum": [
+        "none",
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "type": "string"
+    },
+    "BAMData": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "bam",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url"
+      ],
+      "type": "object"
+    },
+    "BEDDBData": {
+      "additionalProperties": false,
+      "properties": {
+        "exonIntervalFields": {
+          "items": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "index": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "index",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "index": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "index",
+                "name"
+              ],
+              "type": "object"
+            }
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "genomicFields": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "index": {
+                "type": "number"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "index",
+              "name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "beddb",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "valueFields": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "index": {
+                "type": "number"
+              },
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "nominal",
+                  "quantitative"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "index",
+              "name",
+              "type"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "genomicFields"
+      ],
+      "type": "object"
+    },
+    "BIGWIGData": {
+      "additionalProperties": false,
+      "properties": {
+        "binSize": {
+          "type": "number"
+        },
+        "column": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "type": {
+          "const": "bigwig",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "column",
+        "value"
+      ],
+      "type": "object"
+    },
+    "CSVData": {
+      "additionalProperties": false,
+      "properties": {
+        "chromosomeField": {
+          "type": "string"
+        },
+        "chromosomePrefix": {
+          "type": "string"
+        },
+        "genomicFields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "genomicFieldsToConvert": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "chromosomeField": {
+                "type": "string"
+              },
+              "genomicFields": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "chromosomeField",
+              "genomicFields"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "headerNames": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "longToWideId": {
+          "type": "string"
+        },
+        "quantitativeFields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sampleLength": {
+          "type": "number"
+        },
+        "separator": {
+          "type": "string"
+        },
+        "type": {
+          "const": "csv",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url"
+      ],
+      "type": "object"
+    },
+    "Channel": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ChannelDeep"
+        },
+        {
+          "$ref": "#/definitions/ChannelValue"
+        }
+      ]
+    },
+    "ChannelBind": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregate": {
+          "$ref": "#/definitions/Aggregate"
+        },
+        "bind": {
+          "$ref": "#/definitions/ChannelType"
+        }
+      },
+      "required": [
+        "bind"
+      ],
+      "type": "object"
+    },
+    "ChannelDeep": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregate": {
+          "$ref": "#/definitions/Aggregate"
+        },
+        "axis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "baseline": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "domain": {
+          "$ref": "#/definitions/Domain"
+        },
+        "field": {
+          "type": "string"
+        },
+        "flip": {
+          "type": "boolean"
+        },
+        "grid": {
+          "type": "boolean"
+        },
+        "legend": {
+          "type": "boolean"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "mirrored": {
+          "type": "boolean"
+        },
+        "padding": {
+          "type": "number"
+        },
+        "range": {
+          "$ref": "#/definitions/Range"
+        },
+        "sort": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "stack": {
+          "type": "boolean"
+        },
+        "type": {
+          "$ref": "#/definitions/FieldType"
+        },
+        "zeroBaseline": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ChannelType": {
+      "type": "string"
+    },
+    "ChannelValue": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "string"
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "Chromosome": {
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "X",
+        "Y",
+        "M",
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY",
+        "chrM"
+      ],
+      "type": "string"
+    },
+    "CoverageTransform": {
+      "additionalProperties": false,
+      "description": "Aggregate rows and calculate coverage",
+      "properties": {
+        "endField": {
+          "type": "string"
+        },
+        "groupField": {
+          "type": "string"
+        },
+        "newField": {
+          "type": "string"
+        },
+        "startField": {
+          "type": "string"
+        },
+        "type": {
+          "const": "coverage",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "startField",
+        "endField"
+      ],
+      "type": "object"
+    },
+    "DataDeep": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/JSONData"
+        },
+        {
+          "$ref": "#/definitions/CSVData"
+        },
+        {
+          "$ref": "#/definitions/BIGWIGData"
+        },
+        {
+          "$ref": "#/definitions/MultivecData"
+        },
+        {
+          "$ref": "#/definitions/BEDDBData"
+        },
+        {
+          "$ref": "#/definitions/VectorData"
+        },
+        {
+          "$ref": "#/definitions/MatrixData"
+        },
+        {
+          "$ref": "#/definitions/BAMData"
+        }
+      ]
+    },
+    "DataTrack": {
+      "additionalProperties": false,
+      "description": "Partial specification of `BasicSingleTrack` to use default visual encoding predefined by data type.",
+      "properties": {
+        "_invalidTrack": {
+          "type": "boolean"
+        },
+        "_renderingId": {
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "innerRadius": {
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "outerRadius": {
+          "type": "number"
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "prerelease": {
+          "additionalProperties": false,
+          "properties": {
+            "testUsingNewRectRenderingForBAM": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "yOffset": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "data",
+        "height",
+        "width"
+      ],
+      "type": "object"
+    },
+    "DataTransform": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FilterTransform"
+        },
+        {
+          "$ref": "#/definitions/StrConcatTransform"
+        },
+        {
+          "$ref": "#/definitions/StrReplaceTransform"
+        },
+        {
+          "$ref": "#/definitions/LogTransform"
+        },
+        {
+          "$ref": "#/definitions/DisplaceTransform"
+        },
+        {
+          "$ref": "#/definitions/ExonSplitTransform"
+        },
+        {
+          "$ref": "#/definitions/CoverageTransform"
+        },
+        {
+          "$ref": "#/definitions/JSONParseTransform"
+        }
+      ]
+    },
+    "Datum": {
+      "additionalProperties": {
+        "type": [
+          "number",
+          "string"
+        ]
+      },
+      "type": "object"
+    },
+    "DisplaceTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "boundingBox": {
+          "additionalProperties": false,
+          "properties": {
+            "endField": {
+              "type": "string"
+            },
+            "groupField": {
+              "type": "string"
+            },
+            "isPaddingBP": {
+              "type": "boolean"
+            },
+            "padding": {
+              "type": "number"
+            },
+            "startField": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "startField",
+            "endField"
+          ],
+          "type": "object"
+        },
+        "maxRows": {
+          "type": "number"
+        },
+        "method": {
+          "$ref": "#/definitions/DisplacementType"
+        },
+        "newField": {
+          "type": "string"
+        },
+        "type": {
+          "const": "displace",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "boundingBox",
+        "method",
+        "newField"
+      ],
+      "type": "object"
+    },
+    "Displacement": {
+      "additionalProperties": false,
+      "properties": {
+        "padding": {
+          "type": "number"
+        },
+        "type": {
+          "$ref": "#/definitions/DisplacementType"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "DisplacementType": {
+      "enum": [
+        "pile",
+        "spread"
+      ],
+      "type": "string"
+    },
+    "Domain": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        {
+          "$ref": "#/definitions/DomainInterval"
+        },
+        {
+          "$ref": "#/definitions/DomainChrInterval"
+        },
+        {
+          "$ref": "#/definitions/DomainChr"
+        },
+        {
+          "$ref": "#/definitions/DomainGene"
+        }
+      ]
+    },
+    "DomainChr": {
+      "additionalProperties": false,
+      "properties": {
+        "chromosome": {
+          "$ref": "#/definitions/Chromosome"
+        }
+      },
+      "required": [
+        "chromosome"
+      ],
+      "type": "object"
+    },
+    "DomainChrInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "chromosome": {
+          "$ref": "#/definitions/Chromosome"
+        },
+        "interval": {
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "chromosome",
+        "interval"
+      ],
+      "type": "object"
+    },
+    "DomainGene": {
+      "additionalProperties": false,
+      "properties": {
+        "gene": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "required": [
+        "gene"
+      ],
+      "type": "object"
+    },
+    "DomainInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "interval": {
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "interval"
+      ],
+      "type": "object"
+    },
+    "ExonSplitTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "chrField": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              },
+              "newField": {
+                "type": "string"
+              },
+              "type": {
+                "$ref": "#/definitions/FieldType"
+              }
+            },
+            "required": [
+              "field",
+              "type",
+              "newField",
+              "chrField"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "flag": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": [
+                "number",
+                "string"
+              ]
+            }
+          },
+          "required": [
+            "field",
+            "value"
+          ],
+          "type": "object"
+        },
+        "separator": {
+          "type": "string"
+        },
+        "type": {
+          "const": "exonSplit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "separator",
+        "flag",
+        "fields"
+      ],
+      "type": "object"
+    },
+    "FieldType": {
+      "enum": [
+        "genomic",
+        "nominal",
+        "quantitative"
+      ],
+      "type": "string"
+    },
+    "FilterTransform": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/OneOfFilter"
+        },
+        {
+          "$ref": "#/definitions/RangeFilter"
+        },
+        {
+          "$ref": "#/definitions/IncludeFilter"
+        }
+      ]
+    },
+    "FlatTracks": {
+      "additionalProperties": false,
+      "properties": {
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "tracks": {
+          "items": {
+            "$ref": "#/definitions/Track"
+          },
+          "type": "array"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "yOffset": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "tracks"
+      ],
+      "type": "object"
+    },
+    "GlyphElement": {
+      "additionalProperties": false,
+      "properties": {
+        "background": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "color": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "mark": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/MarkType"
+            },
+            {
+              "$ref": "#/definitions/MarkBind"
+            }
+          ]
+        },
+        "opacity": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "row": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "select": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "channel": {
+                "$ref": "#/definitions/ChannelType"
+              },
+              "oneOf": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "channel",
+              "oneOf"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "size": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "stroke": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "strokeWidth": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "style": {
+          "$ref": "#/definitions/MarkStyleInGlyph"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "w": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "x": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "x1": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "x1e": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "xe": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "y": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "y1": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "y1e": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        },
+        "ye": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ChannelBind"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            },
+            {
+              "const": "none",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "mark"
+      ],
+      "type": "object"
+    },
+    "GoslingSpec": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/RootSpecWithSingleView"
+        },
+        {
+          "$ref": "#/definitions/RootSpecWithMultipleViews"
+        }
+      ]
+    },
+    "IncludeFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "include": {
+          "type": "string"
+        },
+        "not": {
+          "type": "boolean"
+        },
+        "type": {
+          "const": "filter",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "field",
+        "include"
+      ],
+      "type": "object"
+    },
+    "JSONData": {
+      "additionalProperties": false,
+      "properties": {
+        "chromosomeField": {
+          "type": "string"
+        },
+        "genomicFields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "genomicFieldsToConvert": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "chromosomeField": {
+                "type": "string"
+              },
+              "genomicFields": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "chromosomeField",
+              "genomicFields"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "quantitativeFields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sampleLength": {
+          "type": "number"
+        },
+        "type": {
+          "const": "json",
+          "type": "string"
+        },
+        "values": {
+          "items": {
+            "$ref": "#/definitions/Datum"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "values"
+      ],
+      "type": "object"
+    },
+    "JSONParseTransform": {
+      "additionalProperties": false,
+      "description": "Parse JSON Object Array and append vertically",
+      "properties": {
+        "baseGenomicField": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "genomicField": {
+          "type": "string"
+        },
+        "genomicLengthField": {
+          "type": "string"
+        },
+        "type": {
+          "const": "subjson",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "field",
+        "baseGenomicField",
+        "genomicField",
+        "genomicLengthField"
+      ],
+      "type": "object"
+    },
+    "Layout": {
+      "enum": [
+        "linear",
+        "circular"
+      ],
+      "type": "string"
+    },
+    "LogBase": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "const": "e",
+          "type": "string"
+        }
+      ]
+    },
+    "LogTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "$ref": "#/definitions/LogBase"
+        },
+        "field": {
+          "type": "string"
+        },
+        "newField": {
+          "type": "string"
+        },
+        "type": {
+          "const": "log",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "field"
+      ],
+      "type": "object"
+    },
+    "LogicalOperation": {
+      "enum": [
+        "less-than",
+        "lt",
+        "LT",
+        "greater-than",
+        "gt",
+        "GT",
+        "less-than-or-equal-to",
+        "ltet",
+        "LTET",
+        "greater-than-or-equal-to",
+        "gtet",
+        "GTET"
+      ],
+      "type": "string"
+    },
+    "Mark": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/MarkType"
+        },
+        {
+          "$ref": "#/definitions/MarkDeep"
+        }
+      ]
+    },
+    "MarkBind": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "type": "string"
+        },
+        "domain": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "range": {
+          "items": {
+            "$ref": "#/definitions/MarkType"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "bind",
+        "domain",
+        "range"
+      ],
+      "type": "object"
+    },
+    "MarkDeep": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/MarkGlyphPreset"
+        },
+        {
+          "$ref": "#/definitions/MarkGlyph"
+        }
+      ]
+    },
+    "MarkGlyph": {
+      "additionalProperties": false,
+      "properties": {
+        "elements": {
+          "items": {
+            "$ref": "#/definitions/GlyphElement"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "referenceColumn": {
+          "type": "string"
+        },
+        "requiredChannels": {
+          "items": {
+            "$ref": "#/definitions/ChannelType"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "compositeMark",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "requiredChannels",
+        "elements"
+      ],
+      "type": "object"
+    },
+    "MarkGlyphPreset": {
+      "additionalProperties": false,
+      "properties": {
+        "server": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "server"
+      ],
+      "type": "object"
+    },
+    "MarkStyleInGlyph": {
+      "additionalProperties": false,
+      "properties": {
+        "background": {
+          "type": "string"
+        },
+        "dashed": {
+          "type": "string"
+        },
+        "dy": {
+          "type": "number"
+        },
+        "stroke": {
+          "type": "string"
+        },
+        "strokeWidth": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "MarkType": {
+      "enum": [
+        "point",
+        "line",
+        "area",
+        "bar",
+        "rect",
+        "text",
+        "withinLink",
+        "betweenLink",
+        "rule",
+        "triangleLeft",
+        "triangleRight",
+        "triangleBottom",
+        "brush",
+        "header"
+      ],
+      "type": "string"
+    },
+    "MatrixData": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "matrix",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url"
+      ],
+      "type": "object"
+    },
+    "MultipleViews": {
+      "additionalProperties": false,
+      "properties": {
+        "arrangement": {
+          "enum": [
+            "parallel",
+            "serial",
+            "horizontal",
+            "vertical"
+          ],
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "views": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/SingleView"
+              },
+              {
+                "$ref": "#/definitions/MultipleViews"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "yOffset": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "views"
+      ],
+      "type": "object"
+    },
+    "MultivecData": {
+      "additionalProperties": false,
+      "properties": {
+        "binSize": {
+          "type": "number"
+        },
+        "categories": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "column": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        },
+        "row": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "type": {
+          "const": "multivec",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "column",
+        "row",
+        "value"
+      ],
+      "type": "object"
+    },
+    "OneOfFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "not": {
+          "type": "boolean"
+        },
+        "oneOf": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "type": {
+          "const": "filter",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "field",
+        "oneOf"
+      ],
+      "type": "object"
+    },
+    "Orientation": {
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "type": "string"
+    },
+    "OverlaidTrack": {
+      "additionalProperties": false,
+      "description": "Superposing multiple tracks.",
+      "properties": {
+        "_invalidTrack": {
+          "type": "boolean"
+        },
+        "_renderingId": {
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "color": {
+          "$ref": "#/definitions/Channel"
+        },
+        "column": {
+          "$ref": "#/definitions/Channel"
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "dataTransform": {
+          "items": {
+            "$ref": "#/definitions/DataTransform"
+          },
+          "type": "array"
+        },
+        "displacement": {
+          "$ref": "#/definitions/Displacement"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "flipY": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "innerRadius": {
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "mark": {
+          "$ref": "#/definitions/Mark"
+        },
+        "opacity": {
+          "$ref": "#/definitions/Channel"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "outerRadius": {
+          "type": "number"
+        },
+        "overlay": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "_invalidTrack": {
+                "type": "boolean"
+              },
+              "_renderingId": {
+                "type": "string"
+              },
+              "assembly": {
+                "$ref": "#/definitions/Assembly"
+              },
+              "centerRadius": {
+                "description": "Proportion of the radius of the center white space.",
+                "type": "number"
+              },
+              "color": {
+                "$ref": "#/definitions/Channel"
+              },
+              "column": {
+                "$ref": "#/definitions/Channel"
+              },
+              "data": {
+                "$ref": "#/definitions/DataDeep"
+              },
+              "dataTransform": {
+                "items": {
+                  "$ref": "#/definitions/DataTransform"
+                },
+                "type": "array"
+              },
+              "displacement": {
+                "$ref": "#/definitions/Displacement"
+              },
+              "endAngle": {
+                "type": "number"
+              },
+              "flipY": {
+                "type": "boolean"
+              },
+              "id": {
+                "type": "string"
+              },
+              "innerRadius": {
+                "type": "number"
+              },
+              "linkingId": {
+                "type": "string"
+              },
+              "mark": {
+                "$ref": "#/definitions/Mark"
+              },
+              "opacity": {
+                "$ref": "#/definitions/Channel"
+              },
+              "orientation": {
+                "$ref": "#/definitions/Orientation"
+              },
+              "outerRadius": {
+                "type": "number"
+              },
+              "overlayOnPreviousTrack": {
+                "type": "boolean"
+              },
+              "overrideTemplate": {
+                "type": "boolean"
+              },
+              "prerelease": {
+                "additionalProperties": false,
+                "properties": {
+                  "testUsingNewRectRenderingForBAM": {
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              },
+              "row": {
+                "$ref": "#/definitions/Channel"
+              },
+              "size": {
+                "$ref": "#/definitions/Channel"
+              },
+              "spacing": {
+                "type": "number"
+              },
+              "startAngle": {
+                "type": "number"
+              },
+              "static": {
+                "type": "boolean"
+              },
+              "stretch": {
+                "type": "boolean"
+              },
+              "stroke": {
+                "$ref": "#/definitions/Channel"
+              },
+              "strokeWidth": {
+                "$ref": "#/definitions/Channel"
+              },
+              "style": {
+                "$ref": "#/definitions/Style"
+              },
+              "text": {
+                "$ref": "#/definitions/Channel"
+              },
+              "tooltip": {
+                "items": {
+                  "$ref": "#/definitions/Tooltip"
+                },
+                "type": "array"
+              },
+              "visibility": {
+                "items": {
+                  "$ref": "#/definitions/VisibilityCondition"
+                },
+                "type": "array"
+              },
+              "x": {
+                "$ref": "#/definitions/Channel"
+              },
+              "x1": {
+                "$ref": "#/definitions/Channel"
+              },
+              "x1e": {
+                "$ref": "#/definitions/Channel"
+              },
+              "xAxis": {
+                "$ref": "#/definitions/AxisPosition"
+              },
+              "xDomain": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/DomainInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChrInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChr"
+                  }
+                ]
+              },
+              "xOffset": {
+                "type": "number"
+              },
+              "xe": {
+                "$ref": "#/definitions/Channel"
+              },
+              "y": {
+                "$ref": "#/definitions/Channel"
+              },
+              "y1": {
+                "$ref": "#/definitions/Channel"
+              },
+              "y1e": {
+                "$ref": "#/definitions/Channel"
+              },
+              "yOffset": {
+                "type": "number"
+              },
+              "ye": {
+                "$ref": "#/definitions/Channel"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "overrideTemplate": {
+          "type": "boolean"
+        },
+        "prerelease": {
+          "additionalProperties": false,
+          "properties": {
+            "testUsingNewRectRenderingForBAM": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "row": {
+          "$ref": "#/definitions/Channel"
+        },
+        "size": {
+          "$ref": "#/definitions/Channel"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "stretch": {
+          "type": "boolean"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Channel"
+        },
+        "strokeWidth": {
+          "$ref": "#/definitions/Channel"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "#/definitions/Channel"
+        },
+        "title": {
+          "type": "string"
+        },
+        "tooltip": {
+          "items": {
+            "$ref": "#/definitions/Tooltip"
+          },
+          "type": "array"
+        },
+        "visibility": {
+          "items": {
+            "$ref": "#/definitions/VisibilityCondition"
+          },
+          "type": "array"
+        },
+        "width": {
+          "type": "number"
+        },
+        "x": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "xe": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "yOffset": {
+          "type": "number"
+        },
+        "ye": {
+          "$ref": "#/definitions/Channel"
+        }
+      },
+      "required": [
+        "height",
+        "overlay",
+        "width"
+      ],
+      "type": "object"
+    },
+    "OverlaidTracks": {
+      "additionalProperties": false,
+      "properties": {
+        "_invalidTrack": {
+          "type": "boolean"
+        },
+        "_renderingId": {
+          "type": "string"
+        },
+        "alignment": {
+          "const": "overlay",
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "color": {
+          "$ref": "#/definitions/Channel"
+        },
+        "column": {
+          "$ref": "#/definitions/Channel"
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "dataTransform": {
+          "items": {
+            "$ref": "#/definitions/DataTransform"
+          },
+          "type": "array"
+        },
+        "displacement": {
+          "$ref": "#/definitions/Displacement"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "flipY": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "innerRadius": {
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "mark": {
+          "$ref": "#/definitions/Mark"
+        },
+        "opacity": {
+          "$ref": "#/definitions/Channel"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "outerRadius": {
+          "type": "number"
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "overrideTemplate": {
+          "type": "boolean"
+        },
+        "prerelease": {
+          "additionalProperties": false,
+          "properties": {
+            "testUsingNewRectRenderingForBAM": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "row": {
+          "$ref": "#/definitions/Channel"
+        },
+        "size": {
+          "$ref": "#/definitions/Channel"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "stretch": {
+          "type": "boolean"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Channel"
+        },
+        "strokeWidth": {
+          "$ref": "#/definitions/Channel"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "#/definitions/Channel"
+        },
+        "title": {
+          "type": "string"
+        },
+        "tooltip": {
+          "items": {
+            "$ref": "#/definitions/Tooltip"
+          },
+          "type": "array"
+        },
+        "tracks": {
+          "items": {
+            "$ref": "#/definitions/PartialTrack"
+          },
+          "type": "array"
+        },
+        "visibility": {
+          "items": {
+            "$ref": "#/definitions/VisibilityCondition"
+          },
+          "type": "array"
+        },
+        "width": {
+          "type": "number"
+        },
+        "x": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "xe": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "yOffset": {
+          "type": "number"
+        },
+        "ye": {
+          "$ref": "#/definitions/Channel"
+        }
+      },
+      "required": [
+        "alignment",
+        "tracks",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
+    "PREDEFINED_COLORS": {
+      "enum": [
+        "viridis",
+        "grey",
+        "spectral",
+        "warm",
+        "cividis",
+        "bupu",
+        "rdbu"
+      ],
+      "type": "string"
+    },
+    "PartialTrack": {
+      "additionalProperties": false,
+      "properties": {
+        "_invalidTrack": {
+          "type": "boolean"
+        },
+        "_renderingId": {
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "color": {
+          "$ref": "#/definitions/Channel"
+        },
+        "column": {
+          "$ref": "#/definitions/Channel"
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "dataTransform": {
+          "items": {
+            "$ref": "#/definitions/DataTransform"
+          },
+          "type": "array"
+        },
+        "displacement": {
+          "$ref": "#/definitions/Displacement"
+        },
+        "encoding": {
+          "additionalProperties": {
+            "$ref": "#/definitions/Channel"
+          },
+          "type": "object"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "flipY": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "innerRadius": {
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "mark": {
+          "$ref": "#/definitions/Mark"
+        },
+        "opacity": {
+          "$ref": "#/definitions/Channel"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "outerRadius": {
+          "type": "number"
+        },
+        "overlay": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "_invalidTrack": {
+                "type": "boolean"
+              },
+              "_renderingId": {
+                "type": "string"
+              },
+              "assembly": {
+                "$ref": "#/definitions/Assembly"
+              },
+              "centerRadius": {
+                "description": "Proportion of the radius of the center white space.",
+                "type": "number"
+              },
+              "color": {
+                "$ref": "#/definitions/Channel"
+              },
+              "column": {
+                "$ref": "#/definitions/Channel"
+              },
+              "data": {
+                "$ref": "#/definitions/DataDeep"
+              },
+              "dataTransform": {
+                "items": {
+                  "$ref": "#/definitions/DataTransform"
+                },
+                "type": "array"
+              },
+              "displacement": {
+                "$ref": "#/definitions/Displacement"
+              },
+              "endAngle": {
+                "type": "number"
+              },
+              "flipY": {
+                "type": "boolean"
+              },
+              "id": {
+                "type": "string"
+              },
+              "innerRadius": {
+                "type": "number"
+              },
+              "linkingId": {
+                "type": "string"
+              },
+              "mark": {
+                "$ref": "#/definitions/Mark"
+              },
+              "opacity": {
+                "$ref": "#/definitions/Channel"
+              },
+              "orientation": {
+                "$ref": "#/definitions/Orientation"
+              },
+              "outerRadius": {
+                "type": "number"
+              },
+              "overlayOnPreviousTrack": {
+                "type": "boolean"
+              },
+              "overrideTemplate": {
+                "type": "boolean"
+              },
+              "prerelease": {
+                "additionalProperties": false,
+                "properties": {
+                  "testUsingNewRectRenderingForBAM": {
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              },
+              "row": {
+                "$ref": "#/definitions/Channel"
+              },
+              "size": {
+                "$ref": "#/definitions/Channel"
+              },
+              "spacing": {
+                "type": "number"
+              },
+              "startAngle": {
+                "type": "number"
+              },
+              "static": {
+                "type": "boolean"
+              },
+              "stretch": {
+                "type": "boolean"
+              },
+              "stroke": {
+                "$ref": "#/definitions/Channel"
+              },
+              "strokeWidth": {
+                "$ref": "#/definitions/Channel"
+              },
+              "style": {
+                "$ref": "#/definitions/Style"
+              },
+              "text": {
+                "$ref": "#/definitions/Channel"
+              },
+              "tooltip": {
+                "items": {
+                  "$ref": "#/definitions/Tooltip"
+                },
+                "type": "array"
+              },
+              "visibility": {
+                "items": {
+                  "$ref": "#/definitions/VisibilityCondition"
+                },
+                "type": "array"
+              },
+              "x": {
+                "$ref": "#/definitions/Channel"
+              },
+              "x1": {
+                "$ref": "#/definitions/Channel"
+              },
+              "x1e": {
+                "$ref": "#/definitions/Channel"
+              },
+              "xAxis": {
+                "$ref": "#/definitions/AxisPosition"
+              },
+              "xDomain": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/DomainInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChrInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChr"
+                  }
+                ]
+              },
+              "xOffset": {
+                "type": "number"
+              },
+              "xe": {
+                "$ref": "#/definitions/Channel"
+              },
+              "y": {
+                "$ref": "#/definitions/Channel"
+              },
+              "y1": {
+                "$ref": "#/definitions/Channel"
+              },
+              "y1e": {
+                "$ref": "#/definitions/Channel"
+              },
+              "yOffset": {
+                "type": "number"
+              },
+              "ye": {
+                "$ref": "#/definitions/Channel"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "overrideTemplate": {
+          "type": "boolean"
+        },
+        "prerelease": {
+          "additionalProperties": false,
+          "properties": {
+            "testUsingNewRectRenderingForBAM": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "row": {
+          "$ref": "#/definitions/Channel"
+        },
+        "size": {
+          "$ref": "#/definitions/Channel"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "stretch": {
+          "type": "boolean"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Channel"
+        },
+        "strokeWidth": {
+          "$ref": "#/definitions/Channel"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "template": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "#/definitions/Channel"
+        },
+        "title": {
+          "type": "string"
+        },
+        "tooltip": {
+          "items": {
+            "$ref": "#/definitions/Tooltip"
+          },
+          "type": "array"
+        },
+        "visibility": {
+          "items": {
+            "$ref": "#/definitions/VisibilityCondition"
+          },
+          "type": "array"
+        },
+        "width": {
+          "type": "number"
+        },
+        "x": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "xe": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "yOffset": {
+          "type": "number"
+        },
+        "ye": {
+          "$ref": "#/definitions/Channel"
+        }
+      },
+      "type": "object"
+    },
+    "Range": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        {
+          "$ref": "#/definitions/PREDEFINED_COLORS"
+        }
+      ]
+    },
+    "RangeFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "inRange": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "not": {
+          "type": "boolean"
+        },
+        "type": {
+          "const": "filter",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "field",
+        "inRange"
+      ],
+      "type": "object"
+    },
+    "RootSpecWithMultipleViews": {
+      "additionalProperties": false,
+      "properties": {
+        "arrangement": {
+          "enum": [
+            "parallel",
+            "serial",
+            "horizontal",
+            "vertical"
+          ],
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "views": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/SingleView"
+              },
+              {
+                "$ref": "#/definitions/MultipleViews"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "yOffset": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "views"
+      ],
+      "type": "object"
+    },
+    "RootSpecWithSingleView": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "_invalidTrack": {
+              "type": "boolean"
+            },
+            "_renderingId": {
+              "type": "string"
+            },
+            "alignment": {
+              "const": "overlay",
+              "type": "string"
+            },
+            "assembly": {
+              "$ref": "#/definitions/Assembly"
+            },
+            "centerRadius": {
+              "description": "Proportion of the radius of the center white space.",
+              "type": "number"
+            },
+            "color": {
+              "$ref": "#/definitions/Channel"
+            },
+            "column": {
+              "$ref": "#/definitions/Channel"
+            },
+            "data": {
+              "$ref": "#/definitions/DataDeep"
+            },
+            "dataTransform": {
+              "items": {
+                "$ref": "#/definitions/DataTransform"
+              },
+              "type": "array"
+            },
+            "description": {
+              "type": "string"
+            },
+            "displacement": {
+              "$ref": "#/definitions/Displacement"
+            },
+            "endAngle": {
+              "type": "number"
+            },
+            "flipY": {
+              "type": "boolean"
+            },
+            "height": {
+              "type": "number"
+            },
+            "id": {
+              "type": "string"
+            },
+            "innerRadius": {
+              "type": "number"
+            },
+            "layout": {
+              "$ref": "#/definitions/Layout"
+            },
+            "linkingId": {
+              "type": "string"
+            },
+            "mark": {
+              "$ref": "#/definitions/Mark"
+            },
+            "opacity": {
+              "$ref": "#/definitions/Channel"
+            },
+            "orientation": {
+              "$ref": "#/definitions/Orientation"
+            },
+            "outerRadius": {
+              "type": "number"
+            },
+            "overlayOnPreviousTrack": {
+              "type": "boolean"
+            },
+            "overrideTemplate": {
+              "type": "boolean"
+            },
+            "prerelease": {
+              "additionalProperties": false,
+              "properties": {
+                "testUsingNewRectRenderingForBAM": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "row": {
+              "$ref": "#/definitions/Channel"
+            },
+            "size": {
+              "$ref": "#/definitions/Channel"
+            },
+            "spacing": {
+              "type": "number"
+            },
+            "startAngle": {
+              "type": "number"
+            },
+            "static": {
+              "type": "boolean"
+            },
+            "stretch": {
+              "type": "boolean"
+            },
+            "stroke": {
+              "$ref": "#/definitions/Channel"
+            },
+            "strokeWidth": {
+              "$ref": "#/definitions/Channel"
+            },
+            "style": {
+              "$ref": "#/definitions/Style"
+            },
+            "subtitle": {
+              "type": "string"
+            },
+            "text": {
+              "$ref": "#/definitions/Channel"
+            },
+            "title": {
+              "type": "string"
+            },
+            "tooltip": {
+              "items": {
+                "$ref": "#/definitions/Tooltip"
+              },
+              "type": "array"
+            },
+            "tracks": {
+              "items": {
+                "$ref": "#/definitions/PartialTrack"
+              },
+              "type": "array"
+            },
+            "visibility": {
+              "items": {
+                "$ref": "#/definitions/VisibilityCondition"
+              },
+              "type": "array"
+            },
+            "width": {
+              "type": "number"
+            },
+            "x": {
+              "$ref": "#/definitions/Channel"
+            },
+            "x1": {
+              "$ref": "#/definitions/Channel"
+            },
+            "x1e": {
+              "$ref": "#/definitions/Channel"
+            },
+            "xAxis": {
+              "$ref": "#/definitions/AxisPosition"
+            },
+            "xDomain": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/DomainInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChrInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChr"
+                }
+              ]
+            },
+            "xOffset": {
+              "type": "number"
+            },
+            "xe": {
+              "$ref": "#/definitions/Channel"
+            },
+            "y": {
+              "$ref": "#/definitions/Channel"
+            },
+            "y1": {
+              "$ref": "#/definitions/Channel"
+            },
+            "y1e": {
+              "$ref": "#/definitions/Channel"
+            },
+            "yOffset": {
+              "type": "number"
+            },
+            "ye": {
+              "$ref": "#/definitions/Channel"
+            }
+          },
+          "required": [
+            "alignment",
+            "height",
+            "tracks",
+            "width"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "_invalidTrack": {
+              "type": "boolean"
+            },
+            "_renderingId": {
+              "type": "string"
+            },
+            "alignment": {
+              "const": "stack",
+              "type": "string"
+            },
+            "assembly": {
+              "$ref": "#/definitions/Assembly"
+            },
+            "centerRadius": {
+              "description": "Proportion of the radius of the center white space.",
+              "type": "number"
+            },
+            "color": {
+              "$ref": "#/definitions/Channel"
+            },
+            "column": {
+              "$ref": "#/definitions/Channel"
+            },
+            "data": {
+              "$ref": "#/definitions/DataDeep"
+            },
+            "dataTransform": {
+              "items": {
+                "$ref": "#/definitions/DataTransform"
+              },
+              "type": "array"
+            },
+            "description": {
+              "type": "string"
+            },
+            "displacement": {
+              "$ref": "#/definitions/Displacement"
+            },
+            "endAngle": {
+              "type": "number"
+            },
+            "flipY": {
+              "type": "boolean"
+            },
+            "height": {
+              "type": "number"
+            },
+            "id": {
+              "type": "string"
+            },
+            "innerRadius": {
+              "type": "number"
+            },
+            "layout": {
+              "$ref": "#/definitions/Layout"
+            },
+            "linkingId": {
+              "type": "string"
+            },
+            "mark": {
+              "$ref": "#/definitions/Mark"
+            },
+            "opacity": {
+              "$ref": "#/definitions/Channel"
+            },
+            "orientation": {
+              "$ref": "#/definitions/Orientation"
+            },
+            "outerRadius": {
+              "type": "number"
+            },
+            "overlayOnPreviousTrack": {
+              "type": "boolean"
+            },
+            "overrideTemplate": {
+              "type": "boolean"
+            },
+            "prerelease": {
+              "additionalProperties": false,
+              "properties": {
+                "testUsingNewRectRenderingForBAM": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "row": {
+              "$ref": "#/definitions/Channel"
+            },
+            "size": {
+              "$ref": "#/definitions/Channel"
+            },
+            "spacing": {
+              "type": "number"
+            },
+            "startAngle": {
+              "type": "number"
+            },
+            "static": {
+              "type": "boolean"
+            },
+            "stretch": {
+              "type": "boolean"
+            },
+            "stroke": {
+              "$ref": "#/definitions/Channel"
+            },
+            "strokeWidth": {
+              "$ref": "#/definitions/Channel"
+            },
+            "style": {
+              "$ref": "#/definitions/Style"
+            },
+            "subtitle": {
+              "type": "string"
+            },
+            "text": {
+              "$ref": "#/definitions/Channel"
+            },
+            "title": {
+              "type": "string"
+            },
+            "tooltip": {
+              "items": {
+                "$ref": "#/definitions/Tooltip"
+              },
+              "type": "array"
+            },
+            "tracks": {
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/PartialTrack"
+                  },
+                  {
+                    "$ref": "#/definitions/OverlaidTracks"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            "visibility": {
+              "items": {
+                "$ref": "#/definitions/VisibilityCondition"
+              },
+              "type": "array"
+            },
+            "width": {
+              "type": "number"
+            },
+            "x": {
+              "$ref": "#/definitions/Channel"
+            },
+            "x1": {
+              "$ref": "#/definitions/Channel"
+            },
+            "x1e": {
+              "$ref": "#/definitions/Channel"
+            },
+            "xAxis": {
+              "$ref": "#/definitions/AxisPosition"
+            },
+            "xDomain": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/DomainInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChrInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChr"
+                }
+              ]
+            },
+            "xOffset": {
+              "type": "number"
+            },
+            "xe": {
+              "$ref": "#/definitions/Channel"
+            },
+            "y": {
+              "$ref": "#/definitions/Channel"
+            },
+            "y1": {
+              "$ref": "#/definitions/Channel"
+            },
+            "y1e": {
+              "$ref": "#/definitions/Channel"
+            },
+            "yOffset": {
+              "type": "number"
+            },
+            "ye": {
+              "$ref": "#/definitions/Channel"
+            }
+          },
+          "required": [
+            "tracks"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "assembly": {
+              "$ref": "#/definitions/Assembly"
+            },
+            "centerRadius": {
+              "description": "Proportion of the radius of the center white space.",
+              "type": "number"
+            },
+            "description": {
+              "type": "string"
+            },
+            "layout": {
+              "$ref": "#/definitions/Layout"
+            },
+            "linkingId": {
+              "type": "string"
+            },
+            "orientation": {
+              "$ref": "#/definitions/Orientation"
+            },
+            "spacing": {
+              "type": "number"
+            },
+            "static": {
+              "type": "boolean"
+            },
+            "style": {
+              "$ref": "#/definitions/Style"
+            },
+            "subtitle": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "tracks": {
+              "items": {
+                "$ref": "#/definitions/Track"
+              },
+              "type": "array"
+            },
+            "xAxis": {
+              "$ref": "#/definitions/AxisPosition"
+            },
+            "xDomain": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/DomainInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChrInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChr"
+                }
+              ]
+            },
+            "xOffset": {
+              "type": "number"
+            },
+            "yOffset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "tracks"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SingleTrack": {
+      "additionalProperties": false,
+      "properties": {
+        "_invalidTrack": {
+          "type": "boolean"
+        },
+        "_renderingId": {
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "color": {
+          "$ref": "#/definitions/Channel"
+        },
+        "column": {
+          "$ref": "#/definitions/Channel"
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "dataTransform": {
+          "items": {
+            "$ref": "#/definitions/DataTransform"
+          },
+          "type": "array"
+        },
+        "displacement": {
+          "$ref": "#/definitions/Displacement"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "flipY": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "innerRadius": {
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "mark": {
+          "$ref": "#/definitions/Mark"
+        },
+        "opacity": {
+          "$ref": "#/definitions/Channel"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "outerRadius": {
+          "type": "number"
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "overrideTemplate": {
+          "type": "boolean"
+        },
+        "prerelease": {
+          "additionalProperties": false,
+          "properties": {
+            "testUsingNewRectRenderingForBAM": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "row": {
+          "$ref": "#/definitions/Channel"
+        },
+        "size": {
+          "$ref": "#/definitions/Channel"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "stretch": {
+          "type": "boolean"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Channel"
+        },
+        "strokeWidth": {
+          "$ref": "#/definitions/Channel"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "#/definitions/Channel"
+        },
+        "title": {
+          "type": "string"
+        },
+        "tooltip": {
+          "items": {
+            "$ref": "#/definitions/Tooltip"
+          },
+          "type": "array"
+        },
+        "visibility": {
+          "items": {
+            "$ref": "#/definitions/VisibilityCondition"
+          },
+          "type": "array"
+        },
+        "width": {
+          "type": "number"
+        },
+        "x": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "xe": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "yOffset": {
+          "type": "number"
+        },
+        "ye": {
+          "$ref": "#/definitions/Channel"
+        }
+      },
+      "required": [
+        "data",
+        "height",
+        "mark",
+        "width"
+      ],
+      "type": "object"
+    },
+    "SingleView": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/OverlaidTracks"
+        },
+        {
+          "$ref": "#/definitions/StackedTracks"
+        },
+        {
+          "$ref": "#/definitions/FlatTracks"
+        }
+      ]
+    },
+    "SizeVisibilityCondition": {
+      "additionalProperties": false,
+      "properties": {
+        "conditionPadding": {
+          "type": "number"
+        },
+        "measure": {
+          "enum": [
+            "width",
+            "height"
+          ],
+          "type": "string"
+        },
+        "operation": {
+          "$ref": "#/definitions/LogicalOperation"
+        },
+        "target": {
+          "enum": [
+            "track",
+            "mark"
+          ],
+          "type": "string"
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "const": "|xe-x|",
+              "type": "string"
+            }
+          ]
+        },
+        "transitionPadding": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "measure",
+        "operation",
+        "target",
+        "threshold"
+      ],
+      "type": "object"
+    },
+    "StackedTracks": {
+      "additionalProperties": false,
+      "properties": {
+        "_invalidTrack": {
+          "type": "boolean"
+        },
+        "_renderingId": {
+          "type": "string"
+        },
+        "alignment": {
+          "const": "stack",
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "color": {
+          "$ref": "#/definitions/Channel"
+        },
+        "column": {
+          "$ref": "#/definitions/Channel"
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "dataTransform": {
+          "items": {
+            "$ref": "#/definitions/DataTransform"
+          },
+          "type": "array"
+        },
+        "displacement": {
+          "$ref": "#/definitions/Displacement"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "flipY": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "innerRadius": {
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "mark": {
+          "$ref": "#/definitions/Mark"
+        },
+        "opacity": {
+          "$ref": "#/definitions/Channel"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "outerRadius": {
+          "type": "number"
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "overrideTemplate": {
+          "type": "boolean"
+        },
+        "prerelease": {
+          "additionalProperties": false,
+          "properties": {
+            "testUsingNewRectRenderingForBAM": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "row": {
+          "$ref": "#/definitions/Channel"
+        },
+        "size": {
+          "$ref": "#/definitions/Channel"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "stretch": {
+          "type": "boolean"
+        },
+        "stroke": {
+          "$ref": "#/definitions/Channel"
+        },
+        "strokeWidth": {
+          "$ref": "#/definitions/Channel"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "text": {
+          "$ref": "#/definitions/Channel"
+        },
+        "title": {
+          "type": "string"
+        },
+        "tooltip": {
+          "items": {
+            "$ref": "#/definitions/Tooltip"
+          },
+          "type": "array"
+        },
+        "tracks": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/PartialTrack"
+              },
+              {
+                "$ref": "#/definitions/OverlaidTracks"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "visibility": {
+          "items": {
+            "$ref": "#/definitions/VisibilityCondition"
+          },
+          "type": "array"
+        },
+        "width": {
+          "type": "number"
+        },
+        "x": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "x1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "xe": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1": {
+          "$ref": "#/definitions/Channel"
+        },
+        "y1e": {
+          "$ref": "#/definitions/Channel"
+        },
+        "yOffset": {
+          "type": "number"
+        },
+        "ye": {
+          "$ref": "#/definitions/Channel"
+        }
+      },
+      "required": [
+        "tracks"
+      ],
+      "type": "object"
+    },
+    "StrConcatTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "newField": {
+          "type": "string"
+        },
+        "separator": {
+          "type": "string"
+        },
+        "type": {
+          "const": "concat",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "fields",
+        "newField",
+        "separator"
+      ],
+      "type": "object"
+    },
+    "StrReplaceTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "newField": {
+          "type": "string"
+        },
+        "replace": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "from",
+              "to"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "replace",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "field",
+        "newField",
+        "replace"
+      ],
+      "type": "object"
+    },
+    "Style": {
+      "additionalProperties": false,
+      "properties": {
+        "align": {
+          "enum": [
+            "left",
+            "right"
+          ],
+          "type": "string"
+        },
+        "background": {
+          "type": "string"
+        },
+        "backgroundOpacity": {
+          "type": "number"
+        },
+        "bazierLink": {
+          "type": "boolean"
+        },
+        "circularLink": {
+          "type": "boolean"
+        },
+        "curve": {
+          "enum": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ],
+          "type": "string"
+        },
+        "dashed": {
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "dx": {
+          "type": "number"
+        },
+        "dy": {
+          "type": "number"
+        },
+        "enableSmoothPath": {
+          "type": "boolean"
+        },
+        "inlineLegend": {
+          "type": "boolean"
+        },
+        "legendTitle": {
+          "type": "string"
+        },
+        "linePattern": {
+          "additionalProperties": false,
+          "properties": {
+            "size": {
+              "type": "number"
+            },
+            "type": {
+              "enum": [
+                "triangleLeft",
+                "triangleRight"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "size"
+          ],
+          "type": "object"
+        },
+        "linkConnectionType": {
+          "enum": [
+            "straight",
+            "curve",
+            "corner"
+          ],
+          "type": "string"
+        },
+        "outline": {
+          "type": "string"
+        },
+        "outlineWidth": {
+          "type": "number"
+        },
+        "textAnchor": {
+          "enum": [
+            "start",
+            "middle",
+            "end"
+          ],
+          "type": "string"
+        },
+        "textFontSize": {
+          "type": "number"
+        },
+        "textFontWeight": {
+          "enum": [
+            "bold",
+            "normal"
+          ],
+          "type": "string"
+        },
+        "textStroke": {
+          "type": "string"
+        },
+        "textStrokeWidth": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TemplateTrack": {
+      "additionalProperties": false,
+      "description": "Template specification that will be internally converted into `SingleTrack` for rendering",
+      "properties": {
+        "_invalidTrack": {
+          "type": "boolean"
+        },
+        "_renderingId": {
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.",
+          "type": "number"
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "encoding": {
+          "additionalProperties": {
+            "$ref": "#/definitions/Channel"
+          },
+          "type": "object"
+        },
+        "endAngle": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "innerRadius": {
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "linkingId": {
+          "type": "string"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation"
+        },
+        "outerRadius": {
+          "type": "number"
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "prerelease": {
+          "additionalProperties": false,
+          "properties": {
+            "testUsingNewRectRenderingForBAM": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "spacing": {
+          "type": "number"
+        },
+        "startAngle": {
+          "type": "number"
+        },
+        "static": {
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "template": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        },
+        "xAxis": {
+          "$ref": "#/definitions/AxisPosition"
+        },
+        "xDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ]
+        },
+        "xOffset": {
+          "type": "number"
+        },
+        "yOffset": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "data",
+        "height",
+        "template",
+        "width"
+      ],
+      "type": "object"
+    },
+    "Tooltip": {
+      "additionalProperties": false,
+      "properties": {
+        "alt": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/FieldType"
+        }
+      },
+      "required": [
+        "field",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Track": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SingleTrack"
+        },
+        {
+          "$ref": "#/definitions/OverlaidTrack"
+        },
+        {
+          "$ref": "#/definitions/DataTrack"
+        },
+        {
+          "$ref": "#/definitions/TemplateTrack"
+        }
+      ]
+    },
+    "VectorData": {
+      "additionalProperties": false,
+      "properties": {
+        "binSize": {
+          "type": "number"
+        },
+        "column": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "type": {
+          "const": "vector",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "column",
+        "value"
+      ],
+      "type": "object"
+    },
+    "VisibilityCondition": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SizeVisibilityCondition"
+        },
+        {
+          "$ref": "#/definitions/ZoomLevelVisibilityCondition"
+        }
+      ]
+    },
+    "ZoomLevelVisibilityCondition": {
+      "additionalProperties": false,
+      "properties": {
+        "conditionPadding": {
+          "type": "number"
+        },
+        "measure": {
+          "const": "zoomLevel",
+          "type": "string"
+        },
+        "operation": {
+          "$ref": "#/definitions/LogicalOperation"
+        },
+        "target": {
+          "enum": [
+            "track",
+            "mark"
+          ],
+          "type": "string"
+        },
+        "threshold": {
+          "type": "number"
+        },
+        "transitionPadding": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "measure",
+        "operation",
+        "target",
+        "threshold"
+      ],
+      "type": "object"
+    }
+  }
+}

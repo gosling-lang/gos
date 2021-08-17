@@ -1,0 +1,344 @@
+# The contents of this file are automatically written by
+# tools/generate_schema_wrapper.py. Do not modify directly.
+from . import core
+from gosling.schemapi import Undefined
+
+
+class MarkMethodMixin(object):
+    """A mixin class that defines mark methods"""
+
+    def mark_point(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                   bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                   dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                   legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                   outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                   textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'point'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "point"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_line(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                  bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                  dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                  legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                  outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'line'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "line"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_area(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                  bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                  dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                  legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                  outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'area'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "area"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_bar(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                 bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                 dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                 legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                 outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                 textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                 textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'bar'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "bar"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_rect(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                  bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                  dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                  legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                  outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'rect'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "rect"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_text(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                  bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                  dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                  legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                  outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'text'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "text"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_withinLink(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                        bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                        dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                        legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                        outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                        textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                        textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'withinLink'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "withinLink"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_betweenLink(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                         bazierLink=Undefined, circularLink=Undefined, curve=Undefined,
+                         dashed=Undefined, dx=Undefined, dy=Undefined, enableSmoothPath=Undefined,
+                         inlineLegend=Undefined, legendTitle=Undefined, linePattern=Undefined,
+                         linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
+                         textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
+                         textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'betweenLink'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "betweenLink"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_rule(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                  bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                  dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                  legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                  outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'rule'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "rule"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_triangleLeft(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                          bazierLink=Undefined, circularLink=Undefined, curve=Undefined,
+                          dashed=Undefined, dx=Undefined, dy=Undefined, enableSmoothPath=Undefined,
+                          inlineLegend=Undefined, legendTitle=Undefined, linePattern=Undefined,
+                          linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
+                          textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
+                          textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'triangleLeft'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "triangleLeft"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_triangleRight(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                           bazierLink=Undefined, circularLink=Undefined, curve=Undefined,
+                           dashed=Undefined, dx=Undefined, dy=Undefined, enableSmoothPath=Undefined,
+                           inlineLegend=Undefined, legendTitle=Undefined, linePattern=Undefined,
+                           linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
+                           textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
+                           textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'triangleRight'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "triangleRight"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_triangleBottom(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                            bazierLink=Undefined, circularLink=Undefined, curve=Undefined,
+                            dashed=Undefined, dx=Undefined, dy=Undefined, enableSmoothPath=Undefined,
+                            inlineLegend=Undefined, legendTitle=Undefined, linePattern=Undefined,
+                            linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
+                            textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
+                            textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'triangleBottom'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "triangleBottom"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_brush(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                   bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                   dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                   legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                   outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                   textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'brush'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "brush"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy
+
+    def mark_header(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                    bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
+                    dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                    legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                    outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
+                    textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                    textStrokeWidth=Undefined, **kwds):
+        """Set the chart's mark to 'header'
+    
+        For information on additional arguments, see :class:`Style`
+        """
+        kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
+                    bazierLink=bazierLink, circularLink=circularLink, curve=curve, dashed=dashed, dx=dx,
+                    dy=dy, enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
+                    linkConnectionType=linkConnectionType, outline=outline, outlineWidth=outlineWidth,
+                    textAnchor=textAnchor, textFontSize=textFontSize, textFontWeight=textFontWeight,
+                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+        copy = self.copy()
+        copy.mark = "header"
+        if any(val is not Undefined for val in kwds.values()):
+            copy.style = core.Style(**kwds)
+        return copy

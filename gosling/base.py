@@ -1,6 +1,7 @@
 from typing import Union
-from gosling.schema import Root
+
 from gosling.display import JSRenderer  # , HTMLRenderer
+from gosling.schema import Root
 
 GOSLING_VERSION = "0.9.1"
 HIGLASS_VERSION = "1.11.3"
