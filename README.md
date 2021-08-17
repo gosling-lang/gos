@@ -37,11 +37,11 @@ data = gos.Data(
 )
 
 track = gos.Track(data=data, layout="linear").mark_bar().encode(
-	y="peak:Q",
-	x="start:G",
-	xe="end:G",
-	stroke=gos.Channel(value=0.5),
-	strokeWidth=gos.Channel(value=0.5),
+    y="peak:Q",
+    x="start:G",
+    xe="end:G",
+    stroke=gos.Channel(value=0.5),
+    strokeWidth=gos.Channel(value=0.5),
 ).properties(width=180)
 
 spec = track.chart(title="Basic Marks: Bar", subtitle="Tutorial Examples")

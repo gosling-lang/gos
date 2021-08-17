@@ -99,7 +99,7 @@ track8 = base.mark_withinLink().encode(
     opacity={"value": 0.2},
 )
 
-spec = gos.Root(
+spec = gos.Chart(
     title="Visual Encoding",
     subtitle="Gosling provides diverse visual encoding methods",
     layout="linear",

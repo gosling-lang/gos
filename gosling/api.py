@@ -1,11 +1,33 @@
 from gosling.schema import Undefined, channels, core, mixins
 from gosling.utils import infer_encoding_types
+from gosling.display import JSRenderer  # , HTMLRenderer
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 180
 
 # create alias for DataDeep type
 Data = core.DataDeep
+
+renderers = {
+    # "html": HTMLRenderer(
+    #     gosling_version=GOSLING_VERSION,
+    #     higlass_version=HIGLASS_VERSION,
+    #     react_version=REACT_VERSION,
+    #     react_dom_version=REACT_DOM_VERSION,
+    #     pixijs_version=PIXIJS_VERSION,
+    # ),
+    "js": JSRenderer(),
+}
+
+class Chart(core.Root):
+    def _repr_mimebundle_(self, include=None, exclude=None):
+        dct = self.to_dict()
+        renderer = renderers.get("js")
+        return renderer(dct) if renderer else {}
+
+    def display(self):
+        from IPython.display import display
+        display(self)
 
 class _EncodingMixin:
     def encode(self, *args, **kwargs):
@@ -35,10 +57,11 @@ class Track(_EncodingMixin, _PropertiesMixen, mixins.MarkMethodMixin, core.Track
         )
 
     def chart(self, **kwargs):
-        return core.Root(tracks=[self.copy()], **kwargs)
+        return Chart(tracks=[self.copy()], **kwargs)
 
 
 class PartialTrack(
     _EncodingMixin, _PropertiesMixen, mixins.MarkMethodMixin, core.PartialTrack
 ):
     ...
+
