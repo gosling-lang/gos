@@ -121,4 +121,5 @@ spec = gos.Root(
     ],
 )
 
-print(spec.to_json())
+with open('spec-test.json', mode='w') as f:
+    f.write(spec.to_json())

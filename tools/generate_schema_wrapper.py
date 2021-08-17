@@ -70,15 +70,10 @@ class FieldChannelMixin(object):
             type_in_shorthand = 'type' in parsed
             type_defined_explicitly = self._get('type') is not Undefined
             if not (type_in_shorthand or type_defined_explicitly):
-                if isinstance(context.get('data', None), pd.DataFrame):
-                    raise ValueError("{} encoding field is specified without a type; "
-                                     "the type cannot be inferred because it does not "
-                                     "match any column in the data.".format(shorthand))
-                else:
-                    raise ValueError("{} encoding field is specified without a type; "
-                                     "the type cannot be automatically inferred because "
-                                     "the data is not specified as a pandas.DataFrame."
-                                     "".format(shorthand))
+                raise ValueError("{} encoding field is specified without a type; "
+                                 "the type cannot be automatically inferred because "
+                                 "the data is not specified as a pandas.DataFrame."
+                                 "".format(shorthand))
         else:
             # Shorthand is not a string; we pass the definition to field,
             # and do not do any parsing.
@@ -144,7 +139,7 @@ SCHEMA_VERSION = {
     "gosling": {"v0": ""},
 }
 
-SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/gosling.js/master/schema/gosling.schema.json"
+SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/gosling.js/107ab0cd43f96e3f8eaac44205ef9ab5c5111ee0/schema/gosling.schema.json"
 
 
 def schema_class(*args, **kwargs):

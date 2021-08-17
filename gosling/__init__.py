@@ -1,6 +1,6 @@
 from gosling.base import Gosling
 from gosling.schema import *
-from gosling.api import Track
+from gosling.api import Track, PartialTrack
 from gosling.schema.channels import Channel
 from gosling.widget import GoslingWidget
 

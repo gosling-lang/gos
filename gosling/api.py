@@ -15,7 +15,15 @@ class _EncodingMixin:
         return copy
 
 
-class Track(_EncodingMixin, mixins.MarkMethodMixin, core.Track):
+class _PropertiesMixen:
+    def properties(self, **kwargs):
+        copy = self.copy()
+        for key, value in kwargs.items():
+            copy[key] = value
+        return copy
+
+
+class Track(_EncodingMixin, _PropertiesMixen, mixins.MarkMethodMixin, core.Track):
     def __init__(self, data=Undefined, **kwargs):
         super().__init__(
             data=data,
@@ -24,11 +32,11 @@ class Track(_EncodingMixin, mixins.MarkMethodMixin, core.Track):
             **kwargs,
         )
 
-    def properties(self, **kwargs):
-        copy = self.copy()
-        for key, value in kwargs.items():
-            copy[key] = value
-        return copy
-
     def chart(self, **kwargs):
         return core.Root(tracks=[self.copy()], **kwargs)
+
+
+class PartialTrack(
+    _EncodingMixin, _PropertiesMixen, mixins.MarkMethodMixin, core.PartialTrack
+):
+    ...
