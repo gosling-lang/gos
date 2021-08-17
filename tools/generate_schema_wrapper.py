@@ -396,6 +396,7 @@ def main(skip_download: Optional[bool] = False):
     with open(outfile, "w", encoding="utf8") as f:
         f.write("# flake8: noqa\n")
         f.write("from .core import *\n")
+        f.write("from .channels import *\n")
         f.write(f"SCHEMA_VERSION = {version!r}\n")
         f.write(f"SCHEMA_URL = {schema_url(library, version)!r}\n")
 

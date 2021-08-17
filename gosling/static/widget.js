@@ -1,0 +1,7 @@
+define(["exports","@jupyter-widgets/base","nbextensions/jupyter-gosling/index"], (exports, ...__imports) => {
+var __mods = Object.fromEntries(["@jupyter-widgets/base","nbextensions/jupyter-gosling/index"].map((n, i) => [n, i]));
+var require = (name) => __imports[__mods[name]];
+
+var p=Object.create;var o=Object.defineProperty;var c=Object.getOwnPropertyDescriptor;var a=Object.getOwnPropertyNames;var h=Object.getPrototypeOf,E=Object.prototype.hasOwnProperty;var n=e=>o(e,"__esModule",{value:!0});var g=(e,t)=>{n(e);for(var s in t)o(e,s,{get:t[s],enumerable:!0})},b=(e,t,s)=>{if(t&&typeof t=="object"||typeof t=="function")for(let r of a(t))!E.call(e,r)&&r!=="default"&&o(e,r,{get:()=>t[r],enumerable:!(s=c(t,r))||s.enumerable});return e},i=e=>b(n(o(e!=null?p(h(e)):{},"default",e&&e.__esModule&&"default"in e?{get:()=>e.default,enumerable:!0}:{value:e,enumerable:!0})),e);g(exports,{GoslingWidget:()=>l});var m=i(require("@jupyter-widgets/base")),d=i(require("nbextensions/jupyter-gosling/index")),l=class extends m.DOMWidgetView{viewElement=document.createElement("div");errorElement=document.createElement("div");render(){this.el.appendChild(this.viewElement),this.errorElement.style.color="red",this.el.appendChild(this.errorElement);let t=()=>{this.embed().catch(s=>console.error(s))};this.model.on("change:_spec_source",t),this.model.on("change:_opt_source",t),t()}async embed(){let t=JSON.parse(this.model.get("_spec_source")),s=JSON.parse(this.model.get("_opt_source"))||{};t!=null&&(0,d.goslingEmbed)(this.viewElement,t,s)}};
+
+});
