@@ -134,7 +134,7 @@ class ValueSchemaGenerator(codegen.SchemaGenerator):
     )
 
 
-SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/v{version}/schema/gosling.schema.json"
+SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/schema/gosling.schema.json"
 
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
@@ -380,7 +380,7 @@ def generate_mark_mixin(
 
 def main(skip_download: Optional[bool] = False):
     library = "gosling.js"
-    version = "0.9.2"
+    version = "v0.9.2"
 
     schemapath = here.parent / ".." / "gosling" / "schema"
     schemafile = download_schemafile(
