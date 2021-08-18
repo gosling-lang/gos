@@ -22,6 +22,11 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     python_requires=">=3.9",
-    install_requires=[],
+    install_requires=[
+        "jsonschema",
+        "jinja2",
+        "numpy",
+        "pandas>=0.18",
+    ],
     entry_points={},
 )
