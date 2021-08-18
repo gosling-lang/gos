@@ -1,5 +1,4 @@
 import json
-from typing import Optional, TypedDict, Union
 
 from gosling.schema import Root
 
@@ -15,18 +14,6 @@ except ImportError as err:
 
 __all__ = ["GoslingWidget"]
 
-EmbedOptions = TypedDict(
-    "EmbedOptions",
-    {
-        "padding": Optional[float],
-        "margin": Optional[Union[str, float]],
-        "border": Optional[str],
-        "id": Optional[str],
-        "className": Optional[str],
-        # TODO: "theme":
-    },
-)
-
 
 class GoslingWidget(DOMWidget):
     _view_module = Unicode("nbextensions/jupyter-gosling/widget").tag(sync=True)
@@ -36,9 +23,7 @@ class GoslingWidget(DOMWidget):
     _spec_source = Unicode("null").tag(sync=True)
     _opt_source = Unicode("null").tag(sync=True)
 
-    def __init__(
-        self, spec: Optional[Root] = None, opt: Optional[EmbedOptions] = None, **kwargs
-    ):
+    def __init__(self, spec=None, opt=None, **kwargs):
         super().__init__(**kwargs)
         self._spec_source = spec.to_json()
         self._opt_source = json.dumps(opt)
@@ -56,6 +41,6 @@ class GoslingWidget(DOMWidget):
         return json.loads(self._opt_source)
 
     @opt.setter
-    def opt(self, value: EmbedOptions):
+    def opt(self, value):
         self._opt_source = json.dumps(value)
         self._reset()
