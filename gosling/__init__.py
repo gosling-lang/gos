@@ -1,6 +1,7 @@
 from gosling.schema import *
 from gosling.api import *
 
+
 def _jupyter_nbextension_paths():
     """Return metadata for the jupyter-gosling nbextension."""
     return [
