@@ -19,6 +19,7 @@ renderers = {
     "js": JSRenderer(),
 }
 
+
 class Chart(core.Root):
     def _repr_mimebundle_(self, include=None, exclude=None):
         dct = self.to_dict()
@@ -27,7 +28,9 @@ class Chart(core.Root):
 
     def display(self):
         from IPython.display import display
+
         display(self)
+
 
 class _EncodingMixin:
     def encode(self, *args, **kwargs):
@@ -64,4 +67,3 @@ class PartialTrack(
     _EncodingMixin, _PropertiesMixen, mixins.MarkMethodMixin, core.PartialTrack
 ):
     ...
-
