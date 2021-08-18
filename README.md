@@ -6,31 +6,8 @@
 > [`gosling.py`](https://github.com/gosling-lang/gosling.py). Feedback is 
 > much appreciated and most welcomed. _Please use with caution_.
 
-## Installation
 ```bash
-pip install -e .
-```
-
-## Generate source code (you should not need to run these steps)
-
-The schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`)
-are automatically generated using the following scripts. Please do not edit these
-files directly.
-
-#### Python schema bindings
-
-```bash
-python tools/generate_schema_wrapper.py # generates gosling/schema/*
-```
-
-#### JavScript Jupyter extension/widget
-
-```bash
-yarn install && yarn build # generates gosling/static/{widget.js, index.js}
-
-# Only run this if using gos.GoslingWidget
-jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
-jupyter nbextension enable gosling --py --sys-prefix
+pip install gosling
 ```
 
 ## Usage
@@ -103,6 +80,7 @@ print(spec.to_json())
 # }
 ```
 
+### Jupyter notebook
 ```python
 spec # render spec in jupyter cell!
 ```
@@ -110,4 +88,31 @@ spec # render spec in jupyter cell!
 ```python
 widget = gos.GoslingWidget(spec) # create widget
 widget.spec = new_spec # update view
+```
+
+## Development
+```bash
+pip install -e .
+```
+
+## Generate source code (you should not need to run these steps)
+
+The schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`)
+are automatically generated using the following scripts. Please do not edit these
+files directly.
+
+#### Python schema bindings
+
+```bash
+python tools/generate_schema_wrapper.py # generates gosling/schema/*
+```
+
+#### JavScript Jupyter extension/widget
+
+```bash
+yarn install && yarn build # generates gosling/static/{widget.js, index.js}
+
+# Only run this if using gos.GoslingWidget
+jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
+jupyter nbextension enable gosling --py --sys-prefix
 ```
