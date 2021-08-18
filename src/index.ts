@@ -28,7 +28,7 @@ type EmbedOptions = Parameters<typeof embed>[2];
  */
 function goslingIndex(selector: string, outputs: JupyterOutput[], mimeType: string) {
 	// Return the index in the output array of the mimetype repr of this viz
-	return outputs.findIndex(item =>
+	return outputs.findIndex(item => 
 		item?.metadata?.['jupyter-gosling'] === selector &&
 		item.data?.[mimeType] !== undefined
 	);
@@ -63,7 +63,7 @@ export function render(selector: string, spec: GoslingSpec, opts?: EmbedOptions,
 		.then(async api => {
 			if (!output_area) return;
 			// TODO: any way to wait for full canvas render?
-			await wait(200);
+			await wait(2000);
 			const { canvas } = api.getCanvas({ resolution: 1 });
 			const type = 'image/png';
 			const output: JupyterOutput = {
