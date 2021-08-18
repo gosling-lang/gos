@@ -20,18 +20,6 @@ renderers = {
 }
 
 
-class Chart(core.Root):
-    def _repr_mimebundle_(self, include=None, exclude=None):
-        dct = self.to_dict()
-        renderer = renderers.get("js")
-        return renderer(dct) if renderer else {}
-
-    def display(self):
-        from IPython.display import display
-
-        display(self)
-
-
 class _EncodingMixin:
     def encode(self, *args, **kwargs):
         # Convert args to kwargs based on their types.
@@ -46,8 +34,20 @@ class _PropertiesMixen:
     def properties(self, **kwargs):
         copy = self.copy()
         for key, value in kwargs.items():
-            copy[key] = value
+            setattr(copy, key, value)
         return copy
+
+
+class Chart(_PropertiesMixen, core.Root):
+    def _repr_mimebundle_(self, include=None, exclude=None):
+        dct = self.to_dict()
+        renderer = renderers.get("js")
+        return renderer(dct) if renderer else {}
+
+    def display(self):
+        from IPython.display import display
+
+        display(self)
 
 
 class Track(_EncodingMixin, _PropertiesMixen, mixins.MarkMethodMixin, core.Track):
