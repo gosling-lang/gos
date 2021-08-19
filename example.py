@@ -17,46 +17,47 @@ tooltip = [
     {"field": "sample", "type": "nominal", "alt": "Sample"},
 ]
 
-track1 = base.mark_rect().encode(
+view1 = base.mark_rect().encode(
     x=gos.Channel("start:G", axis="top"),
     xe="end:G",
     row=gos.Channel("sample:N", legend=True),
     color=gos.Channel("peak:Q", legend=True),
     tooltip=tooltip,
-)
+).view()
 
-track2 = base.mark_bar().encode(
+
+view2 = base.mark_bar().encode(
     x=gos.Channel("position:G", axis="top"),
     y="peak:Q",
     row="sample:N",
     color=gos.Channel("sample:N", legend=True),
     tooltip=tooltip,
-)
+).view()
 
-track3 = base.mark_bar().encode(
+
+view3 = base.mark_bar().encode(
     x=gos.Channel("position:G", axis="top"),
     y=gos.Channel("peak:Q", grid=True),
     color=gos.Channel("smaple:N", legend=True),
     tooltip=tooltip,
-)
+).view()
 
-track4 = base.encode(
+
+
+overlay_base = base.encode(
     x=gos.Channel("position:G", axis="top"),
     y="peak:Q",
     row="sample:N",
     color=gos.Channel("sample:N", legend=True),
     tooltip=tooltip,
-).properties(
-    alignment="overlay",
-    tracks=[
-        gos.PartialTrack().mark_line(),
-        gos.PartialTrack().mark_point().encode(
-            size=gos.Channel("peak:Q", range=[0, 2]),
-        )
-    ],
 )
 
-track5 = base.mark_point().encode(
+view4 = gos.overlay(
+    overlay_base.mark_line(),
+    overlay_base.mark_point().encode(size=gos.Channel("peak:Q", range=[0, 2])),
+)
+
+view5 = base.mark_point().encode(
     x=gos.Channel("position:G", axis="top"),
     y="peak:Q",
     row="sample:N",
@@ -64,18 +65,20 @@ track5 = base.mark_point().encode(
     color=gos.Channel("sample:N", legend=True),
     opacity={"value": 0.5},
     tooltip=tooltip,
-)
+).view()
 
-track6 = base.mark_point().encode(
+
+view6 = base.mark_point().encode(
     x=gos.Channel("position:G", axis="top"),
     y=gos.Channel("peak:Q", grid=True),
     size="peak:Q",
     color=gos.Channel("sample:N", legend=True),
     opacity={"value": 0.5},
     tooltip=tooltip,
-)
+).view()
 
-track7 = base.mark_area().encode(
+
+view7 = base.mark_area().encode(
     x=gos.Channel("position:G", axis="top"),
     y="peak:Q",
     row="sample:N",
@@ -83,9 +86,10 @@ track7 = base.mark_area().encode(
     stroke={"value": "white"},
     strokeWidth={"value": 0.5},
     tooltip=tooltip,
-)
+).view()
 
-track8 = base.mark_withinLink().encode(
+
+view8 = base.mark_withinLink().encode(
     x=gos.Channel(
         "s1:G", domain=gos.Domain(chromosome="1", interval=[103900000, 104100000])
     ),
@@ -96,28 +100,14 @@ track8 = base.mark_withinLink().encode(
     stroke={"value": "black"},
     strokeWidth={"value": 0.5},
     opacity={"value": 0.2},
-)
+).view()
 
-spec = gos.Chart(
+spec = gos.vertical(view1, view2, view3, view4, view5, view6, view7, view8).properties(
     title="Visual Encoding",
     subtitle="Gosling provides diverse visual encoding methods",
     layout="linear",
-    arrangement="vertical",
     centerRadius=0.8,
     xDomain=gos.Domain(chromosome="1", interval=[1, 3000500]),
-    views=[
-        {"tracks": [track]}
-        for track in [
-            track1,
-            track2,
-            track3,
-            track4,
-            track5,
-            track6,
-            track7,
-            track8,
-        ]
-    ],
 )
 
 print(spec.to_dict())
