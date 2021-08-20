@@ -110,7 +110,7 @@ python tools/generate_schema_wrapper.py # generates gosling/schema/*
 #### JavScript Jupyter extension/widget
 
 ```bash
-yarn install && yarn build # generates gosling/static/{widget.js, index.js}
+yarn install && yarn build:js # generates gosling/static/{widget.js, index.js}
 
 # Only run this if using gos.GoslingWidget
 jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
