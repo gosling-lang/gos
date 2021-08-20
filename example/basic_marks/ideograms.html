@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔧</text></svg>"
+    />
+    <title>ipygosling</title>
+    <style>
+      body {
+        display: grid;
+        grid-template-columns: minmax(150px, 10%) 1fr;
+        padding: 0;
+        margin: 0;
+        font-family: system-ui, serif;
+      }
+
+      .sidebar {
+        height: 100vh;
+        font-size: 0.8em;
+        background-color: #f2f2f2;
+      }
+
+      .content {
+        padding: 2rem;
+      }
+
+      #root {
+        min-height: 20rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <ul>
+        <b>Basic Marks</b>
+        <li><a href="/basic_marks/bar_chart.html">Bar Chart</a></li>
+        <li><a href="/basic_marks/line_chart.html">Line Chart</a></li>
+        <li><a href="/basic_marks/point_plot.html">Point Plot</a></li>
+        <li><a href="/basic_marks/ideograms.html">Ideograms</a></li>
+        <li><a href="/basic_marks/area_chart.html">Area Chart</a></li>
+        <li><a href="/basic_marks/text_marks.html">Text Marks</a></li>
+        <br />
+        <b>Composite Vis</b>
+        <li>
+          <a href="/composite_vis/comparative_matrices.html">Comparative Matrices</a>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <div id="root"></div>
+      <pre><code><span class="hljs-keyword">import</span> gosling <span class="hljs-keyword">as</span> gos
+
+data = gos.Data(
+    url=<span class="hljs-string">&quot;https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/UCSC.HG38.Human.CytoBandIdeogram.csv&quot;</span>,
+    <span class="hljs-built_in">type</span>=<span class="hljs-string">&quot;csv&quot;</span>,
+    chromosomeField=<span class="hljs-string">&quot;Chromosome&quot;</span>,
+    genomicFields=[<span class="hljs-string">&quot;chromStart&quot;</span>, <span class="hljs-string">&quot;chromEnd&quot;</span>],
+)
+
+track = gos.Track(data).mark_rect(outline=<span class="hljs-string">&quot;white&quot;</span>).encode(
+    color=gos.Channel(<span class="hljs-string">&quot;Stain:N&quot;</span>,
+        domain=[<span class="hljs-string">&quot;gneg&quot;</span>, <span class="hljs-string">&quot;gpos25&quot;</span>, <span class="hljs-string">&quot;gpos50&quot;</span>, <span class="hljs-string">&quot;gpos75&quot;</span>, <span class="hljs-string">&quot;gpos100&quot;</span>, <span class="hljs-string">&quot;gvar&quot;</span>],
+        <span class="hljs-built_in">range</span>=[<span class="hljs-string">&quot;white&quot;</span>, <span class="hljs-string">&quot;#D9D9D9&quot;</span>, <span class="hljs-string">&quot;#979797&quot;</span>, <span class="hljs-string">&quot;#636363&quot;</span>, <span class="hljs-string">&quot;black&quot;</span>, <span class="hljs-string">&quot;#A0A0F2&quot;</span>],
+    ),
+    x=gos.Channel(<span class="hljs-string">&quot;chromStart:G&quot;</span>, domain=gos.Domain(chromosome=<span class="hljs-string">&quot;1&quot;</span>), axis=<span class="hljs-string">&quot;top&quot;</span>),
+    xe=<span class="hljs-string">&quot;chromEnd:G&quot;</span>,
+    size=gos.value(<span class="hljs-number">20</span>),
+    stroke=gos.value(<span class="hljs-string">&quot;gray&quot;</span>),
+    strokeWidth=gos.value(<span class="hljs-number">0.5</span>),
+).properties(
+    width=<span class="hljs-number">800</span>,
+    height=<span class="hljs-number">40</span>,
+    dataTransform=[
+        {<span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;filter&quot;</span>, <span class="hljs-string">&quot;field&quot;</span>: <span class="hljs-string">&quot;Stain&quot;</span>, <span class="hljs-string">&quot;oneOf&quot;</span>: [<span class="hljs-string">&quot;acen&quot;</span>], <span class="hljs-string">&quot;not&quot;</span>: <span class="hljs-literal">True</span>}
+    ],
+)
+
+track.view(title=<span class="hljs-string">&quot;Basic Marks: Rect&quot;</span>, subtitle=<span class="hljs-string">&quot;Tutorial Examples&quot;</span>)
+</code></pre>
+    </div>
+    <script>var SPEC = {
+  "subtitle": "Tutorial Examples",
+  "title": "Basic Marks: Rect",
+  "tracks": [
+    {
+      "color": {
+        "domain": [
+          "gneg",
+          "gpos25",
+          "gpos50",
+          "gpos75",
+          "gpos100",
+          "gvar"
+        ],
+        "field": "Stain",
+        "range": [
+          "white",
+          "#D9D9D9",
+          "#979797",
+          "#636363",
+          "black",
+          "#A0A0F2"
+        ],
+        "type": "nominal"
+      },
+      "data": {
+        "chromosomeField": "Chromosome",
+        "genomicFields": [
+          "chromStart",
+          "chromEnd"
+        ],
+        "type": "csv",
+        "url": "https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/UCSC.HG38.Human.CytoBandIdeogram.csv"
+      },
+      "dataTransform": [
+        {
+          "field": "Stain",
+          "not": true,
+          "oneOf": [
+            "acen"
+          ],
+          "type": "filter"
+        }
+      ],
+      "height": 40,
+      "mark": "rect",
+      "size": {
+        "value": 20
+      },
+      "stroke": {
+        "value": "gray"
+      },
+      "strokeWidth": {
+        "value": 0.5
+      },
+      "style": {
+        "outline": "white"
+      },
+      "width": 800,
+      "x": {
+        "axis": "top",
+        "domain": {
+          "chromosome": "1"
+        },
+        "field": "chromStart",
+        "type": "genomic"
+      },
+      "xe": {
+        "field": "chromEnd",
+        "type": "genomic"
+      }
+    }
+  ]
+}
+;</script>
+    <script type="module" src="/index.js"></script>
+  </body>
+</html>

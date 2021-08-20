@@ -3,6 +3,7 @@ __pycache__/
 
 build/
 dist/
+_site/
 examples/basic_marks/*.html
 examples/composite_vis/*.html
 

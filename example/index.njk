@@ -1,0 +1,17 @@
+---
+layout: base.njk
+title: test
+pagination:
+    data: data.routes
+    size: 1
+    alias: routes
+permalink: "{{ routes.dir | slug }}/{{ routes.name | slug }}/"
+---
+
+<div class="content">
+  <div id="root"></div>
+  <pre><code>{{ data.eleventyComputed.code(routes) | safe }}</code></pre>
+</div>
+<script>var SPEC = {{ data.eleventyComputed.spec(routes) }};</script>
+<script type="module" src="/index.js"></script>
+

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔧</text></svg>"
+    />
+    <title>ipygosling</title>
+    <style>
+      body {
+        display: grid;
+        grid-template-columns: minmax(150px, 10%) 1fr;
+        padding: 0;
+        margin: 0;
+        font-family: system-ui, serif;
+      }
+
+      .sidebar {
+        height: 100vh;
+        font-size: 0.8em;
+        background-color: #f2f2f2;
+      }
+
+      .content {
+        padding: 2rem;
+      }
+
+      #root {
+        min-height: 20rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <ul>
+        <b>Basic Marks</b>
+        <li><a href="/basic_marks/bar_chart.html">Bar Chart</a></li>
+        <li><a href="/basic_marks/line_chart.html">Line Chart</a></li>
+        <li><a href="/basic_marks/point_plot.html">Point Plot</a></li>
+        <li><a href="/basic_marks/ideograms.html">Ideograms</a></li>
+        <li><a href="/basic_marks/area_chart.html">Area Chart</a></li>
+        <li><a href="/basic_marks/text_marks.html">Text Marks</a></li>
+        <br />
+        <b>Composite Vis</b>
+        <li>
+          <a href="/composite_vis/comparative_matrices.html">Comparative Matrices</a>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <div id="root"></div>
+      <pre><code><span class="hljs-keyword">import</span> gosling <span class="hljs-keyword">as</span> gos
+
+data = gos.Data(
+    url=<span class="hljs-string">&quot;https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ&quot;</span>,
+    <span class="hljs-built_in">type</span>=<span class="hljs-string">&quot;multivec&quot;</span>,
+    row=<span class="hljs-string">&quot;base&quot;</span>,
+    column=<span class="hljs-string">&quot;position&quot;</span>,
+    value=<span class="hljs-string">&quot;count&quot;</span>,
+    categories=[<span class="hljs-string">&quot;A&quot;</span>, <span class="hljs-string">&quot;T&quot;</span>, <span class="hljs-string">&quot;G&quot;</span>, <span class="hljs-string">&quot;C&quot;</span>],
+    start=<span class="hljs-string">&quot;start&quot;</span>,
+    end=<span class="hljs-string">&quot;end&quot;</span>,
+    binSize=<span class="hljs-number">16</span>,
+)
+
+track = gos.Track(data).mark_text(textStrokeWidth=<span class="hljs-number">0</span>).encode(
+    y=<span class="hljs-string">&quot;count:Q&quot;</span>,
+    x=gos.Channel(<span class="hljs-string">&quot;start:G&quot;</span>, axis=<span class="hljs-string">&quot;top&quot;</span>),
+    xe=<span class="hljs-string">&quot;end:G&quot;</span>,
+    color=gos.Channel(<span class="hljs-string">&quot;base:N&quot;</span>, domain=[<span class="hljs-string">&quot;A&quot;</span>, <span class="hljs-string">&quot;T&quot;</span>, <span class="hljs-string">&quot;G&quot;</span>, <span class="hljs-string">&quot;C&quot;</span>]),
+    text=<span class="hljs-string">&quot;base:N&quot;</span>,
+).properties(width=<span class="hljs-number">800</span>, height=<span class="hljs-number">180</span>, stretch=<span class="hljs-literal">True</span>)
+
+track.view(title=<span class="hljs-string">&quot;Basic Marks: Text&quot;</span>, subtitle=<span class="hljs-string">&quot;Tutorial Examples&quot;</span>)
+</code></pre>
+    </div>
+    <script>var SPEC = {
+  "subtitle": "Tutorial Examples",
+  "title": "Basic Marks: Text",
+  "tracks": [
+    {
+      "color": {
+        "domain": [
+          "A",
+          "T",
+          "G",
+          "C"
+        ],
+        "field": "base",
+        "type": "nominal"
+      },
+      "data": {
+        "binSize": 16,
+        "categories": [
+          "A",
+          "T",
+          "G",
+          "C"
+        ],
+        "column": "position",
+        "end": "end",
+        "row": "base",
+        "start": "start",
+        "type": "multivec",
+        "url": "https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
+        "value": "count"
+      },
+      "height": 180,
+      "mark": "text",
+      "stretch": true,
+      "style": {
+        "textStrokeWidth": 0
+      },
+      "text": {
+        "field": "base",
+        "type": "nominal"
+      },
+      "width": 800,
+      "x": {
+        "axis": "top",
+        "field": "start",
+        "type": "genomic"
+      },
+      "xe": {
+        "field": "end",
+        "type": "genomic"
+      },
+      "y": {
+        "field": "count",
+        "type": "quantitative"
+      }
+    }
+  ]
+}
+;</script>
+    <script type="module" src="/index.js"></script>
+  </body>
+</html>
