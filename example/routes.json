@@ -1,4 +1,5 @@
 [
+    { "dir": "", "name": "", "title": "Home" },
     { "dir": "basic_marks", "name": "bar_chart", "title": "Bar Chart" },
     { "dir": "basic_marks", "name": "line_chart", "title": "Line Chart" },
     { "dir": "basic_marks", "name": "point_plot", "title": "Point Plot" }

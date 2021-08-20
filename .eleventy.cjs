@@ -5,7 +5,7 @@ const { spawn } = require('child_process');
 const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
 
-const render = (path) => {
+const renderSpec = (path) => {
   const proc = spawn('python', ['./example/render.py', path]);
   return new Promise((resolve, reject) => {
     let buffer;
@@ -13,7 +13,7 @@ const render = (path) => {
       buffer = Buffer.concat(buffer ? [buffer, buf] : [buf]);
     });
     proc.stderr.on('data', (buf) => reject(buf.toString()));
-    proc.on('close', () => resolve(buffer));
+    proc.on('close', () => resolve(buffer.toString()));
   });
 };
 
@@ -25,7 +25,7 @@ const readAndHighlight = async (path) => {
 module.exports = (config) => {
   config.addNunjucksAsyncShortcode('spec', ({ dir, name }) => {
     const path = resolve(__dirname, 'example', dir, name + '.py');
-    return render(path);
+    return renderSpec(path);
   });
 
   config.addNunjucksAsyncShortcode('code', ({ dir, name }) => {
