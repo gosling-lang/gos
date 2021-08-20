@@ -10,7 +10,6 @@
     "build:js": "NODE_ENV=production node build"
   },
   "dependencies": {
-    "@11ty/eleventy": "^0.12.1",
     "@jupyter-widgets/base": "^4.0.0",
     "@types/react": "^17.0.16",
     "@types/react-dom": "^17.0.9",
@@ -21,6 +20,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@11ty/eleventy": "^0.12.1",
     "esbuild": "^0.12.15",
     "highlight.js": "^11.2.0",
     "prettier": "^2.3.2",
