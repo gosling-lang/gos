@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="gosling",
-    version="0.0.0",
+    version="0.0.1",
     author="Trevor Manz",
     author_email="trevor.j.manz@gmail.com",
     description="Python bindings to generate gosling schema.",
@@ -16,7 +16,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/manzt/ipygosling",
     classifiers=[
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
