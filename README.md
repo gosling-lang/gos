@@ -116,3 +116,10 @@ yarn install && yarn build:js # generates gosling/static/{widget.js, index.js}
 jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
 jupyter nbextension enable gosling --py --sys-prefix
 ```
+
+## Add an example
+
+We have started a gallery of community examples in `example/`. If you are intereseted in
+contributing, please feel free to submit a PR! Checkout the [existing examples](http://gosling-lang.org/examples/)
+for gosling.js if you are looking for inspiration. To add an example, create a `.py` file
+in `example`, and add the new "route" for the website in `example/routes.json`.
