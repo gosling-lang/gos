@@ -39,6 +39,7 @@ module.exports = (config) => {
       data: '',
       layouts: '',
       input: 'example/example.njk',
+      output: 'dist',
     },
   };
 };
