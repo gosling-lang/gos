@@ -74,10 +74,7 @@ export default async ({ command }) => {
     root: "examples",
     build: {
       rollupOptions: {
-        input: {
-          index: resolve("index.html"),
-          ...entries,
-        },
+        input: { index: resolve("index.html"), ...entries },
       },
     },
   });
