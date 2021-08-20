@@ -33,7 +33,7 @@ track = gos.Track(data=data, layout="linear").mark_bar().encode(
     strokeWidth=gos.Channel(value=0.5),
 ).properties(width=180)
 
-spec = track.chart(title="Basic Marks: Bar", subtitle="Tutorial Examples")
+spec = track.view(title="Basic Marks: Bar", subtitle="Tutorial Examples")
 
 print(spec.to_json())
 
