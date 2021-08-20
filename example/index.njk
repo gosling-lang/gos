@@ -46,7 +46,9 @@ permalink: "{{ route.dir | slug }}/{{ route.name | slug }}/"
   <div class="sidebar">
     <ul>
       {% for r in routes %}
-        <li><a href="/{{ r.dir }}/{{ r.name }}">{{ r.title }}</a></li>
+	  	{%if r.dir %}
+		  <li><a href="/{{ r.dir }}/{{ r.name }}">{{ r.title }}</a></li>
+		{% endif %}
       {% endfor %}
     </ul>
   </div>
