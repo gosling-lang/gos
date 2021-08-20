@@ -28,7 +28,7 @@ const renderSpec = (example) => {
     proc.stdout.on("data", (buf) => {
       buffer = Buffer.concat(buffer ? [buffer, buf] : [buf]);
     });
-    proc.stderr.on("data", reject);
+    proc.stderr.on("data", (buf) => reject(buf.toString()));
     proc.on("close", () => resolve(buffer));
   });
 };
@@ -72,8 +72,16 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
-        nested: resolve(__dirname, "nested/index.html"),
+        index: resolve("index.html"),
+        bar_chart: resolve("basic_marks/bar_chart.html"),
+        line_chart: resolve("basic_marks/line_chart.html"),
+        point_plot: resolve("basic_marks/point_plot.html"),
+        ideograms: resolve("basic_marks/ideograms.html"),
+        area_chart: resolve("basic_marks/area_chart.html"),
+        text_marks: resolve("basic_marks/text_marks.html"),
+        comparative_matrices: resolve(
+          "composite_vis/comparative_matrices.html",
+        ),
       },
     },
   },
