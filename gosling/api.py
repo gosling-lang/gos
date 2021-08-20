@@ -5,9 +5,6 @@ from gosling.display import JSRenderer  # , HTMLRenderer
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 180
 
-# create alias for DataDeep type
-Data = core.DataDeep
-
 renderers = {
     # "html": HTMLRenderer(
     #     gosling_version=GOSLING_VERSION,
@@ -18,6 +15,12 @@ renderers = {
     # ),
     "js": JSRenderer(),
 }
+
+# Aliases & Utils
+Data = core.DataDeep
+
+def value(value, **kwargs):
+    return dict(value=value, **kwargs)
 
 
 class _EncodingMixin:

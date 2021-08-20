@@ -6,7 +6,8 @@
   "scripts": {
     "format": "prettier --write 'src/*.ts' build.js",
     "lint": "prettier --check 'src/*.ts' build.js",
-    "build": "NODE_ENV=production node build"
+    "build": "eleventy --config=.eleventy.cjs",
+    "build:js": "NODE_ENV=production node build"
   },
   "dependencies": {
     "@jupyter-widgets/base": "^4.0.0",
@@ -19,7 +20,9 @@
   },
   "private": true,
   "devDependencies": {
+    "@11ty/eleventy": "^0.12.1",
     "esbuild": "^0.12.15",
+    "highlight.js": "^11.2.0",
     "prettier": "^2.3.2",
     "typescript": "^4.3.5"
   },
