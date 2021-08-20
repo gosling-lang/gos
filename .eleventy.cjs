@@ -6,7 +6,7 @@ const hljs = require('highlight.js/lib/core');
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
 
 const renderSpec = (path) => {
-  const proc = spawn('python', ['./example/render.py', path]);
+  const proc = spawn('python', ['-m', 'gosling.utils.execeval', path]);
   return new Promise((resolve, reject) => {
     let buffer;
     proc.stdout.on('data', (buf) => {

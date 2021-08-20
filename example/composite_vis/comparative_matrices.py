@@ -148,7 +148,7 @@ pane = gos.vertical(top, matrix.view(), bottom.view(), spacing=0)
 
 right = gos.View(views=[pane, pane], spacing=30)
 
-vis = gos.horizontal(left, right).properties(
+gos.horizontal(left, right).properties(
     title="Matrix Visualization",
     subtitle="Comparison of Micro-C and Hi-C for HFFc6 Cells",
     xDomain=gos.Domain(chromosome="7",
@@ -156,5 +156,3 @@ vis = gos.horizontal(left, right).properties(
     spacing=1,
     linkingId="-"
 )
-
-vis
