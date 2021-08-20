@@ -1,0 +1,17 @@
+---
+layout: base.njk
+title: test
+pagination:
+    data: routes
+    size: 1
+    alias: route
+permalink: "{{ route.dir | slug }}/{{ route.name | slug }}/"
+---
+
+<div class="content">
+  <div id="root"></div>
+  <pre><code>{% code route %}</code></pre>
+</div>
+<script>var SPEC = {% spec route %};</script>
+<script type="module" src="/index.js"></script>
+
