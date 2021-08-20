@@ -38,7 +38,7 @@ module.exports = (config) => {
     dir: {
       data: '',
       layouts: '',
-      input: 'example/example.njk',
+      input: 'example/index.njk',
       output: 'dist',
     },
   };
