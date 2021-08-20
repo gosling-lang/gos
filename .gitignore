@@ -4,6 +4,7 @@ __pycache__/
 build/
 dist/
 examples/basic_marks/*.html
+examples/composite_vis/*.html
 
 .ipynb_checkpoints
 Untitled*.ipynb

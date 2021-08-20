@@ -14,9 +14,9 @@ track = gos.Track(data).mark_rect(outline="white").encode(
     ),
     x=gos.Channel("chromStart:G", domain=gos.Domain(chromosome="1"), axis="top"),
     xe="chromEnd:G",
-    size={"value": 20},
-    stroke={"value": "gray"},
-    strokeWidth={"value": 0.5},
+    size=gos.value(20),
+    stroke=gos.value("gray"),
+    strokeWidth=gos.value(0.5),
 ).properties(
     width=800,
     height=40,

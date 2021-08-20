@@ -14,8 +14,8 @@ track = gos.Track(data).mark_bar().encode(
     x="start:G",
     xe="end:G",
     y="peak:Q",
-    stroke={"value": "white"},
-    strokeWidth={"value": 0.5},
+    stroke=gos.value("white"),
+    strokeWidth=gos.value(0.5),
 ).properties(layout="linear", width=800, height=180)
 
 track.view(title="Basic Marks: Bar", subtitle="Tutorial Examples")

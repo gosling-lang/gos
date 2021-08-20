@@ -15,7 +15,7 @@ track = gos.Track(data).mark_area().encode(
         axis="bottom",
     ),
     y="peak:Q",
-    size={"value": 2}
+    size=gos.value(2),
 ).properties(width=800, height=180, layout="linear")
 
 track.view(title="Basic Marks: Area", subtitle="Tutorial Examples")

@@ -10,20 +10,26 @@ import hljs from "highlight.js/lib/core";
 import py from "highlight.js/lib/languages/python";
 hljs.registerLanguage("python", py);
 
-const highlight = python => hljs.highlight(python, { language: 'python' }).value;
+const highlight = (python) =>
+  hljs.highlight(python, { language: "python" }).value;
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-const resolve = fp => path.resolve(__dirname, 'examples', fp);
+const resolve = (fp) => path.resolve(__dirname, "examples", fp);
 
 const watcher = chokidar.watch([
   "./examples/basic_marks/*.py",
+  "./examples/composite_vis/*.py",
   "./examples/index.html",
 ]);
 
 const renderSpec = (example) => {
   const proc = spawn("python", ["./examples/render.py", example]);
   return new Promise((resolve, reject) => {
-    proc.stdout.on("data", resolve);
+    let buffer;
+    proc.stdout.on("data", (buf) => {
+      buffer = Buffer.concat(buffer ? [buffer, buf] : [buf]);
+    });
     proc.stderr.on("data", reject);
+    proc.on("close", () => resolve(buffer));
   });
 };
 
@@ -31,8 +37,8 @@ const render = async (example) => {
   const [spec, python, template] = await Promise.all([
     renderSpec(example),
     fs.promises.readFile(example),
-    fs.promises.readFile(resolve('index.html')),
-  ]).then(bufs => bufs.map(b => b.toString()));
+    fs.promises.readFile(resolve("index.html")),
+  ]).then((bufs) => bufs.map((b) => b.toString()));
 
   const html = template
     .replace("<!--PYTHON_CODE-->", highlight(python))
@@ -64,11 +70,11 @@ watcher.on("change", (path) => {
 export default defineConfig({
   root: "examples",
   build: {
-	  rollupOptions: {
-		  input: {
-			  main: resolve(__dirname, 'index.html'),
-			  nested: resolve(__dirname, 'nested/index.html')
-		  }
-	  }
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        nested: resolve(__dirname, "nested/index.html"),
+      },
+    },
   },
 });
