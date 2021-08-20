@@ -5,21 +5,15 @@ import url from "url";
 import { spawn } from "child_process";
 
 import chokidar from "chokidar";
-
 import hljs from "highlight.js/lib/core";
 import py from "highlight.js/lib/languages/python";
-hljs.registerLanguage("python", py);
 
-const highlight = (python) =>
-  hljs.highlight(python, { language: "python" }).value;
+const language = "python";
+hljs.registerLanguage(language, py);
+const highlight = (python) => hljs.highlight(python, { language }).value;
+
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const resolve = (fp) => path.resolve(__dirname, "examples", fp);
-
-const watcher = chokidar.watch([
-  "./examples/basic_marks/*.py",
-  "./examples/composite_vis/*.py",
-  "./examples/index.html",
-]);
 
 const renderSpec = (example) => {
   const proc = spawn("python", ["./examples/render.py", example]);
@@ -48,41 +42,43 @@ const render = async (example) => {
   return fs.promises.writeFile(htmlFp, html);
 };
 
-watcher.on("add", async (path) => {
-  if (path.includes(".py")) {
-    render(path).catch((err) => console.warn(err));
-  }
-});
+const entries = {
+  bar_chart: resolve("basic_marks/bar_chart.html"),
+  line_chart: resolve("basic_marks/line_chart.html"),
+  point_plot: resolve("basic_marks/point_plot.html"),
+  ideograms: resolve("basic_marks/ideograms.html"),
+  area_chart: resolve("basic_marks/area_chart.html"),
+  text_marks: resolve("basic_marks/text_marks.html"),
+  comparative_matrices: resolve("composite_vis/comparative_matrices.html"),
+};
 
-watcher.on("change", (path) => {
-  if (path.includes(".py")) {
-    render(path).catch((err) => console.warn(err));
-  }
-  if (path.includes(".html")) {
-    // need to render all py files since template changed
-    const files = watcher.getWatched();
-    Object.entries(files).forEach(([dir, names]) => {
-      names.forEach((name) => name.includes(".py") && render(`${dir}/${name}`));
+export default async ({ command }) => {
+  const pythonFiles = Object
+    .values(entries)
+    .map((f) => f.split(".").slice(0, -1).join(".") + ".py");
+
+  await Promise.all(pythonFiles.map(render));
+
+  if (command === "serve") {
+    const watcher = chokidar.watch(["./examples/index.html", ...pythonFiles]);
+    watcher.on("change", (path) => {
+      if (path.includes(".py")) render(path);
+      if (path.includes(".html")) {
+        // need to render all py files since template changed
+        pythonFiles.map(render);
+      }
     });
   }
-});
 
-export default defineConfig({
-  root: "examples",
-  build: {
-    rollupOptions: {
-      input: {
-        index: resolve("index.html"),
-        bar_chart: resolve("basic_marks/bar_chart.html"),
-        line_chart: resolve("basic_marks/line_chart.html"),
-        point_plot: resolve("basic_marks/point_plot.html"),
-        ideograms: resolve("basic_marks/ideograms.html"),
-        area_chart: resolve("basic_marks/area_chart.html"),
-        text_marks: resolve("basic_marks/text_marks.html"),
-        comparative_matrices: resolve(
-          "composite_vis/comparative_matrices.html",
-        ),
+  return defineConfig({
+    root: "examples",
+    build: {
+      rollupOptions: {
+        input: {
+          index: resolve("index.html"),
+          ...entries,
+        },
       },
     },
-  },
-});
+  });
+};
