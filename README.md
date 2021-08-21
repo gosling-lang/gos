@@ -10,85 +10,55 @@
 pip install gosling
 ```
 
-## Usage
+## Example
 
 ```python
 import gosling as gos
 
-data = gos.Data(
-    url="https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
+multivec = gos.Data(
+    url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
     type="multivec",
     row="sample",
     column="position",
     value="peak",
-    categories=["sample 1"],
+    categories=["sample 1", "sample 2", "sample 3", "sample 4"],
     binSize=5,
 )
 
-track = gos.Track(data=data, layout="linear").mark_bar().encode(
-    y="peak:Q",
-    x="start:G",
+base_track = gos.Track(data=multivec, width=800, height=100)
+
+heatmap = base_track.mark_rect().encode(
+    x=gos.Channel("start:G", axis="top"),
     xe="end:G",
-    stroke=gos.Channel(value=0.5),
-    strokeWidth=gos.Channel(value=0.5),
-).properties(width=180)
+    row=gos.Channel("sample:N", legend=True),
+    color=gos.Channel("peak:Q", legend=True),
+)
 
-spec = track.view(title="Basic Marks: Bar", subtitle="Tutorial Examples")
+bars = base_track.mark_bar().encode(
+    x=gos.Channel("position:G", axis="top"),
+    y="peak:Q",
+    row="sample:N",
+    color=gos.Channel("sample:N", legend=True),
+)
 
-print(spec.to_json())
+lines = base_track.mark_line().encode(
+    x=gos.Channel("position:G", axis="top"),
+    y="peak:Q",
+    row="sample:N",
+    color=gos.Channel("sample:N", legend=True),
+)
 
-# {
-#   "subtitle": "Tutorial Examples",
-#   "title": "Basic Marks: Bar",
-#   "tracks": [
-#     {
-#       "data": {
-#         "binSize": 5,
-#         "categories": [
-#           "sample 1"
-#         ],
-#         "column": "position",
-#         "row": "sample",
-#         "type": "multivec",
-#         "url": "https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
-#         "value": "peak"
-#       },
-#       "height": 180,
-#       "layout": "linear",
-#       "mark": "bar",
-#       "stroke": {
-#         "value": 0.5
-#       },
-#       "strokeWidth": {
-#         "value": 0.5
-#       },
-#       "width": 180,
-#       "x": {
-#         "field": "start",
-#         "type": "genomic"
-#       },
-#       "xe": {
-#         "field": "end",
-#         "type": "genomic"
-#       },
-#       "y": {
-#         "field": "peak",
-#         "type": "quantitative"
-#       }
-#     }
-#   ]
-# }
+gos.vertical(heatmap.view(), bars.view(), lines.view()).properties(
+    title="Visual Encoding",
+    subtitle="Gosling provides diverse visual encoding methods",
+    layout="linear",
+    centerRadius=0.8,
+    xDomain=gos.Domain(chromosome="1", interval=[1, 3000500]),
+)
 ```
 
-### Jupyter notebook
-```python
-spec # render spec in jupyter cell!
-```
+![Gosling visualization](https://github.com/manzt/ipygosling/raw/enhance-readme/images/example.gif | width=400)
 
-```python
-widget = gos.GoslingWidget(spec) # create widget
-widget.spec = new_spec # update view
-```
 
 ## Development
 ```bash
