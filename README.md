@@ -1,14 +1,5 @@
 # ipygosling
 
-**Here be dragons 🐉**
-
-> This is an *experimental* project that is planned to merge with 
-> [`gosling.py`](https://github.com/gosling-lang/gosling.py). Feedback is 
-> much appreciated and most welcomed. _Please use with caution_.
-
-```bash
-pip install gosling
-```
 
 ## Example
 
@@ -60,36 +51,44 @@ gos.vertical(heatmap.view(), bars.view(), lines.view()).properties(
 <img src="https://github.com/manzt/ipygosling/raw/enhance-readme/images/example.gif" alt="Gosling visualization" width="800" />
 
 
+## Installation
+
+**Here be dragons 🐉**
+
+> The API is *experimental* and under active development.
+> Feedback is much appreciated and most welcomed.
+
+```bash
+pip install gosling
+```
+
+
+## Add an example
+
+We have started a gallery of community examples in `example/`. If you are 
+intereseted in contributing, please feel free to submit a PR! Checkout the
+[existing JSON examples](http://gosling-lang.org/examples/) if you are
+looking for inspiration.
+
 ## Development
+
 ```bash
 pip install -e .
 ```
 
-## Generate source code (you should not need to run these steps)
-
-The schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`)
+The schema bindings (`gosling/schema/`) and JS static assets (`gosling/static/`)
 are automatically generated using the following scripts. Please do not edit these
 files directly.
 
-#### Python schema bindings
-
 ```bash
-python tools/generate_schema_wrapper.py # generates gosling/schema/*
-```
+# generate gosling/schema/*
+python tools/generate_schema_wrapper.py
 
-#### JavScript Jupyter extension/widget
+# generate gosling/static/{widget.js,index.js} from src/{widget.ts,index.ts}
+yarn install && yarn build:js
 
-```bash
-yarn install && yarn build:js # generates gosling/static/{widget.js, index.js}
-
-# Only run this if using gos.GoslingWidget
+# Only run this if editing/using gos.GoslingWidget
 jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
 jupyter nbextension enable gosling --py --sys-prefix
 ```
 
-## Add an example
-
-We have started a gallery of community examples in `example/`. If you are intereseted in
-contributing, please feel free to submit a PR! Checkout the [existing examples](http://gosling-lang.org/examples/)
-for gosling.js if you are looking for inspiration. To add an example, create a `.py` file
-in `example`, and add the new "route" for the website in `example/routes.json`.
