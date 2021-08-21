@@ -97,15 +97,10 @@ gene_overlay = gos.overlay(
     ),
     gene_anno_base.mark_triangleRight(backgroundOpacity=0).encode(
         color=gos.value("#CB7AA7"),
-    ).properties(
-        dataTransform=[{"type": "filter", "field": "strand", "oneOf": ["+"]}],
-    ),
+    ).transform_filter("strand", oneOf=["+"]),
     gene_anno_base.mark_triangleLeft(backgroundOpacity=0).encode(
         color=gos.value("#029F73"),
-    ).properties(
-        title="HFFC6_CTCF",
-        dataTransform=[{"type": "filter", "field": "strand", "oneOf": ["-"]}],
-    )
+    ).transform_filter("strand", oneOf=["-"]).properties(title="HFFC6_CTCF")
 ).properties(height=size, width=scaled_size)
 
 # Configure Layout
@@ -137,9 +132,8 @@ bottom = gos.Track(epilogos_data).mark_bar().encode(
         "#C2E105", "#FFFF00", "#66CDAA", "#8A91D0", "#CD5C5C",
         "#E9967A", "#BDB76B", "#808080", "#C0C0C0", "gray"
     ]),
-).properties(
+).transform_filter("value", inRange=[0, 999999]).properties(
     title="Epilogos (hg38)",
-    dataTransform=[{"type": "filter", "field": "value", "inRange": [0, 999999]}],
     width=size,
     height=scaled_size,
 )

@@ -63,7 +63,8 @@ def eval_block(code, namespace=None, filename="<string>"):
 
 if __name__ == "__main__":
     import sys
-    with open(sys.argv[1], mode='r') as f:
+
+    with open(sys.argv[1], mode="r") as f:
         code = f.read()
     spec = eval_block(code)
     print(spec.to_json())

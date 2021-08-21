@@ -19,6 +19,7 @@ renderers = {
 # Aliases & Utils
 Data = core.DataDeep
 
+
 def value(value, **kwargs):
     return dict(value=value, **kwargs)
 
@@ -39,6 +40,59 @@ class _PropertiesMixen:
         for key, value in kwargs.items():
             setattr(copy, key, value)
         return copy
+
+
+class _TransformsMixen:
+    def _add_transform(self, *transforms):
+        copy = self.copy()
+        if copy.dataTransform is Undefined:
+            copy.dataTransform = []
+        copy.dataTransform.extend(transforms)
+        return copy
+
+    def transform_filter(self, field, **kwargs):
+        return self._add_transform(
+            core.FilterTransform(type="filter", field=field, **kwargs)
+        )
+
+    def transform_filter_not(self, field, **kwargs):
+        kwargs["not"] = True
+        return self._add_transform(
+            core.FilterTransform(type="filter", field=field, **kwargs)
+        )
+
+    def transform_log(self, field, **kwargs):
+        return self._add_transform(
+            core.LogTransform(type="log", field=field, **kwargs),
+        )
+
+    def transform_str_concat(self, fields, **kwargs):
+        return self._add_transform(
+            core.StrConcatTransform(type="concat", fields=fields, **kwargs),
+        )
+
+    def transform_str_replace(self, field, **kwargs):
+        return self._add_transform(
+            core.StrReplaceTransform(type="replace", field=field, **kwargs)
+        )
+
+    def transform_displace(self, **kwargs):
+        return self._add_transform(core.DisplaceTransform(type="displace", **kwargs))
+
+    def transform_exon_split(self, **kwargs):
+        return self._add_transform(core.ExonSplitTransform(type="exonSplit", **kwargs))
+
+    def transform_coverage(self, startField, endField, **kwargs):
+        return self._add_transform(
+            core.CoverageTransform(
+                type="coverage", startField=startField, endField=endField, **kwargs
+            )
+        )
+
+    def transform_json_parse(self, field, **kwargs):
+        return self._add_transform(
+            core.JSONParseTransform(type="subjson", field=field, **kwargs)
+        )
 
 
 class View(_PropertiesMixen, core.Root):
@@ -99,7 +153,13 @@ def stack(*tracks, **kwargs):
     return View(alignment="stack", tracks=tracks, **kwargs)
 
 
-class Track(_EncodingMixin, _PropertiesMixen, mixins.MarkMethodMixin, core.Track):
+class Track(
+    _EncodingMixin,
+    _PropertiesMixen,
+    _TransformsMixen,
+    mixins.MarkMethodMixin,
+    core.Track,
+):
     def __init__(self, data=Undefined, **kwargs):
         super().__init__(
             data=data,
