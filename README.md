@@ -57,7 +57,7 @@ gos.vertical(heatmap.view(), bars.view(), lines.view()).properties(
 )
 ```
 
-![Gosling visualization](https://github.com/manzt/ipygosling/raw/enhance-readme/images/example.gif | width=400)
+<img src="https://github.com/manzt/ipygosling/raw/enhance-readme/images/example.gif" alt="Gosling visualization" width="800" />
 
 
 ## Development
