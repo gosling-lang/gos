@@ -144,7 +144,7 @@ bottom = gos.Track(epilogos_data).mark_bar().encode(
     height=scaled_size,
 )
 
-pane = gos.vertical(top, matrix.view(), bottom.view(), spacing=0)
+pane = gos.vertical(top, matrix, bottom, spacing=0)
 
 right = gos.View(views=[pane, pane], spacing=30)
 
