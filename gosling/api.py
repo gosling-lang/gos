@@ -4,6 +4,7 @@ from gosling.display import JSRenderer  # , HTMLRenderer
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 180
+DEFAULT_MARK = "bar"
 
 renderers = {
     # "html": HTMLRenderer(
@@ -158,13 +159,14 @@ class Track(
     _PropertiesMixen,
     _TransformsMixen,
     mixins.MarkMethodMixin,
-    core.Track,
+    core.SingleTrack,
 ):
     def __init__(self, data=Undefined, **kwargs):
         super().__init__(
             data=data,
             width=kwargs.pop("width", DEFAULT_WIDTH),
             height=kwargs.pop("height", DEFAULT_HEIGHT),
+            mark=kwargs.pop("mark", DEFAULT_MARK),
             **kwargs,
         )
 
