@@ -10,7 +10,6 @@ const style = document.createElement('style');
 style.innerText = css;
 document.head.appendChild(style).setAttribute('type', 'text/css');
 
-
 /**
  * Types
  */
@@ -22,15 +21,15 @@ type JupyterOutput = {
 type OutputArea = { outputs: JupyterOutput[] };
 type EmbedOptions = Parameters<typeof embed>[2];
 
-
 /**
  * Adapted from https://github.com/vega/ipyvega/blob/master/src/index.ts
  */
 function goslingIndex(selector: string, outputs: JupyterOutput[], mimeType: string) {
 	// Return the index in the output array of the mimetype repr of this viz
-	return outputs.findIndex(item => 
-		item?.metadata?.['jupyter-gosling'] === selector &&
-		item.data?.[mimeType] !== undefined
+	return outputs.findIndex(
+		(item) =>
+			item?.metadata?.['jupyter-gosling'] === selector &&
+			item.data?.[mimeType] !== undefined
 	);
 }
 
@@ -45,11 +44,19 @@ function showError(el: HTMLElement, error: Error) {
 
 const wait = (ms: number) => new Promise<void>((res) => setTimeout(res, ms));
 
-export function render(selector: string, spec: GoslingSpec, opts?: EmbedOptions, output_area?: OutputArea): void {
-
+export function render(
+	selector: string,
+	spec: GoslingSpec,
+	opts?: EmbedOptions,
+	output_area?: OutputArea
+): void {
 	// Find the indices of this visualizations JS and PNG representation.
 	if (output_area) {
-		const imgIndex = goslingIndex(selector, output_area.outputs, 'application/javascript');
+		const imgIndex = goslingIndex(
+			selector,
+			output_area.outputs,
+			'application/javascript'
+		);
 		const jsIndex = goslingIndex(selector, output_area.outputs, 'image/png');
 		// If we have already rendered a static image, don't render
 		// the JS version or append a new PNG version
@@ -60,7 +67,7 @@ export function render(selector: string, spec: GoslingSpec, opts?: EmbedOptions,
 
 	const root = document.getElementById(selector.substring(1))!;
 	embed(root, spec, opts)
-		.then(async api => {
+		.then(async (api) => {
 			if (!output_area) return;
 			// TODO: any way to wait for full canvas render?
 			await wait(2000);
@@ -73,7 +80,7 @@ export function render(selector: string, spec: GoslingSpec, opts?: EmbedOptions,
 			};
 			output_area.outputs.push(output);
 		})
-		.catch(err => showError(root, err));
+		.catch((err) => showError(root, err));
 }
 
 export { embed as goslingEmbed };

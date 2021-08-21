@@ -1,4 +1,5 @@
-import * as esbuild from 'esbuild';
+const esbuild = require('esbuild');
+const { resolve } = require('path');
 
 /** @param {string[]} external */
 const banner = (external = []) => {
@@ -35,17 +36,17 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const configs = [
 	{
-		entry: 'src/index.ts',
-		outdir: 'gosling/static',
+		entry: resolve(__dirname, 'src', 'index.ts'),
+		outdir: resolve(__dirname, '..', 'gosling', 'static'),
 		loader: { '.css': 'text' },
 		minify: isProd,
 		define: {
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-		}
+		},
 	},
 	{
-		entry: 'src/widget.ts',
-		outdir: 'gosling/static',
+		entry: resolve(__dirname, 'src', 'widget.ts'),
+		outdir: resolve(__dirname, '..', 'gosling', 'static'),
 		external: ['@jupyter-widgets/base', 'nbextensions/jupyter-gosling/index'],
 		minify: isProd,
 	},
