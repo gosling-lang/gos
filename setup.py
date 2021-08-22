@@ -14,7 +14,7 @@ setuptools.setup(
     description="Python bindings to generate gosling schema.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/manzt/ipygosling",
+    url="https://github.com/manzt/gos",
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",

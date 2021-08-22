@@ -2,12 +2,11 @@
   "name": "jupyter-gosling",
   "version": "0.0.0",
   "author": "",
-  "type": "module",
   "scripts": {
-    "format": "prettier --write 'src/*.ts' build.js",
-    "lint": "prettier --check 'src/*.ts' build.js",
-    "build": "eleventy --config=.eleventy.cjs",
-    "build:js": "NODE_ENV=production node build"
+    "format": "prettier --write 'js/**/*.ts' js/build.js",
+    "lint": "prettier --check 'js/**/*.ts' js/build.js",
+    "build": "eleventy",
+    "build:js": "NODE_ENV=production node js/build.js"
   },
   "dependencies": {
     "@jupyter-widgets/base": "^4.0.0",

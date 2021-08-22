@@ -42,8 +42,13 @@ genes = gos.Data(
     ],
 )
 
-matrix_data = gos.Data(
+micro_c = gos.Data(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-microc-hg38",
+    type="matrix",
+)
+
+hi_c = gos.Data(
+    url="https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-hic-hg38",
     type="matrix",
 )
 
@@ -116,7 +121,7 @@ top = gos.stack(
     gene_overlay.properties(width=size, height=scaled_size),
 )
 
-matrix = gos.Track(matrix_data).mark_rect().encode(
+matrix = gos.Track(micro_c).mark_rect().encode(
     x=gos.Channel("position1:G", axis="none"),
     y=gos.Channel("position2:G", axis="none"),
     color=gos.Channel("value:Q", range="warm"),
@@ -138,9 +143,17 @@ bottom = gos.Track(epilogos_data).mark_bar().encode(
     height=scaled_size,
 )
 
-pane = gos.vertical(top, matrix.view(), bottom.view(), spacing=0)
 
-right = gos.View(views=[pane, pane], spacing=30)
+left_matrix = gos.vertical(top, matrix, bottom, spacing=0)
+right_matrix = gos.vertical(
+    top,
+    # replace data source for right side, change title
+    matrix.properties(data=hi_c, title="HFFc6_Hi-C"),
+    bottom,
+    spacing=0,
+)
+
+right = gos.View(views=[left_matrix, right_matrix], spacing=30)
 
 gos.horizontal(left, right).properties(
     title="Matrix Visualization",

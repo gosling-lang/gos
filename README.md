@@ -1,125 +1,113 @@
-# ipygosling
+# gos 🦆
+
+**gos** is a declarative (epi)genomics visualization library for Python.
+It is built on top of the [Gosling] JSON specification, providing an
+simplified interface for authoring interactive genomic visualizations.
+
+## Example
+
+```python
+import gosling as gos
+
+multivec = gos.Data(
+    url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
+    type="multivec",
+    row="sample",
+    column="position",
+    value="peak",
+    categories=["sample 1", "sample 2", "sample 3", "sample 4"],
+    binSize=5,
+)
+
+base_track = gos.Track(data=multivec, width=800, height=100)
+
+heatmap = base_track.mark_rect().encode(
+    x=gos.Channel("start:G", axis="top"),
+    xe="end:G",
+    row=gos.Channel("sample:N", legend=True),
+    color=gos.Channel("peak:Q", legend=True),
+)
+
+bars = base_track.mark_bar().encode(
+    x=gos.Channel("position:G", axis="top"),
+    y="peak:Q",
+    row="sample:N",
+    color=gos.Channel("sample:N", legend=True),
+)
+
+lines = base_track.mark_line().encode(
+    x=gos.Channel("position:G", axis="top"),
+    y="peak:Q",
+    row="sample:N",
+    color=gos.Channel("sample:N", legend=True),
+)
+
+gos.vertical(heatmap, bars, lines).properties(
+    title="Visual Encoding",
+    subtitle="Gosling provides diverse visual encoding methods",
+    layout="linear",
+    centerRadius=0.8,
+    xDomain=gos.Domain(chromosome="1", interval=[1, 3000500]),
+)
+```
+
+<img src="https://github.com/manzt/gos/raw/main/images/example.gif" alt="Gosling visualization" width="800" />
+
+
+## Installation
 
 **Here be dragons 🐉**
 
-> This is an *experimental* project that is planned to merge with 
-> [`gosling.py`](https://github.com/gosling-lang/gosling.py). Feedback is 
-> much appreciated and most welcomed. _Please use with caution_.
+> The API is *experimental* and under active development.
+> Feedback is much appreciated and most welcomed.
 
 ```bash
 pip install gosling
 ```
 
-## Usage
 
-```python
-import gosling as gos
+## Example Gallery
 
-data = gos.Data(
-    url="https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
-    type="multivec",
-    row="sample",
-    column="position",
-    value="peak",
-    categories=["sample 1"],
-    binSize=5,
-)
+We have started a gallery of community examples in `example/`. If you are 
+intereseted in contributing, please feel free to submit a PR! Checkout the
+[existing JSON examples](http://gosling-lang.org/examples/) if you are
+looking for inspiration.
 
-track = gos.Track(data=data, layout="linear").mark_bar().encode(
-    y="peak:Q",
-    x="start:G",
-    xe="end:G",
-    stroke=gos.Channel(value=0.5),
-    strokeWidth=gos.Channel(value=0.5),
-).properties(width=180)
-
-spec = track.view(title="Basic Marks: Bar", subtitle="Tutorial Examples")
-
-print(spec.to_json())
-
-# {
-#   "subtitle": "Tutorial Examples",
-#   "title": "Basic Marks: Bar",
-#   "tracks": [
-#     {
-#       "data": {
-#         "binSize": 5,
-#         "categories": [
-#           "sample 1"
-#         ],
-#         "column": "position",
-#         "row": "sample",
-#         "type": "multivec",
-#         "url": "https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
-#         "value": "peak"
-#       },
-#       "height": 180,
-#       "layout": "linear",
-#       "mark": "bar",
-#       "stroke": {
-#         "value": 0.5
-#       },
-#       "strokeWidth": {
-#         "value": 0.5
-#       },
-#       "width": 180,
-#       "x": {
-#         "field": "start",
-#         "type": "genomic"
-#       },
-#       "xe": {
-#         "field": "end",
-#         "type": "genomic"
-#       },
-#       "y": {
-#         "field": "peak",
-#         "type": "quantitative"
-#       }
-#     }
-#   ]
-# }
-```
-
-### Jupyter notebook
-```python
-spec # render spec in jupyter cell!
-```
-
-```python
-widget = gos.GoslingWidget(spec) # create widget
-widget.spec = new_spec # update view
-```
 
 ## Development
+
 ```bash
 pip install -e .
 ```
 
-## Generate source code (you should not need to run these steps)
-
-The schema bindings (`gosling/schema`) and JS static assets (`gosling/static/`)
+The schema bindings (`gosling/schema/`) and JS static assets (`gosling/static/`)
 are automatically generated using the following scripts. Please do not edit these
 files directly.
 
-#### Python schema bindings
-
 ```bash
-python tools/generate_schema_wrapper.py # generates gosling/schema/*
-```
+# generate gosling/schema/*
+python tools/generate_schema_wrapper.py
 
-#### JavScript Jupyter extension/widget
+# generate gosling/static/{widget.js,index.js} from src/{widget.ts,index.ts}
+yarn install && yarn build:js
 
-```bash
-yarn install && yarn build:js # generates gosling/static/{widget.js, index.js}
-
-# Only run this if using gos.GoslingWidget
+# Only run this if editing/using gos.GoslingWidget
 jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
 jupyter nbextension enable gosling --py --sys-prefix
 ```
 
-## Add an example
 
-We have started a gallery of community examples in `example/`. If you are intereseted in
-contributing, please feel free to submit a PR! Checkout the [existing examples](http://gosling-lang.org/examples/)
-for gosling.js if you are looking for inspiration. To add an example, create a `.py` file
-in `example`, and add the new "route" for the website in `example/routes.json`.
+## Design & implemenation
+
+gos is inspired by and borrows heavily from [Altair] both in project philosophy
+and implementation. The internal Python API is auto-generated from the
+[Gosling] specification using code adapted directly from Altair to generate
+[Vega-Lite] bindings. This design choice gaurentees that visualizations are
+type-checked in complete concordance with the [Gosling] specification, and that
+the Python API remains consitent with the evolving schema over time. Special thanks to
+[Jake Vanderplas](https://github.com/jakevdp) and others on
+[`schemapi`](https://github.com/altair-viz/altair/tree/master/tools/schemapi).
+
+[Gosling]: https://github.com/gosling-lang/gosling.js
+[Altair]: https://github.com/altair-viz/altair
+[Vega-Lite]: https://github.com/vega/vega-lite
