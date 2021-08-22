@@ -149,12 +149,13 @@ bottom = gos.Track(epilogos_data).mark_bar().encode(
     height=scaled_size,
 )
 
-left_matrix = gos.vertical(top, matrix.view(), bottom.view(), spacing=0)
+
+left_matrix = gos.vertical(top, matrix, bottom, spacing=0)
 right_matrix = gos.vertical(
     top,
     # replace data source for right side, change title
-    matrix.properties(data=hi_c, title="HFFc6_Hi-C").view(),
-    bottom.view(),
+    matrix.properties(data=hi_c, title="HFFc6_Hi-C"),
+    bottom,
     spacing=0,
 )
 

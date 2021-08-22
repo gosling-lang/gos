@@ -42,7 +42,7 @@ lines = base_track.mark_line().encode(
     color=gos.Channel("sample:N", legend=True),
 )
 
-gos.vertical(heatmap.view(), bars.view(), lines.view()).properties(
+gos.vertical(heatmap, bars, lines).properties(
     title="Visual Encoding",
     subtitle="Gosling provides diverse visual encoding methods",
     layout="linear",

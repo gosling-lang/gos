@@ -19,6 +19,7 @@ renderers = {
 # Aliases & Utils
 Data = core.DataDeep
 
+
 def value(value, **kwargs):
     return dict(value=value, **kwargs)
 
@@ -53,19 +54,28 @@ class View(_PropertiesMixen, core.Root):
         display(self)
 
 
+def _auto_cast_to_view(views):
+    """Converts a list of Tracks and/or Views into a list of Views."""
+    return [v.view() if isinstance(v, Track) else v for v in views]
+
+
 def horizontal(*views, **kwargs):
+    views = _auto_cast_to_view(views)
     return View(arrangement="horizontal", views=views, **kwargs)
 
 
 def vertical(*views, **kwargs):
+    views = _auto_cast_to_view(views)
     return View(arrangement="vertical", views=views, **kwargs)
 
 
 def parallel(*views, **kwargs):
+    views = _auto_cast_to_view(views)
     return View(arrangement="parallel", views=views, **kwargs)
 
 
 def serial(*views, **kwargs):
+    views = _auto_cast_to_view(views)
     return View(arrangement="serial", views=views, **kwargs)
 
 
