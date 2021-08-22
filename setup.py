@@ -29,5 +29,12 @@ setuptools.setup(
         "numpy",
         "pandas>=0.18",
     ],
+    extras_require={
+        'all': [
+            'portpicker',
+            'uvicorn',
+            'starlette',
+        ]
+    },
     entry_points={},
 )
