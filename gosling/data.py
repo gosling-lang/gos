@@ -13,10 +13,9 @@ import starlette.applications
 import starlette.endpoints
 import starlette.requests
 import starlette.responses
+import starlette.middleware.cors
 import starlette.routing
 import uvicorn
-
-from gosling.schema import core
 
 
 class BackgroundServer:
@@ -56,7 +55,13 @@ class BackgroundServer:
 
         return self
 
-    def start(self, port: Optional[int] = None, timeout: int = 1, daemon: bool = True):
+    def start(
+        self,
+        port: Optional[int] = None,
+        timeout: int = 1,
+        daemon: bool = True,
+        access_log: bool = False,
+    ):
 
         if self._server_thread is not None:
             return self
@@ -65,6 +70,7 @@ class BackgroundServer:
             app=self.app,
             port=port or portpicker.pick_unused_port(),
             timeout_keep_alive=timeout,
+            access_log=access_log,
         )
 
         self._port = config.port
@@ -268,23 +274,33 @@ def create_resources_route(
     resources: MutableMapping[str, Resource]
 ) -> starlette.routing.Route:
     def endpoint(request: starlette.requests.Request):
-        path = request.url.path
-        resource = resources.get(path.lstrip("/"))
+        resource = resources.get(request.path_params["guid"].split(".")[0])
         if not resource:
             return starlette.responses.Response(None, 404)
         return resource.get(request)
 
-    return starlette.routing.Route("/*", endpoint=endpoint)
+    return starlette.routing.Route("/{guid:path}", endpoint=endpoint)
 
 
 class Provider(BackgroundServer):
 
     _resources: MutableMapping[str, Resource]
 
-    def __init__(self):
+    def __init__(self, allowed_origins: Optional[list[str]] = None):
         self._resources = weakref.WeakValueDictionary()
         route = create_resources_route(self._resources)
         app = starlette.applications.Starlette(routes=[route])
+
+        if allowed_origins:
+            # configure cors
+            app.add_middleware(
+                starlette.middleware.cors.CORSMiddleware,
+                allow_origins=allowed_origins,
+                allow_credentials=True,
+                allow_methods=["*"],
+                allow_headers=["*"],
+            )
+
         super().__init__(app)
 
     @property
@@ -358,17 +374,14 @@ class GoslingDataServer:
 
     def __call__(self, filepath: str, port: Optional[int] = None):
         if self._provider is None:
-            self._provider = Provider().start(port=port)
+            self._provider = Provider(allowed_origins=["*"]).start(port=port)
 
         if port is not None and port != self._provider.port:
             self._provider.stop().start(port=port)
 
         resource_id = _compute_data_hash(str(pathlib.Path(filepath)))
         if resource_id not in self._resources:
-            self._resources[resource_id] = self._provider.create(
-                filepath=filepath,
-                headers={"Access-Control-Allow-Origin": "*"},
-            )
+            self._resources[resource_id] = self._provider.create(filepath=filepath)
 
         return self._resources[resource_id].url
 
@@ -377,15 +390,15 @@ data_server = GoslingDataServer()
 
 
 def csv(filepath: str, **kwargs):
-    url = data_server(filepath=filepath, port=kwargs.pop("port"))
-    return core.DataDeep(type="csv", url=url, **kwargs)
+    url = data_server(filepath=filepath, port=kwargs.pop("port", None))
+    return dict(type="csv", url=url, **kwargs)
 
 
 def bigwig(filepath: str, **kwargs):
-    url = data_server(filepath=filepath, port=kwargs.pop("port"))
-    return core.DataDeep(type="bigwig", url=url, **kwargs)
+    url = data_server(filepath=filepath, port=kwargs.pop("port", None))
+    return dict(type="bigwig", url=url, **kwargs)
 
 
 def json(filepath: str, **kwargs):
-    url = data_server(filepath=filepath, port=kwargs.pop("port"))
-    return core.DataDeep(type="json", url=url, **kwargs)
+    url = data_server(filepath=filepath, port=kwargs.pop("port", None))
+    return dict(type="json", url=url, **kwargs)
