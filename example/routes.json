@@ -5,5 +5,6 @@
     { "dir": "basic_marks", "name": "point_plot", "title": "Point Plot" },
     { "dir": "basic_marks", "name": "area_chart", "title": "Area Chart" },
     { "dir": "basic_marks", "name": "ideograms", "title": "Ideograms" },
+    { "dir": "multiscale_encoding", "name": "sequence", "title": "Multi-scale Sequence" },
     { "dir": "composite_vis", "name": "comparative_matrices", "title": "Comparative Matrices" }
 ]
