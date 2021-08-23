@@ -321,7 +321,7 @@ def generate_channel_wrappers(schemafile, imports=None):
 
 
 MARK_METHOD = '''
-def mark_{mark}({def_arglist}):
+def mark_{mark}({def_arglist}) -> T:
     """Set the chart's mark to '{mark}'
 
     For information on additional arguments, see :class:`{style_def}`
@@ -341,9 +341,14 @@ def generate_mark_mixin(
     with open(schemafile, encoding="utf8") as f:
         schema = json.load(f)
 
-    imports = ["from gosling.schemapi import Undefined", "from . import core"]
+    imports = [
+        "from typing import TypeVar",
+        "from gosling.schemapi import Undefined",
+        "from . import core",
+    ]
 
     code = [
+        "T = TypeVar('T')",
         "class MarkMethodMixin(object):",
         '    """A mixin class that defines mark methods"""',
     ]
@@ -356,7 +361,7 @@ def generate_mark_mixin(
     required -= {"type"}
     kwds -= {"type"}
 
-    def_args = ["self"] + [
+    def_args = ["self: T"] + [
         "{}=Undefined".format(p) for p in (sorted(required) + sorted(kwds))
     ]
     dict_args = ["{0}={0}".format(p) for p in (sorted(required) + sorted(kwds))]
