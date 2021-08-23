@@ -1,3 +1,4 @@
+from typing import TypeVar
 from gosling.schema import Undefined, channels, core, mixins
 from gosling.utils import infer_encoding_types
 from gosling.display import JSRenderer  # , HTMLRenderer
@@ -17,6 +18,8 @@ renderers = {
     "js": JSRenderer(),
 }
 
+T = TypeVar("T")
+
 # Aliases & Utils
 Data = core.DataDeep
 
@@ -26,7 +29,7 @@ def value(value, **kwargs):
 
 
 class _EncodingMixin:
-    def encode(self, *args, **kwargs):
+    def encode(self: T, *args, **kwargs) -> T:
         # Convert args to kwargs based on their types.
         copy = self.copy()
         kwargs = infer_encoding_types(args, kwargs, channels)
@@ -36,7 +39,7 @@ class _EncodingMixin:
 
 
 class _PropertiesMixen:
-    def properties(self, **kwargs):
+    def properties(self: T, **kwargs) -> T:
         copy = self.copy()
         for key, value in kwargs.items():
             setattr(copy, key, value)
@@ -44,53 +47,53 @@ class _PropertiesMixen:
 
 
 class _TransformsMixen:
-    def _add_transform(self, *transforms):
+    def _add_transform(self:T , *transforms) -> T:
         copy = self.copy()
         if copy.dataTransform is Undefined:
             copy.dataTransform = []
         copy.dataTransform.extend(transforms)
         return copy
 
-    def transform_filter(self, field, **kwargs):
+    def transform_filter(self: T, field, **kwargs) -> T:
         return self._add_transform(
             core.FilterTransform(type="filter", field=field, **kwargs)
         )
 
-    def transform_filter_not(self, field, **kwargs):
+    def transform_filter_not(self: T, field, **kwargs) -> T:
         kwargs["not"] = True
         return self._add_transform(
             core.FilterTransform(type="filter", field=field, **kwargs)
         )
 
-    def transform_log(self, field, **kwargs):
+    def transform_log(self: T, field, **kwargs) -> T:
         return self._add_transform(
             core.LogTransform(type="log", field=field, **kwargs),
         )
 
-    def transform_str_concat(self, fields, **kwargs):
+    def transform_str_concat(self: T, fields, **kwargs) -> T:
         return self._add_transform(
             core.StrConcatTransform(type="concat", fields=fields, **kwargs),
         )
 
-    def transform_str_replace(self, field, **kwargs):
+    def transform_str_replace(self: T, field, **kwargs) -> T:
         return self._add_transform(
             core.StrReplaceTransform(type="replace", field=field, **kwargs)
         )
 
-    def transform_displace(self, **kwargs):
+    def transform_displace(self: T, **kwargs) -> T:
         return self._add_transform(core.DisplaceTransform(type="displace", **kwargs))
 
-    def transform_exon_split(self, **kwargs):
+    def transform_exon_split(self: T, **kwargs) -> T:
         return self._add_transform(core.ExonSplitTransform(type="exonSplit", **kwargs))
 
-    def transform_coverage(self, startField, endField, **kwargs):
+    def transform_coverage(self: T, startField, endField, **kwargs) -> T:
         return self._add_transform(
             core.CoverageTransform(
                 type="coverage", startField=startField, endField=endField, **kwargs
             )
         )
 
-    def transform_json_parse(self, field, **kwargs):
+    def transform_json_parse(self: T, field, **kwargs) -> T:
         return self._add_transform(
             core.JSONParseTransform(type="subjson", field=field, **kwargs)
         )
