@@ -505,7 +505,12 @@ def json(filepath: str, **kwargs):
 
 
 def beddb(filepath: str, **kwargs):
-    from clodius.tiles.beddb import tiles, tileset_info
+    try:
+        from clodius.tiles.beddb import tiles, tileset_info
+    except ImportError:
+        raise ImportError(
+            'You must have `clodius` installed to use "beddb" data-server.'
+        )
 
     tileset = Tileset(
         tiles=functools.partial(tiles, filepath),
@@ -516,8 +521,13 @@ def beddb(filepath: str, **kwargs):
     return dict(type="beddb", url=url, **kwargs)
 
 
-def bigwig_vector(filepath: str, **kwargs):
-    from clodius.tiles.bigwig import tiles, tileset_info
+def vector(filepath: str, **kwargs):
+    try:
+        from clodius.tiles.bigwig import tiles, tileset_info
+    except ImportError:
+        raise ImportError(
+            'You must have `clodius` installed to use "vector" data-server.'
+        )
 
     tileset = Tileset(
         tiles=functools.partial(tiles, filepath),
@@ -529,7 +539,12 @@ def bigwig_vector(filepath: str, **kwargs):
 
 
 def multivec(filepath: str, **kwargs):
-    from clodius.tiles.multivec import tiles, tileset_info
+    try:
+        from clodius.tiles.multivec import tiles, tileset_info
+    except ImportError:
+        raise ImportError(
+            'You must have `clodius` installed to use "multivec" data-server.'
+        )
 
     tileset = Tileset(
         tiles=functools.partial(tiles, filepath),
@@ -541,7 +556,10 @@ def multivec(filepath: str, **kwargs):
 
 
 def bam(filepath: str, index_filename=None, chromsizes=None, **kwargs):
-    from clodius.tiles.bam import tiles, tileset_info
+    try:
+        from clodius.tiles.bam import tiles, tileset_info
+    except ImportError:
+        raise ImportError('You must have `clodius` installed to use "bam" data-server.')
 
     if not index_filename:
         index_filename = f"{filepath}.bai"
@@ -558,7 +576,12 @@ def bam(filepath: str, index_filename=None, chromsizes=None, **kwargs):
 
 
 def matrix(filepath: str, **kwargs):
-    from clodius.tiles.cooler import tiles, tileset_info
+    try:
+        from clodius.tiles.cooler import tiles, tileset_info
+    except ImportError:
+        raise ImportError(
+            'You must have `clodius` installed to use "matrix" data-server.'
+        )
 
     tileset = Tileset(
         tiles=functools.partial(tiles, filepath),
