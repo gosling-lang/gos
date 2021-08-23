@@ -1,10 +1,9 @@
 import itertools
 import re
-import warnings
 
 import jsonschema
 
-from gosling.schemapi import SchemaBase, Undefined
+from gosling.schemapi import SchemaBase
 
 TYPECODE_MAP = {
     "quantitative": "Q",
