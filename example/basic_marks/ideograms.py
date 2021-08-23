@@ -17,12 +17,6 @@ track = gos.Track(data).mark_rect(outline="white").encode(
     size=gos.value(20),
     stroke=gos.value("gray"),
     strokeWidth=gos.value(0.5),
-).properties(
-    width=800,
-    height=40,
-    dataTransform=[
-        {"type": "filter", "field": "Stain", "oneOf": ["acen"], "not": True}
-    ],
-)
+).properties(width=800, height=40).transform_filter_not("Stain", oneOf=["acen"])
 
 track.view(title="Basic Marks: Rect", subtitle="Tutorial Examples")

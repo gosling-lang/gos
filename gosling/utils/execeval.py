@@ -66,10 +66,10 @@ if __name__ == "__main__":
 
     arg = sys.argv[1]
 
-    if arg == '-':
+    if arg == "-":
         code = sys.stdin.read()
     else:
-        with open(arg, mode='r') as f:
+        with open(arg, mode="r") as f:
             code = f.read()
 
     print(eval_block(code).to_json())
