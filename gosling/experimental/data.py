@@ -1,4 +1,7 @@
 import abc
+from dataclasses import dataclass, field
+import functools
+import itertools
 import hashlib
 import mimetypes
 import pathlib
@@ -6,7 +9,17 @@ import threading
 import time
 import uuid
 import weakref
-from typing import IO, Awaitable, Callable, Generator, MutableMapping, Optional
+from typing import (
+    IO,
+    Any,
+    Awaitable,
+    Callable,
+    Generator,
+    Iterable,
+    MutableMapping,
+    Optional,
+    Union,
+)
 
 import portpicker
 import starlette.applications
@@ -60,7 +73,7 @@ class BackgroundServer:
         port: Optional[int] = None,
         timeout: int = 1,
         daemon: bool = True,
-        log_level: str = "warning"
+        log_level: str = "warning",
     ):
 
         if self._server_thread is not None:
@@ -270,16 +283,84 @@ class HandlerResource(Resource):
         return resp
 
 
+@dataclass(frozen=True)
+class Tileset:
+    tiles: Callable[[Iterable[str]], list]
+    info: Callable[[], dict[str, Any]]
+    guid: str = field(default_factory=lambda: str(uuid.uuid4()))
+
+
+@dataclass(frozen=True)
+class TilesetResource:
+    tileset: Tileset
+    provider: "Provider"
+
+    @property
+    def url(self):
+        return f"{self.provider.url}/api/v1/tileset_info/?d={self.tileset.guid}"
+
+
 def create_resources_route(
     resources: MutableMapping[str, Resource]
 ) -> starlette.routing.Route:
     def endpoint(request: starlette.requests.Request):
-        resource = resources.get(request.path_params["guid"].split(".")[0])
+        resource = resources.get(request.path_params["guid"])
         if not resource:
             return starlette.responses.Response(None, 404)
         return resource.get(request)
 
     return starlette.routing.Route("/{guid:path}", endpoint=endpoint)
+
+
+def get_list(query: str, field: str) -> list[str]:
+    """Parse chained query params into list.
+    >>> get_list("d=id1&d=id2&d=id3", "d")
+    ["id1", "id2", "id3"]
+    >>> get_list("d=1&e=2&d=3", "d")
+    ["1", "3"]
+    """
+    kv_tuples = [x.split("=") for x in query.split("&")]
+    return [v for k, v in kv_tuples if k == field]
+
+
+# adapted from https://github.com/higlass/higlass-python/blob/b3be6e49cbcab6be72eb0ad65c68a286161b8682/higlass/server.py#L169-L199
+def create_tileset_route(tileset_resources: MutableMapping[str, Tileset]):
+    def tileset_info(request: starlette.requests.Request):
+        guids = get_list(request.url.query, "d")
+        info = {
+            guid: tileset_resources[guid].info()
+            if guid in tileset_resources
+            else {"error": f"No such tileset with guid: {guid}"}
+            for guid in guids
+        }
+        return starlette.responses.JSONResponse(info)
+
+    def tiles(request: starlette.requests.Request):
+        requested_tids = set(get_list(request.url.query, "d"))
+        if not requested_tids:
+            return starlette.responses.JSONResponse(
+                {"error": "No tiles requested"}, 400
+            )
+
+        tiles: list = []
+        for guid, tids in itertools.groupby(
+            iterable=sorted(requested_tids), key=lambda tid: tid.split(".")[0]
+        ):
+            tileset = tileset_resources.get(guid)
+            if not tileset:
+                return starlette.responses.JSONResponse(
+                    {"error": f"No tileset found for requested guid: {guid}"}, 400
+                )
+            tiles.extend(tileset.tiles(tids))
+        return starlette.responses.JSONResponse({tid: v for tid, v in tiles})
+
+    return starlette.routing.Mount(
+        "/api/v1",
+        routes=[
+            starlette.routing.Route("/tileset_info", endpoint=tileset_info),
+            starlette.routing.Route("/tiles", endpoint=tiles),
+        ],
+    )
 
 
 class Provider(BackgroundServer):
@@ -288,8 +369,14 @@ class Provider(BackgroundServer):
 
     def __init__(self, allowed_origins: Optional[list[str]] = None):
         self._resources = weakref.WeakValueDictionary()
-        route = create_resources_route(self._resources)
-        app = starlette.applications.Starlette(routes=[route])
+        self._tilesets = weakref.WeakKeyDictionary()
+
+        routes = [
+            create_resources_route(self._resources),
+            create_tileset_route(self._tilesets),
+        ]
+
+        app = starlette.applications.Starlette(routes=routes)
 
         if allowed_origins:
             # configure cors
@@ -312,50 +399,58 @@ class Provider(BackgroundServer):
         content: str = "",
         filepath: str = "",
         handler: Optional[CustomHandler] = None,
+        tileset: Optional[Tileset] = None,
         headers: Optional[dict[str, str]] = None,
         extension: Optional[str] = None,
         route: Optional[str] = None,
-    ) -> Resource:
+    ) -> Union[Resource, TilesetResource]:
 
-        sources = sum(map(bool, (content, filepath, handler)))
+        sources = sum(map(bool, (content, filepath, handler, tileset)))
         if sources != 1:
             raise ValueError(
-                "Must provide exactly one of content, filepath, or handler"
+                "Must provide exactly one of content, filepath, handler, tileset"
             )
 
         headers = headers or {}
-        resource: Resource
+        resource: Union[Resource, TilesetResource]
 
-        if content:
-            resource = ContentResource(
-                content,
-                headers=headers,
-                extension=extension,
-                provider=self,
-                route=route,
-            )
-        elif filepath:
-            resource = FileResource(
-                filepath,
-                headers=headers,
-                extension=extension,
-                provider=self,
-                route=route,
-            )
-        elif handler:
-            resource = HandlerResource(
-                handler,
-                headers=headers,
-                extension=extension,
-                provider=self,
-                route=route,
-            )
+        if tileset:
+            resource = TilesetResource(tileset, provider=self)
         else:
-            raise ValueError("Must provide one of content, filepath, or handler.")
+            if content:
+                resource = ContentResource(
+                    content,
+                    headers=headers,
+                    extension=extension,
+                    provider=self,
+                    route=route,
+                )
+            elif filepath:
+                resource = FileResource(
+                    filepath,
+                    headers=headers,
+                    extension=extension,
+                    provider=self,
+                    route=route,
+                )
+            elif handler:
+                resource = HandlerResource(
+                    handler,
+                    headers=headers,
+                    extension=extension,
+                    provider=self,
+                    route=route,
+                )
+            else:
+                raise ValueError("Must provide one of content, filepath, or handler.")
 
-        self._resources[resource.guid] = resource
+            self._resources[resource.guid] = resource
         self.start()
         return resource
+
+
+def _hash_filepath(path: str):
+    return _compute_data_hash(str(pathlib.Path(path)))
 
 
 class GoslingDataServer:
@@ -365,23 +460,28 @@ class GoslingDataServer:
         self._provider: Optional[Provider] = None
         # We need to keep references to served resources, because the background
         # server uses weakrefs.
-        self._resources: dict[str, Resource] = {}
+        self._resources: dict[str, Union[Resource, TilesetResource]] = {}
 
     def reset(self) -> None:
         if self._provider is not None:
             self._provider.stop()
         self._resources = {}
 
-    def __call__(self, filepath: str, port: Optional[int] = None):
+    def __call__(self, data: Union[str, Tileset], port: Optional[int] = None):
         if self._provider is None:
             self._provider = Provider(allowed_origins=["*"]).start(port=port)
 
         if port is not None and port != self._provider.port:
             self._provider.stop().start(port=port)
 
-        resource_id = _compute_data_hash(str(pathlib.Path(filepath)))
-        if resource_id not in self._resources:
-            self._resources[resource_id] = self._provider.create(filepath=filepath)
+        if isinstance(data, Tileset):
+            resource_id = data.guid
+            if data.guid not in self._resources:
+                self._resources[resource_id] = self._provider.create(tileset=data)
+        else:
+            resource_id = _hash_filepath(data)
+            if resource_id not in self._resources:
+                self._resources[resource_id] = self._provider.create(filepath=data)
 
         return self._resources[resource_id].url
 
@@ -390,15 +490,80 @@ data_server = GoslingDataServer()
 
 
 def csv(filepath: str, **kwargs):
-    url = data_server(filepath=filepath, port=kwargs.pop("port", None))
+    url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="csv", url=url, **kwargs)
 
 
 def bigwig(filepath: str, **kwargs):
-    url = data_server(filepath=filepath, port=kwargs.pop("port", None))
+    url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="bigwig", url=url, **kwargs)
 
 
 def json(filepath: str, **kwargs):
-    url = data_server(filepath=filepath, port=kwargs.pop("port", None))
+    url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="json", url=url, **kwargs)
+
+
+def beddb(filepath: str, **kwargs):
+    from clodius.tiles.beddb import tiles, tileset_info
+
+    tileset = Tileset(
+        tiles=functools.partial(tiles, filepath),
+        info=functools.partial(tileset_info, filepath),
+        guid=_hash_filepath(filepath),
+    )
+    url = data_server(tileset, port=kwargs.pop("port", None))
+    return dict(type="beddb", url=url, **kwargs)
+
+
+def bigwig_vector(filepath: str, **kwargs):
+    from clodius.tiles.bigwig import tiles, tileset_info
+
+    tileset = Tileset(
+        tiles=functools.partial(tiles, filepath),
+        info=functools.partial(tileset_info, filepath),
+        guid=_hash_filepath(filepath),
+    )
+    url = data_server(tileset, port=kwargs.pop("port", None))
+    return dict(type="vector", url=url, **kwargs)
+
+
+def multivec(filepath: str, **kwargs):
+    from clodius.tiles.multivec import tiles, tileset_info
+
+    tileset = Tileset(
+        tiles=functools.partial(tiles, filepath),
+        info=functools.partial(tileset_info, filepath),
+        guid=_hash_filepath(filepath),
+    )
+    url = data_server(tileset, port=kwargs.pop("port", None))
+    return dict(type="multivec", url=url, **kwargs)
+
+
+def bam(filepath: str, index_filename=None, chromsizes=None, **kwargs):
+    from clodius.tiles.bam import tiles, tileset_info
+
+    if not index_filename:
+        index_filename = f"{filepath}.bai"
+
+    tileset = Tileset(
+        tiles=functools.partial(
+            tiles, filepath, index_filename=index_filename, chromsizes=chromsizes
+        ),
+        info=functools.partial(tileset_info, filepath, chromsizes=chromsizes),
+        guid=_hash_filepath(filepath),
+    )
+    url = data_server(tileset, port=kwargs.pop("port", None))
+    return dict(type="bam", url=url, **kwargs)
+
+
+def matrix(filepath: str, **kwargs):
+    from clodius.tiles.cooler import tiles, tileset_info
+
+    tileset = Tileset(
+        tiles=functools.partial(tiles, filepath),
+        info=functools.partial(tileset_info),
+        guid=_hash_filepath(filepath),
+    )
+    url = data_server(tileset, port=kwargs.pop("port", None))
+    return dict(type="matrix", url=url, **kwargs)
