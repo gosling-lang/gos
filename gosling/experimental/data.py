@@ -60,7 +60,7 @@ class BackgroundServer:
         port: Optional[int] = None,
         timeout: int = 1,
         daemon: bool = True,
-        access_log: bool = False,
+        log_level: str = "warning"
     ):
 
         if self._server_thread is not None:
@@ -70,7 +70,7 @@ class BackgroundServer:
             app=self.app,
             port=port or portpicker.pick_unused_port(),
             timeout_keep_alive=timeout,
-            access_log=access_log,
+            log_level=log_level,
         )
 
         self._port = config.port
