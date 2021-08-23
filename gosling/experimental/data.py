@@ -30,6 +30,8 @@ import starlette.middleware.cors
 import starlette.routing
 import uvicorn
 
+import gosling.data as url_loaders
+
 
 class BackgroundServer:
     _app: starlette.applications.Starlette
@@ -486,24 +488,55 @@ class GoslingDataServer:
         return self._resources[resource_id].url
 
 
+
+
+def with_default(url_loader):
+    """Delegates data creation method based on whether path is url or local file."""
+
+    def decorator(file_loader):
+        def wrapper(*args, **kwargs):
+            if "url" in kwargs and "filepath" in kwargs:
+                raise ValueError("Must provide one of url or filepath")
+
+            if "url" in kwargs:
+                return url_loader(*args, **kwargs)
+
+            if "filepath" in kwargs:
+                return file_loader(*args, **kwargs)
+
+            if len(args) != 1:
+                raise ValueError(
+                    "Can only provide url or filepath as positional argument."
+                )
+
+            loader = url_loader if args[0] in ["http://", "http://"] else file_loader
+            return loader(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
 data_server = GoslingDataServer()
 
-
+@with_default(url_loaders.csv)
 def csv(filepath: str, **kwargs):
     url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="csv", url=url, **kwargs)
 
 
-def bigwig(filepath: str, **kwargs):
-    url = data_server(filepath, port=kwargs.pop("port", None))
-    return dict(type="bigwig", url=url, **kwargs)
-
-
+@with_default(url_loaders.json)
 def json(filepath: str, **kwargs):
     url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="json", url=url, **kwargs)
 
 
+@with_default(url_loaders.bigwig)
+def bigwig(filepath: str, **kwargs):
+    url = data_server(filepath, port=kwargs.pop("port", None))
+    return dict(type="bigwig", url=url, **kwargs)
+
+
+@with_default(url_loaders.beddb)
 def beddb(filepath: str, **kwargs):
     try:
         from clodius.tiles.beddb import tiles, tileset_info
@@ -521,6 +554,7 @@ def beddb(filepath: str, **kwargs):
     return dict(type="beddb", url=url, **kwargs)
 
 
+@with_default(url_loaders.vector)
 def vector(filepath: str, **kwargs):
     try:
         from clodius.tiles.bigwig import tiles, tileset_info
@@ -538,6 +572,7 @@ def vector(filepath: str, **kwargs):
     return dict(type="vector", url=url, **kwargs)
 
 
+@with_default(url_loaders.multivec)
 def multivec(filepath: str, **kwargs):
     try:
         from clodius.tiles.multivec import tiles, tileset_info
@@ -555,6 +590,7 @@ def multivec(filepath: str, **kwargs):
     return dict(type="multivec", url=url, **kwargs)
 
 
+@with_default(url_loaders.bam)
 def bam(filepath: str, index_filename=None, chromsizes=None, **kwargs):
     try:
         from clodius.tiles.bam import tiles, tileset_info
@@ -575,6 +611,7 @@ def bam(filepath: str, index_filename=None, chromsizes=None, **kwargs):
     return dict(type="bam", url=url, **kwargs)
 
 
+@with_default(url_loaders.matrix)
 def matrix(filepath: str, **kwargs):
     try:
         from clodius.tiles.cooler import tiles, tileset_info
