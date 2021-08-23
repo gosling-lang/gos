@@ -180,7 +180,7 @@ class ContentResource(Resource):
 
 # adapted from https://gist.github.com/tombulled/712fd8e19ed0618c5f9f7d5f5f543782
 def ranged(
-    file: IO[bytes], start: int = 0, end: int = None, block_size: int = 8192
+    file: IO[bytes], start: int = 0, end: int = None, block_size: int = 65535
 ) -> Generator[bytes, None, None]:
     """Read content range as generator from file object."""
     consumed = 0
@@ -231,32 +231,34 @@ class FileResource(Resource):
 
     def get(self, request: starlette.requests.Request) -> starlette.responses.Response:
 
+        media_type, _ = mimetypes.guess_type(self.filepath)
+        media_type = media_type or "application/octet-stream"
         content_range = request.headers.get("range")
 
         file = self.filepath.open("rb")
         file_size = self.filepath.stat().st_size
 
-        status_code = 200
-        content_length = file_size
         headers = self.headers.copy()
 
         if content_range is not None:
             range_start, range_end = parse_content_range(content_range, file_size)
             content_length = (range_end - range_start) + 1
             file = ranged(file, start=range_start, end=range_end + 1)
-            status_code = 206
             headers["Content-Range"] = f"bytes {range_start}-{range_end}/{file_size}"
 
-        media_type, _ = mimetypes.guess_type(self.filepath)
-        return starlette.responses.StreamingResponse(
-            content=file,
-            media_type=media_type or "application/octet-stream",
-            status_code=status_code,
-            headers={
-                "Accept-Ranges": "bytes",
-                "Content-Length": str(content_length),
-                **headers,
-            },
+            return starlette.responses.StreamingResponse(
+                content=file,
+                media_type=media_type,
+                status_code=206,
+                headers={
+                    "Accept-Ranges": "bytes",
+                    "Content-Length": str(content_length),
+                    **headers,
+                },
+            )
+
+        return starlette.responses.FileResponse(
+            self.filepath, headers=headers, media_type=media_type
         )
 
 
@@ -521,8 +523,6 @@ def with_default(url_loader):
         return wrapper
 
     return decorator
-
-
 
 
 data_server = GoslingDataServer()
