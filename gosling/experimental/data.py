@@ -298,7 +298,11 @@ class TilesetResource:
     provider: "Provider"
 
     @property
-    def url(self):
+    def guid(self) -> str:
+        return self.tileset.guid
+
+    @property
+    def url(self) -> str:
         return f"{self.provider.url}/api/v1/tileset_info/?d={self.tileset.guid}"
 
 
@@ -326,11 +330,11 @@ def get_list(query: str, field: str) -> list[str]:
 
 
 # adapted from https://github.com/higlass/higlass-python/blob/b3be6e49cbcab6be72eb0ad65c68a286161b8682/higlass/server.py#L169-L199
-def create_tileset_route(tileset_resources: MutableMapping[str, Tileset]):
+def create_tileset_route(tileset_resources: MutableMapping[str, TilesetResource]):
     def tileset_info(request: starlette.requests.Request):
         guids = get_list(request.url.query, "d")
         info = {
-            guid: tileset_resources[guid].info()
+            guid: tileset_resources[guid].tileset.info()
             if guid in tileset_resources
             else {"error": f"No such tileset with guid: {guid}"}
             for guid in guids
@@ -348,13 +352,14 @@ def create_tileset_route(tileset_resources: MutableMapping[str, Tileset]):
         for guid, tids in itertools.groupby(
             iterable=sorted(requested_tids), key=lambda tid: tid.split(".")[0]
         ):
-            tileset = tileset_resources.get(guid)
-            if not tileset:
+            tileset_resource = tileset_resources.get(guid)
+            if not tileset_resource:
                 return starlette.responses.JSONResponse(
                     {"error": f"No tileset found for requested guid: {guid}"}, 400
                 )
-            tiles.extend(tileset.tiles(tids))
-        return starlette.responses.JSONResponse({tid: v for tid, v in tiles})
+            tiles.extend(tileset_resource.tileset.tiles(list(tids)))
+        data = {tid: tval for tid, tval in tiles}
+        return starlette.responses.JSONResponse(data)
 
     return starlette.routing.Mount(
         "/api/v1",
@@ -366,16 +371,17 @@ def create_tileset_route(tileset_resources: MutableMapping[str, Tileset]):
 
 
 class Provider(BackgroundServer):
-
-    _resources: MutableMapping[str, Resource]
-
     def __init__(self, allowed_origins: Optional[list[str]] = None):
-        self._resources = weakref.WeakValueDictionary()
-        self._tilesets = weakref.WeakKeyDictionary()
+        self._resources: weakref.WeakValueDictionary[
+            str, Resource
+        ] = weakref.WeakValueDictionary()
+        self._tilesets: weakref.WeakValueDictionary[
+            str, TilesetResource
+        ] = weakref.WeakValueDictionary()
 
         routes = [
-            create_resources_route(self._resources),
             create_tileset_route(self._tilesets),
+            create_resources_route(self._resources),
         ]
 
         app = starlette.applications.Starlette(routes=routes)
@@ -418,6 +424,7 @@ class Provider(BackgroundServer):
 
         if tileset:
             resource = TilesetResource(tileset, provider=self)
+            self._tilesets[resource.guid] = resource
         else:
             if content:
                 resource = ContentResource(
@@ -447,6 +454,7 @@ class Provider(BackgroundServer):
                 raise ValueError("Must provide one of content, filepath, or handler.")
 
             self._resources[resource.guid] = resource
+
         self.start()
         return resource
 
@@ -488,8 +496,6 @@ class GoslingDataServer:
         return self._resources[resource_id].url
 
 
-
-
 def with_default(url_loader):
     """Delegates data creation method based on whether path is url or local file."""
 
@@ -516,7 +522,11 @@ def with_default(url_loader):
 
     return decorator
 
+
+
+
 data_server = GoslingDataServer()
+
 
 @with_default(url_loaders.csv)
 def csv(filepath: str, **kwargs):
