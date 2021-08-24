@@ -13,6 +13,7 @@ def session_context(request: pytest.Session) -> None:
     # Reset the server at the end of the session.
     request.addfinalizer(data_server.reset)
 
+
 def test_creates_no_resources(tmpdir: pytest.Testdir, session_context: Any):
     data = csv(url="http://localhost:8000/data.csv")
     assert data["url"] == "http://localhost:8000/data.csv"
@@ -66,4 +67,3 @@ def test_missing_files(tmpdir: pytest.Testdir, session_context: Any):
     assert isinstance(Data(**data), Data)
     assert "localhost" not in data["url"]
     assert isinstance(data["url"], str)
-

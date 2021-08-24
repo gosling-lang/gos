@@ -73,6 +73,18 @@ def test_file_resource(provider: Provider) -> None:
         assert requests.get(resource.url).content == content
 
 
+def test_file_resource_range_request(provider: Provider) -> None:
+    content = b"hello, world. some additional content."
+    with tempfile.NamedTemporaryFile(suffix=".txt") as f:
+        f.write(content)
+        f.flush()
+        resource = provider.create(filepath=pathlib.Path(f.name))
+        assert isinstance(resource, Resource)
+        res = requests.get(resource.url, headers={"Range": "bytes=0-12"})
+        assert res.status_code == 206
+        assert res.content == b"hello, world."
+
+
 def test_tileset_resource(provider: Provider) -> None:
     tileset = Tileset(
         filepath=pathlib.Path("mock.tiles"),
