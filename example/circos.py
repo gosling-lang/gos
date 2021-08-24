@@ -50,6 +50,7 @@ link_base = gos.Track(segdup).mark_withinLink().encode(
     xe="p1_2:G",
     x1="p2:G",
     x1e="P2_2:G",
+    opacity=gos.value(0.4)
 ).properties(width=WIDTH, height=300)
 
 colors = ["#E79F00", "#029F73", "#0072B2", "#CB7AA7", "#D45E00", "#57B4E9", "#EFE441"]
