@@ -218,13 +218,13 @@ class FileResource(Resource):
 
     def __init__(
         self,
-        filepath: str,
+        filepath: pathlib.Path,
         provider: "Provider",
         headers: dict[str, str],
         extension: Optional[str] = None,
         route: Optional[str] = None,
     ):
-        self.filepath = pathlib.Path(filepath)
+        self.filepath = filepath
         super().__init__(
             provider=provider, headers=headers, extension=extension, route=route
         )
@@ -407,7 +407,7 @@ class Provider(BackgroundServer):
     def create(
         self,
         content: str = "",
-        filepath: str = "",
+        filepath: Optional[pathlib.Path] = None,
         handler: Optional[CustomHandler] = None,
         tileset: Optional[Tileset] = None,
         headers: Optional[dict[str, str]] = None,
@@ -461,8 +461,8 @@ class Provider(BackgroundServer):
         return resource
 
 
-def _hash_filepath(path: str):
-    return _compute_data_hash(str(pathlib.Path(path)))
+def _hash_filepath(path: pathlib.Path):
+    return _compute_data_hash(str(path))
 
 
 class GoslingDataServer:
@@ -479,7 +479,7 @@ class GoslingDataServer:
             self._provider.stop()
         self._resources = {}
 
-    def __call__(self, data: Union[str, Tileset], port: Optional[int] = None):
+    def __call__(self, data: Union[pathlib.Path, Tileset], port: Optional[int] = None):
         if self._provider is None:
             self._provider = Provider(allowed_origins=["*"]).start(port=port)
 
@@ -510,15 +510,22 @@ def with_default(url_loader):
                 return url_loader(*args, **kwargs)
 
             if "filepath" in kwargs:
-                return file_loader(*args, **kwargs)
+                # Ensure path is a Path
+                filepath = pathlib.Path(kwargs.pop("filepath"))
+                return file_loader(filepath=filepath, **kwargs)
 
             if len(args) != 1:
                 raise ValueError(
                     "Can only provide url or filepath as positional argument."
                 )
 
-            loader = url_loader if args[0] in ["http://", "http://"] else file_loader
-            return loader(*args, **kwargs)
+            if args[0] in {"http://", "https://"}:
+                return url_loader(*args, **kwargs)
+
+            # Try to read as file
+            filepath = pathlib.Path(args[0])
+            assert filepath.is_file()
+            return file_loader(filepath=filepath, **kwargs)
 
         return wrapper
 
@@ -529,25 +536,25 @@ data_server = GoslingDataServer()
 
 
 @with_default(url_loaders.csv)
-def csv(filepath: str, **kwargs):
+def csv(filepath: pathlib.Path, **kwargs):
     url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="csv", url=url, **kwargs)
 
 
 @with_default(url_loaders.json)
-def json(filepath: str, **kwargs):
+def json(filepath: pathlib.Path, **kwargs):
     url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="json", url=url, **kwargs)
 
 
 @with_default(url_loaders.bigwig)
-def bigwig(filepath: str, **kwargs):
+def bigwig(filepath: pathlib.Path, **kwargs):
     url = data_server(filepath, port=kwargs.pop("port", None))
     return dict(type="bigwig", url=url, **kwargs)
 
 
 @with_default(url_loaders.beddb)
-def beddb(filepath: str, **kwargs):
+def beddb(filepath: pathlib.Path, **kwargs):
     try:
         from clodius.tiles.beddb import tiles, tileset_info
     except ImportError:
@@ -565,7 +572,7 @@ def beddb(filepath: str, **kwargs):
 
 
 @with_default(url_loaders.vector)
-def vector(filepath: str, **kwargs):
+def vector(filepath: pathlib.Path, **kwargs):
     try:
         from clodius.tiles.bigwig import tiles, tileset_info
     except ImportError:
@@ -583,7 +590,7 @@ def vector(filepath: str, **kwargs):
 
 
 @with_default(url_loaders.multivec)
-def multivec(filepath: str, **kwargs):
+def multivec(filepath: pathlib.Path, **kwargs):
     try:
         from clodius.tiles.multivec import tiles, tileset_info
     except ImportError:
@@ -601,14 +608,14 @@ def multivec(filepath: str, **kwargs):
 
 
 @with_default(url_loaders.bam)
-def bam(filepath: str, index_filename=None, chromsizes=None, **kwargs):
+def bam(filepath: pathlib.Path, index_filename=None, chromsizes=None, **kwargs):
     try:
         from clodius.tiles.bam import tiles, tileset_info
     except ImportError:
         raise ImportError('You must have `clodius` installed to use "bam" data-server.')
 
     if not index_filename:
-        index_filename = f"{filepath}.bai"
+        index_filename = filepath.with_suffix(".bai")
 
     tileset = Tileset(
         tiles=functools.partial(
@@ -622,7 +629,7 @@ def bam(filepath: str, index_filename=None, chromsizes=None, **kwargs):
 
 
 @with_default(url_loaders.matrix)
-def matrix(filepath: str, **kwargs):
+def matrix(filepath: pathlib.Path, **kwargs):
     try:
         from clodius.tiles.cooler import tiles, tileset_info
     except ImportError:
