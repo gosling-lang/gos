@@ -6,6 +6,12 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+data_server_requirements = [
+    'portpicker',
+    'uvicorn',
+    'starlette',
+]
+
 setuptools.setup(
     name="gosling",
     version="0.0.1",
@@ -30,11 +36,8 @@ setuptools.setup(
         "pandas>=0.18",
     ],
     extras_require={
-        'all': [
-            'portpicker',
-            'uvicorn',
-            'starlette',
-        ]
+        'all': data_server_requirements,
+        'dev': data_server_requirements + ['pytest']
     },
     entry_points={},
 )
