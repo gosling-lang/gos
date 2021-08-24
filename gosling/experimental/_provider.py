@@ -4,7 +4,7 @@ import mimetypes
 import pathlib
 import uuid
 import weakref
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import IO, Awaitable, Callable, Generator, MutableMapping, Optional, Union
 
 import starlette.applications
@@ -169,43 +169,15 @@ class FileResource(Resource):
             yield tup
 
 
-CustomHandler = Callable[
-    [starlette.requests.Request], Awaitable[starlette.responses.Response]
-]
-
-
-class HandlerResource(Resource):
-    def __init__(
-        self,
-        func: CustomHandler,
-        provider: "Provider",
-        headers: dict[str, str],
-        extension: Optional[str] = None,
-        route: Optional[str] = None,
-    ):
-        self.func = func
-        super().__init__(
-            provider=provider, headers=headers, extension=extension, route=route
-        )
-
-    async def get(self, request: starlette.requests.Request):
-        resp = await self.func(request)
-        resp.headers.update(self.headers)
-        return resp
-
-
 @dataclass(frozen=True)
 class TilesetResource:
     tileset: Tileset
     provider: "Provider"
-
-    @property
-    def guid(self) -> str:
-        return self.tileset.guid
+    guid: str = field(default_factory=lambda: str(uuid.uuid4()))
 
     @property
     def url(self) -> str:
-        return f"{self.provider.url}/api/v1/tileset_info/?d={self.tileset.guid}"
+        return f"{self.provider.url}/api/v1/tileset_info/?d={self.guid}"
 
     def __rich_repr__(self):
         yield "url", self.url
@@ -310,17 +282,16 @@ class Provider(BackgroundServer):
         self,
         content: str = "",
         filepath: Optional[pathlib.Path] = None,
-        handler: Optional[CustomHandler] = None,
         tileset: Optional[Tileset] = None,
         headers: Optional[dict[str, str]] = None,
         extension: Optional[str] = None,
         route: Optional[str] = None,
     ) -> Union[Resource, TilesetResource]:
 
-        sources = sum(map(bool, (content, filepath, handler, tileset)))
+        sources = sum(map(bool, (content, filepath, tileset)))
         if sources != 1:
             raise ValueError(
-                "Must provide exactly one of content, filepath, handler, tileset"
+                "Must provide exactly one of content, filepath, tileset"
             )
 
         headers = headers or {}
@@ -346,16 +317,8 @@ class Provider(BackgroundServer):
                     provider=self,
                     route=route,
                 )
-            elif handler:
-                resource = HandlerResource(
-                    handler,
-                    headers=headers,
-                    extension=extension,
-                    provider=self,
-                    route=route,
-                )
             else:
-                raise ValueError("Must provide one of content, filepath, or handler.")
+                raise ValueError("Must provide one of content, filepath, or tileset.")
 
             self._resources[resource.guid] = resource
 
