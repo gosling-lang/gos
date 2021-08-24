@@ -8,7 +8,7 @@ from typing import Any, Callable, Iterable, Optional
 class Tileset:
     filepath: pathlib.Path
     tiles: Callable[[Iterable[str]], list]
-    info: Callable[[], dict[str, Any]]
+    info: Callable[[], Any]
     type: Optional[str] = None
 
 
