@@ -72,11 +72,3 @@ class BackgroundServer:
             time.sleep(1e-3)
 
         return self
-
-    def __rich_repr__(self):
-        for key in ("app", "port"):
-            yield key, getattr(self, "_" + key)
-
-    def __repr__(self):
-        props = ", ".join(f"{k}={repr(v)}" for k, v in self.__rich_repr__())
-        return f"{self.__class__.__name__}({props})"
