@@ -51,14 +51,6 @@ class Resource(metaclass=abc.ABCMeta):
     def url(self) -> str:
         return f"{self._provider.url}/{self._guid}"
 
-    def __rich_repr__(self):
-        for key in ("guid", "url", "headers"):
-            yield key, getattr(self, key)
-
-    def __repr__(self):
-        props = ", ".join(f"{k}={repr(v)}" for k, v in self.__rich_repr__())
-        return f"{self.__class__.__name__}({props})"
-
 
 class ContentResource(Resource):
     """Content Resource"""
