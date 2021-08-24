@@ -290,9 +290,7 @@ class Provider(BackgroundServer):
 
         sources = sum(map(bool, (content, filepath, tileset)))
         if sources != 1:
-            raise ValueError(
-                "Must provide exactly one of content, filepath, tileset"
-            )
+            raise ValueError("Must provide exactly one of content, filepath, tileset")
 
         headers = headers or {}
         resource: Union[Resource, TilesetResource]

@@ -1,17 +1,18 @@
+import pathlib
 import tempfile
 from typing import Iterator
-import pathlib
 
 import pytest
-import starlette.routing
+import requests
 import starlette.requests
 import starlette.responses
+import starlette.routing
 
-from gosling.experimental.data import Provider, Resource, TilesetResource
 from gosling.experimental._tilesets import Tileset
-import requests
+from gosling.experimental.data import Provider, Resource, TilesetResource
 
 content = b"root content"
+
 
 class ProviderSubclass(Provider):
     """Test class for Provider subclassing"""
@@ -20,6 +21,7 @@ class ProviderSubclass(Provider):
         routes = super()._routes()
         endpoint = lambda _: starlette.responses.Response(content)
         return [starlette.routing.Route("/", endpoint=endpoint)] + routes
+
 
 @pytest.fixture(scope="module")
 def provider() -> Iterator[Provider]:
@@ -70,6 +72,7 @@ def test_file_resource(provider: Provider) -> None:
         assert isinstance(resource, Resource)
         assert requests.get(resource.url).content == content
 
+
 def test_tileset_resource(provider: Provider) -> None:
     tileset = Tileset(
         filepath=pathlib.Path("mock.tiles"),
@@ -80,7 +83,7 @@ def test_tileset_resource(provider: Provider) -> None:
     assert isinstance(resource, TilesetResource)
     info = requests.get(resource.url).json()
     assert info[resource.guid] == "tile_info"
-    tile_url = resource.url.replace('tileset_info', 'tiles') + ".0.0"
+    tile_url = resource.url.replace("tileset_info", "tiles") + ".0.0"
     tiles = requests.get(tile_url).json()
     assert f"{resource.guid}.0.0" in tiles
 
@@ -97,4 +100,3 @@ def test_expected_404(provider: Provider) -> None:
     response = requests.get(url)
     assert response.ok == False
     assert response.status_code == 404
-
