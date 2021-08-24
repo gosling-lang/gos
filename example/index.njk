@@ -3,14 +3,14 @@ pagination:
     data: routes
     size: 1
     alias: route
-permalink: "{{ route.dir | slug }}/{{ route.name | slug }}/"
+permalink: "{{ route.file | slug }}/"
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta.file="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦆</text></svg>"
@@ -46,15 +46,15 @@ permalink: "{{ route.dir | slug }}/{{ route.name | slug }}/"
   <div class="sidebar">
     <ul>
       {% for r in routes %}
-	  	{%if r.dir %}
-		  <li><a href="/{{ r.dir }}/{{ r.name }}">{{ r.title }}</a></li>
-		{% endif %}
+        {% if r.file %}
+          <li><a href="/{{ r.file }}">{{ r.title }}</a></li>
+        {% endif %}
       {% endfor %}
     </ul>
   </div>
 
   <div class="content">
-    {% if route.dir %}
+    {% if route.file %}
       <div id="root"></div>
       <pre><code>{% code route %}</code></pre>
 
