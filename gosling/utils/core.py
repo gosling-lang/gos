@@ -1,3 +1,4 @@
+import hashlib
 import itertools
 import re
 
@@ -126,3 +127,7 @@ def infer_encoding_types(args, kwargs, channels):
         encoding: _wrap_in_channel_class(obj, encoding)
         for encoding, obj in kwargs.items()
     }
+
+def _compute_data_hash(data_str: str):
+    return hashlib.md5(data_str.encode()).hexdigest()
+
