@@ -51,6 +51,9 @@ class Resource(metaclass=abc.ABCMeta):
     def url(self) -> str:
         return f"{self._provider.url}/{self._guid}"
 
+    def __rich_repr__(self):
+        yield "url", self.url
+
 
 class ContentResource(Resource):
     """Content Resource"""
@@ -160,9 +163,14 @@ class FileResource(Resource):
             self.filepath, headers=headers, media_type=media_type
         )
 
+    def __rich_repr__(self):
+        yield "filepath", str(self.filepath)
+        for tup in super().__rich_repr__():
+            yield tup
+
 
 CustomHandler = Callable[
-    [starlette.requests.Request], Awaitable[starlette.responses.RedirectResponse]
+    [starlette.requests.Request], Awaitable[starlette.responses.Response]
 ]
 
 
@@ -198,6 +206,10 @@ class TilesetResource:
     @property
     def url(self) -> str:
         return f"{self.provider.url}/api/v1/tileset_info/?d={self.tileset.guid}"
+
+    def __rich_repr__(self):
+        yield "url", self.url
+        yield "type", self.tileset.type
 
 
 def get_list(query: str, field: str) -> list[str]:

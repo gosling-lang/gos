@@ -1,18 +1,18 @@
 import functools
 import pathlib
-import uuid
-from dataclasses import dataclass, field
-from typing import Any, Callable, Iterable
+from dataclasses import dataclass
+from typing import Any, Callable, Iterable, Optional
 
 
 @dataclass(frozen=True)
 class Tileset:
+    filepath: pathlib.Path
     tiles: Callable[[Iterable[str]], list]
     info: Callable[[], dict[str, Any]]
-    guid: str = field(default_factory=lambda: str(uuid.uuid4()))
+    type: Optional[str] = None
 
 
-def beddb(filepath: pathlib.Path, **kwargs):
+def beddb(filepath: pathlib.Path):
     try:
         from clodius.tiles.beddb import tiles, tileset_info
     except ImportError:
@@ -21,13 +21,14 @@ def beddb(filepath: pathlib.Path, **kwargs):
         )
 
     return Tileset(
+        filepath=filepath,
+        type="beddb",
         tiles=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
-        **kwargs,
     )
 
 
-def bigwig(filepath: pathlib.Path, **kwargs):
+def bigwig(filepath: pathlib.Path):
     try:
         from clodius.tiles.bigwig import tiles, tileset_info
     except ImportError:
@@ -36,13 +37,14 @@ def bigwig(filepath: pathlib.Path, **kwargs):
         )
 
     return Tileset(
+        filepath=filepath,
+        type="bigwig",
         tiles=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
-        **kwargs,
     )
 
 
-def multivec(filepath: pathlib.Path, **kwargs):
+def multivec(filepath: pathlib.Path):
     try:
         from clodius.tiles.multivec import tiles, tileset_info
     except ImportError:
@@ -51,13 +53,14 @@ def multivec(filepath: pathlib.Path, **kwargs):
         )
 
     return Tileset(
+        filepath=filepath,
+        type="multivec",
         tiles=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
-        **kwargs,
     )
 
 
-def bam(filepath: pathlib.Path, index_filename=None, chromsizes=None, **kwargs):
+def bam(filepath: pathlib.Path, index_filename=None, chromsizes=None):
     try:
         from clodius.tiles.bam import tiles, tileset_info
     except ImportError:
@@ -67,15 +70,16 @@ def bam(filepath: pathlib.Path, index_filename=None, chromsizes=None, **kwargs):
         index_filename = filepath.with_suffix(".bai")
 
     return Tileset(
+        filepath=filepath,
+        type="bam",
         tiles=functools.partial(
             tiles, filepath, index_filename=index_filename, chromsizes=chromsizes
         ),
         info=functools.partial(tileset_info, filepath, chromsizes=chromsizes),
-        **kwargs,
     )
 
 
-def cooler(filepath: pathlib.Path, **kwargs):
+def cooler(filepath: pathlib.Path):
     try:
         from clodius.tiles.cooler import tiles, tileset_info
     except ImportError:
@@ -84,7 +88,8 @@ def cooler(filepath: pathlib.Path, **kwargs):
         )
 
     return Tileset(
+        filepath=filepath,
+        type="cooler",
         tiles=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
-        **kwargs,
     )
