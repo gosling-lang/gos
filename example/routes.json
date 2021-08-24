@@ -6,5 +6,6 @@
     { "file": "area_chart", "title": "Area Chart" },
     { "file": "ideograms", "title": "Ideograms" },
     { "file": "multiscale_sequence", "title": "Multiscale Sequence" },
-    { "file": "comparative_matrices", "title": "Comparative Matrices" }
+    { "file": "comparative_matrices", "title": "Comparative Matrices" },
+    { "file": "circos", "title": "Circos" }
 ]
