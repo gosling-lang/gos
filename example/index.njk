@@ -3,7 +3,7 @@ pagination:
     data: routes
     size: 1
     alias: route
-permalink: "{{ route.dir | slug }}/{{ route.name | slug }}/"
+permalink: "{{ route.file | slug }}/"
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -46,15 +46,15 @@ permalink: "{{ route.dir | slug }}/{{ route.name | slug }}/"
   <div class="sidebar">
     <ul>
       {% for r in routes %}
-	  	{%if r.dir %}
-		  <li><a href="/{{ r.dir }}/{{ r.name }}">{{ r.title }}</a></li>
-		{% endif %}
+        {% if r.file %}
+          <li><a href="/{{ r.file }}">{{ r.title }}</a></li>
+        {% endif %}
       {% endfor %}
     </ul>
   </div>
 
   <div class="content">
-    {% if route.dir %}
+    {% if route.file %}
       <div id="root"></div>
       <pre><code>{% code route %}</code></pre>
 

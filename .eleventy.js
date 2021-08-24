@@ -23,13 +23,13 @@ const readAndHighlight = async (path) => {
 };
 
 module.exports = (config) => {
-  config.addNunjucksAsyncShortcode('spec', ({ dir, name }) => {
-    const path = resolve(__dirname, 'example', dir, name + '.py');
+  config.addNunjucksAsyncShortcode('spec', ({ file }) => {
+    const path = resolve(__dirname, 'example', file + '.py');
     return renderSpec(path);
   });
 
-  config.addNunjucksAsyncShortcode('code', ({ dir, name }) => {
-    const path = resolve(__dirname, 'example', dir, name + '.py');
+  config.addNunjucksAsyncShortcode('code', ({ file }) => {
+    const path = resolve(__dirname, 'example', file + '.py');
     return readAndHighlight(path);
   });
 
