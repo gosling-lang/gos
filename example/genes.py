@@ -98,7 +98,7 @@ minusGeneRange = base.mark_rule(linePattern={"type": "triangleLeft", "size": 5})
 gos.overlay(
     plusGeneRange, minusGeneRange, exon, plusGeneHead, minusGeneHead, geneLabel
 ).properties(
-    width=width, height=100,
+    width=800, height=100,
     title="Gene Annotation",
     subtitle="Reimplementation of HiGlass Gene Annotation Track",
     xDomain=gos.Domain(chromosome="1", interval=[103400000, 103700000]),
