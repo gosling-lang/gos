@@ -60,13 +60,14 @@ class GoslingDataServer:
 data_server = GoslingDataServer()
 
 
-def _create_loader(
-    type_: str, tileset_cls: Optional[Callable[[pathlib.Path], tilesets.Tileset]] = None
-):
-    def load(url, **kwargs):
+CreateTileset = Callable[[pathlib.Path], tilesets.Tileset]
+
+def _create_loader(type_: str, create_ts: Optional[CreateTileset]= None):
+    def load(url: Union[pathlib.Path, str], **kwargs):
+        """Adds resource to data_server if local file is detected."""
         fp = pathlib.Path(url)
         if fp.is_file():
-            data = tileset_cls(fp) if tileset_cls else fp
+            data = create_ts(fp) if create_ts else fp
             url = data_server(data)
         return dict(type=type_, url=url, **kwargs)
 
