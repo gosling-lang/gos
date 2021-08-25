@@ -8,4 +8,5 @@
     { "file": "multiscale_sequence", "title": "Multiscale Sequence" },
     { "file": "comparative_matrices", "title": "Comparative Matrices" },
     { "file": "circos", "title": "Circos" }
+    { "file": "overview_detail", "title": "Circular Overview + Detail" }
 ]
