@@ -1,13 +1,13 @@
 import functools
 import pathlib
 from dataclasses import dataclass
-from typing import Any, Callable, Iterable, Optional
+from typing import Any, Callable, Iterable, List, Optional
 
 
 @dataclass(frozen=True)
 class Tileset:
     filepath: pathlib.Path
-    tiles: Callable[[Iterable[str]], list]
+    tiles: Callable[[Iterable[str]], List]
     info: Callable[[], Any]
     type: Optional[str] = None
 

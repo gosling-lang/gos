@@ -1,7 +1,7 @@
-from typing import Any
+from typing import Any, Dict, List
 
 
-def json(values: list[dict[str, Any]], **kwargs):
+def json(values: List[Dict[str, Any]], **kwargs):
     return dict(type="json", values=values, **kwargs)
 
 
