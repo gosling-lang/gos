@@ -1,5 +1,5 @@
 import pathlib
-from typing import Callable, Optional, Union
+from typing import Callable, Dict, Optional, Union
 
 import gosling.experimental._tilesets as tilesets
 from gosling.experimental._provider import Provider, Resource, TilesetResource
@@ -17,7 +17,7 @@ class GoslingDataServer:
         self._provider: Optional[Provider] = None
         # We need to keep references to served resources, because the background
         # server uses weakrefs.
-        self._resources: dict[str, Union[Resource, TilesetResource]] = {}
+        self._resources: Dict[str, Union[Resource, TilesetResource]] = {}
 
     @property
     def port(self):

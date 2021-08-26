@@ -5,7 +5,7 @@ import pathlib
 import uuid
 import weakref
 from dataclasses import dataclass, field
-from typing import IO, Awaitable, Callable, Generator, MutableMapping, Optional, Union
+from typing import Dict, IO, Awaitable, Generator, List, MutableMapping, Optional, Tuple, Union
 
 import starlette.applications
 import starlette.middleware.cors
@@ -23,9 +23,9 @@ class Resource(metaclass=abc.ABCMeta):
     def __init__(
         self,
         provider: "Provider",
-        headers: dict[str, str],
+        headers: Dict[str, str],
         extension: Optional[str] = None,
-        route: Optional[str] = None,
+        route: Optional[str] = None
     ):
         if route is not None and extension is not None:
             raise ValueError("Should only provide one of route or extension.")
@@ -62,7 +62,7 @@ class ContentResource(Resource):
         self,
         content: str,
         provider: "Provider",
-        headers: dict[str, str],
+        headers: Dict[str, str],
         extension: Optional[str] = None,
         route: Optional[str] = None,
     ):
@@ -102,7 +102,7 @@ def ranged(
         file.close()
 
 
-def parse_content_range(content_range: str, file_size: int) -> tuple[int, int]:
+def parse_content_range(content_range: str, file_size: int) -> Tuple[int, int]:
     """Parse 'Range' header into integer interval."""
     content_range = content_range.strip().lower()
     content_ranges = content_range.split("=")[-1]
@@ -122,7 +122,7 @@ class FileResource(Resource):
         self,
         filepath: pathlib.Path,
         provider: "Provider",
-        headers: dict[str, str],
+        headers: Dict[str, str],
         extension: Optional[str] = None,
         route: Optional[str] = None,
     ):
@@ -184,7 +184,7 @@ class TilesetResource:
         yield "type", self.tileset.type
 
 
-def get_list(query: str, field: str) -> list[str]:
+def get_list(query: str, field: str) -> List[str]:
     """Parse chained query params into list.
     >>> get_list("d=id1&d=id2&d=id3", "d")
     ['id1', 'id2', 'id3']
@@ -250,7 +250,7 @@ class Provider(BackgroundServer):
     _resources: MutableMapping[str, Resource]
     _tilesets: MutableMapping[str, TilesetResource]
 
-    def __init__(self, allowed_origins: Optional[list[str]] = None):
+    def __init__(self, allowed_origins: Optional[List[str]] = None):
         self._resources = weakref.WeakValueDictionary()
         self._tilesets = weakref.WeakValueDictionary()
 
@@ -283,7 +283,7 @@ class Provider(BackgroundServer):
         content: str = "",
         filepath: Optional[pathlib.Path] = None,
         tileset: Optional[Tileset] = None,
-        headers: Optional[dict[str, str]] = None,
+        headers: Optional[Dict[str, str]] = None,
         extension: Optional[str] = None,
         route: Optional[str] = None,
     ) -> Union[Resource, TilesetResource]:
