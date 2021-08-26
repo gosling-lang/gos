@@ -128,6 +128,6 @@ def infer_encoding_types(args, kwargs, channels):
         for encoding, obj in kwargs.items()
     }
 
+
 def _compute_data_hash(data_str: str):
     return hashlib.md5(data_str.encode()).hexdigest()
-

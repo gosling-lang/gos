@@ -59,10 +59,10 @@ class GoslingDataServer:
 
 data_server = GoslingDataServer()
 
-
 CreateTileset = Callable[[pathlib.Path], tilesets.Tileset]
 
-def _create_loader(type_: str, create_ts: Optional[CreateTileset]= None):
+
+def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
     def load(url: Union[pathlib.Path, str], **kwargs):
         """Adds resource to data_server if local file is detected."""
         fp = pathlib.Path(url)
@@ -74,9 +74,11 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset]= None):
     return load
 
 
+# re-export json data util
+from gosling.data import json
+
 # file resources
 csv = _create_loader("csv")
-json = _create_loader("json")
 bigwig = _create_loader("bigwig")
 
 # tileset resources

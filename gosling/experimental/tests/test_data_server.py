@@ -4,7 +4,7 @@ from typing import Any
 import pytest
 
 from gosling.api import Data
-from gosling.experimental.data import csv, data_server, json
+from gosling.experimental.data import csv, data_server
 from gosling.schemapi import SchemaValidationError
 
 
@@ -31,8 +31,8 @@ def test_creates_resources(tmpdir: pytest.Testdir, session_context: Any):
     data_dir = pathlib.Path(tmpdir.mkdir("data"))
 
     tmp1 = data_dir / "data1.csv"
-    tmp2 = data_dir / "data2.json"
-    tmp3 = data_dir / "data3.json"
+    tmp2 = data_dir / "data2.csv"
+    tmp3 = data_dir / "data3.csv"
 
     tmp1.touch()
     tmp2.touch()
@@ -44,13 +44,13 @@ def test_creates_resources(tmpdir: pytest.Testdir, session_context: Any):
         assert data["type"] == "csv"
         assert len(data_server._resources) == 1
 
-    data = json(url=str(tmp2))
+    data = csv(url=str(tmp2))
     assert "localhost" in data["url"]
-    assert data["type"] == "json"
+    assert data["type"] == "csv"
     assert len(data_server._resources) == 2
 
     # doesn't add new resource
-    json(url=tmp3)
+    csv(url=tmp3)
     assert len(data_server._resources) == 2
 
 

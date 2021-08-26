@@ -1,13 +1,16 @@
+from typing import Any
+
+
+def json(values: list[dict[str, Any]], **kwargs):
+    return dict(type="json", values=values, **kwargs)
+
+
 def csv(url: str, **kwargs):
     return dict(type="csv", url=url, **kwargs)
 
 
 def bigwig(url: str, **kwargs):
     return dict(type="bigwig", url=url, **kwargs)
-
-
-def json(url: str, **kwargs):
-    return dict(type="json", url=url, **kwargs)
 
 
 def beddb(url: str, **kwargs):
