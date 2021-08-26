@@ -28,7 +28,7 @@ setuptools.setup(
     ],
     include_package_data=True,
     packages=setuptools.find_packages(),
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         "jsonschema",
         "jinja2",
