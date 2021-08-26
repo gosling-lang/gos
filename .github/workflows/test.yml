@@ -28,10 +28,6 @@ jobs:
       - name: Install Node dependencies
         run: yarn --frozen-lockfile
 
-      # TODO: ADD linting
-      # - name: Lint TypeScript
-      # run: yarn lint
-
       - name: Build JavaScript
         run: yarn build:js
 
@@ -40,5 +36,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install .[dev]
 
-      -name: Run pytest
+      - name: Run pytest
         run: pytest --doctest-modules gosling
