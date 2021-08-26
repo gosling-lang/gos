@@ -78,11 +78,11 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
 from gosling.data import json
 
 # file resources
+bam = _create_loader("bam")
 csv = _create_loader("csv")
 bigwig = _create_loader("bigwig")
 
 # tileset resources
-bam = _create_loader("bam", tilesets.bam)
 beddb = _create_loader("beddb", tilesets.beddb)
 vector = _create_loader("vector", tilesets.bigwig)
 matrix = _create_loader("matrix", tilesets.cooler)
