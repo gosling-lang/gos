@@ -187,9 +187,9 @@ class TilesetResource:
 def get_list(query: str, field: str) -> list[str]:
     """Parse chained query params into list.
     >>> get_list("d=id1&d=id2&d=id3", "d")
-    ["id1", "id2", "id3"]
+    ['id1', 'id2', 'id3']
     >>> get_list("d=1&e=2&d=3", "d")
-    ["1", "3"]
+    ['1', '3']
     """
     kv_tuples = [x.split("=") for x in query.split("&")]
     return [v for k, v in kv_tuples if k == field]

@@ -47,7 +47,7 @@ class _PropertiesMixen:
 
 
 class _TransformsMixen:
-    def _add_transform(self:T , *transforms) -> T:
+    def _add_transform(self: T, *transforms) -> T:
         copy = self.copy()
         if copy.dataTransform is Undefined:
             copy.dataTransform = []
