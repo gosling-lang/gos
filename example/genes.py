@@ -27,7 +27,7 @@ base = gos.Track(genes).encode(
         gos.Tooltip(field="name", type="nominal", alt="Name")
     ]
 ).properties(
-    width=800, height=100, title="Genes | hg38",
+    title="Genes | hg38",
 )
 
 plusGeneHead = base.mark_triangleRight(align="left").encode(
