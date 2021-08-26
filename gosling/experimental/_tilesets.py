@@ -60,25 +60,6 @@ def multivec(filepath: pathlib.Path):
     )
 
 
-def bam(filepath: pathlib.Path, index_filename=None, chromsizes=None):
-    try:
-        from clodius.tiles.bam import tiles, tileset_info
-    except ImportError:
-        raise ImportError('You must have `clodius` installed to use "bam" data-server.')
-
-    if not index_filename:
-        index_filename = filepath.with_suffix(".bai")
-
-    return Tileset(
-        filepath=filepath,
-        type="bam",
-        tiles=functools.partial(
-            tiles, filepath, index_filename=index_filename, chromsizes=chromsizes
-        ),
-        info=functools.partial(tileset_info, filepath, chromsizes=chromsizes),
-    )
-
-
 def cooler(filepath: pathlib.Path):
     try:
         from clodius.tiles.cooler import tiles, tileset_info
