@@ -37,7 +37,11 @@ setuptools.setup(
     ],
     extras_require={
         'all': data_server_requirements,
-        'dev': data_server_requirements + ['pytest', 'requests']
+        'dev': data_server_requirements + [
+            'pytest',
+            'requests',
+            'ipywidgets',
+        ],
     },
     entry_points={},
 )
