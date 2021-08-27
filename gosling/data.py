@@ -25,8 +25,8 @@ def multivec(url: str, **kwargs):
     return dict(type="multivec", url=url, **kwargs)
 
 
-def bam(url: str, **kwargs):
-    return dict(type="bam", url=url, **kwargs)
+def bam(url: str, indexUrl: str, **kwargs):
+    return dict(type="bam", url=url, indexUrl=indexUrl, **kwargs)
 
 
 def matrix(url: str, **kwargs):
