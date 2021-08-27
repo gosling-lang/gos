@@ -63,21 +63,22 @@ CreateTileset = Callable[[pathlib.Path], tilesets.Tileset]
 
 
 def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
-    def load(url: Union[pathlib.Path, str], indexUrl: str = None, **kwargs):
+    def load(url: Union[pathlib.Path, str], **kwargs):
         """Adds resource to data_server if local file is detected."""
         fp = pathlib.Path(url)
         if fp.is_file():
             data = create_ts(fp) if create_ts else fp
             url = data_server(data)
-        
+
         # bam's index file url
-        if indexUrl != None and pathlib.Path(indexUrl).is_file():
-            indexUrl = data_server(indexUrl)
-            
-        return dict(type=type_, url=url, indexUrl=indexUrl, **kwargs)
+        if 'indexUrl' in kwargs:
+            fp = pathlib.Path(kwargs['indexUrl'])
+            if fp.is_file():
+                kwargs['indexUrl'] = data_server(fp)
+        
+        return dict(type=type_, url=url, **kwargs)
 
     return load
-
 
 # re-export json data util
 from gosling.data import json
