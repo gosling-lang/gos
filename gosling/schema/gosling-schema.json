@@ -38,6 +38,9 @@
     "BAMData": {
       "additionalProperties": false,
       "properties": {
+        "indexUrl": {
+          "type": "string"
+        },
         "type": {
           "const": "bam",
           "type": "string"
@@ -48,7 +51,8 @@
       },
       "required": [
         "type",
-        "url"
+        "url",
+        "indexUrl"
       ],
       "type": "object"
     },

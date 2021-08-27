@@ -6,6 +6,12 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+data_server_requirements = [
+    'portpicker',
+    'uvicorn',
+    'starlette',
+]
+
 setuptools.setup(
     name="gosling",
     version="0.0.1",
@@ -22,12 +28,20 @@ setuptools.setup(
     ],
     include_package_data=True,
     packages=setuptools.find_packages(),
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         "jsonschema",
         "jinja2",
         "numpy",
         "pandas>=0.18",
     ],
+    extras_require={
+        'all': data_server_requirements,
+        'dev': data_server_requirements + [
+            'pytest',
+            'requests',
+            'ipywidgets',
+        ],
+    },
     entry_points={},
 )

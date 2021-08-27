@@ -1,24 +1,22 @@
 import gosling as gos
+from gosling.data import csv, vector
 
 WIDTH = 700
 
-tileset = gos.Data(
+tileset = vector(
     url="https://resgen.io/api/v1/tileset_info/?d=VLFaiSVjTjW6mkbjRjWREA",
-    type="vector",
     column="position",
     value="peak",
 )
 
-cytoband = gos.Data(
+cytoband = csv(
     url="https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/UCSC.HG38.Human.CytoBandIdeogram.csv",
-    type="csv",
     chromosomeField="Chromosome",
     genomicFields=["chromStart", "chromEnd"],
 )
 
-segdup = gos.Data(
+segdup = csv(
     url="https://raw.githubusercontent.com/vigsterkr/circos/master/data/5/segdup.txt",
-    type="csv",
     headerNames=["id", "chr", "p1", "p2"],
     chromosomePrefix="hs",
     chromosomeField="chr",

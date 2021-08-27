@@ -1,8 +1,8 @@
 import gosling as gos
+from gosling.data import csv, multivec
 
-multivec_data = gos.Data(
+multivec_data = multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
-    type="multivec",
     row="sample",
     column="position",
     value="peak",
@@ -10,9 +10,8 @@ multivec_data = gos.Data(
     binSize=4,
 )
 
-rearrangments = gos.Data(
+rearrangments = csv(
     url="https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/rearrangements.bulk.1639.simple.filtered.pub",
-    type="csv",
     headerNames=["chr1", "p1s", "p1e", "chr2", "p2s", "p2e", "type", "id", "f1", "f2", "f3", "f4", "f5", "f6"],
     separator="\t",
     genomicFieldsToConvert=[

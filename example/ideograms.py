@@ -1,8 +1,8 @@
 import gosling as gos
+from gosling.data import csv
 
-data = gos.Data(
+data = csv(
     url="https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/UCSC.HG38.Human.CytoBandIdeogram.csv",
-    type="csv",
     chromosomeField="Chromosome",
     genomicFields=["chromStart", "chromEnd"],
 )

@@ -1,10 +1,10 @@
+import hashlib
 import itertools
 import re
-import warnings
 
 import jsonschema
 
-from gosling.schemapi import SchemaBase, Undefined
+from gosling.schemapi import SchemaBase
 
 TYPECODE_MAP = {
     "quantitative": "Q",
@@ -127,3 +127,7 @@ def infer_encoding_types(args, kwargs, channels):
         encoding: _wrap_in_channel_class(obj, encoding)
         for encoding, obj in kwargs.items()
     }
+
+
+def _compute_data_hash(data_str: str):
+    return hashlib.md5(data_str.encode()).hexdigest()

@@ -1,8 +1,8 @@
 import gosling as gos
+from gosling.data import beddb
 
-genes = gos.Data(
+genes = beddb(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=gene-annotation",
-    type="beddb",
     genomicFields=[
       {"index": 1, "name": "start"},
       {"index": 2, "name": "end"}

@@ -385,7 +385,7 @@ def generate_mark_mixin(
 
 def main(skip_download: Optional[bool] = False):
     library = "gosling.js"
-    version = "v0.9.2"
+    version = "v0.9.4"
 
     schemapath = here.parent / ".." / "gosling" / "schema"
     schemafile = download_schemafile(

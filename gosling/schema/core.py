@@ -214,10 +214,12 @@ class DataDeep(GoslingSchema):
 class BAMData(DataDeep):
     """BAMData schema wrapper
 
-    Mapping(required=[type, url])
+    Mapping(required=[type, url, indexUrl])
 
     Attributes
     ----------
+
+    indexUrl : string
 
     type : string
 
@@ -227,8 +229,8 @@ class BAMData(DataDeep):
     _schema = {'$ref': '#/definitions/BAMData'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, type=Undefined, url=Undefined, **kwds):
-        super(BAMData, self).__init__(type=type, url=url, **kwds)
+    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, **kwds):
+        super(BAMData, self).__init__(indexUrl=indexUrl, type=type, url=url, **kwds)
 
 
 class BEDDBData(DataDeep):

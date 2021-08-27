@@ -8,10 +8,10 @@ simplified interface for authoring interactive genomic visualizations.
 
 ```python
 import gosling as gos
+from gosling.data import multivec
 
-multivec = gos.Data(
+data = multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
-    type="multivec",
     row="sample",
     column="position",
     value="peak",
@@ -19,7 +19,7 @@ multivec = gos.Data(
     binSize=5,
 )
 
-base_track = gos.Track(data=multivec, width=800, height=100)
+base_track = gos.Track(data, width=800, height=100)
 
 heatmap = base_track.mark_rect().encode(
     x=gos.Channel("start:G", axis="top"),
