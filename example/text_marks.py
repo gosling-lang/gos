@@ -1,8 +1,8 @@
 import gosling as gos
+from gosling.data import multivec
 
-data = gos.Data(
+data = multivec(
     url="https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
-    type="multivec",
     row="base",
     column="position",
     value="count",

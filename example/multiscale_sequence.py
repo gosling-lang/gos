@@ -1,8 +1,8 @@
 import gosling as gos
+from gosling.data import multivec
 
-data = gos.Data(
+data = multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=sequence-multivec",
-    type="multivec",
     row="base",
     column="position",
     value="count",
