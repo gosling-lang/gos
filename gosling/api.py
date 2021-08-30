@@ -99,6 +99,15 @@ class _TransformsMixen:
         )
 
 
+class _VisibilityMixen:
+    def visibility(self: T, **kwargs) -> T:
+        copy = self.copy()
+        if copy.visibility is Undefined:
+            copy.visibility = []
+        copy.visibility.extend(core.VisibilityCondition(**kwargs))
+        return copy
+
+
 class View(_PropertiesMixen, core.Root):
     def _repr_mimebundle_(self, include=None, exclude=None):
         dct = self.to_dict()
@@ -170,6 +179,7 @@ class Track(
     _EncodingMixin,
     _PropertiesMixen,
     _TransformsMixen,
+    _VisibilityMixen,
     mixins.MarkMethodMixin,
     core.SingleTrack,
 ):
