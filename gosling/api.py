@@ -38,7 +38,7 @@ class _EncodingMixin:
         return copy
 
 
-class _PropertiesMixen:
+class _PropertiesMixin:
     def properties(self: T, **kwargs) -> T:
         copy = self.copy()
         for key, value in kwargs.items():
@@ -46,7 +46,7 @@ class _PropertiesMixen:
         return copy
 
 
-class _TransformsMixen:
+class _TransformsMixin:
     def _add_transform(self: T, *transforms) -> T:
         copy = self.copy()
         if copy.dataTransform is Undefined:
@@ -99,7 +99,7 @@ class _TransformsMixen:
         )
 
 
-class _VisibilityMixen:
+class _VisibilityMixin:
     def visibility(self: T, **kwargs) -> T:
         copy = self.copy()
         if copy.visibility is Undefined:
@@ -108,7 +108,7 @@ class _VisibilityMixen:
         return copy
 
 
-class View(_PropertiesMixen, core.Root):
+class View(_PropertiesMixin, core.Root):
     def _repr_mimebundle_(self, include=None, exclude=None):
         dct = self.to_dict()
         renderer = renderers.get("js")
@@ -177,9 +177,9 @@ def stack(*tracks, **kwargs):
 
 class Track(
     _EncodingMixin,
-    _PropertiesMixen,
-    _TransformsMixen,
-    _VisibilityMixen,
+    _PropertiesMixin,
+    _TransformsMixin,
+    _VisibilityMixin,
     mixins.MarkMethodMixin,
     core.SingleTrack,
 ):
