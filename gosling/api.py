@@ -100,12 +100,15 @@ class _TransformsMixin:
 
 
 class _VisibilityMixin:
-    def visibility(self: T, **kwargs) -> T:
+    def _add_visibility(self: T, *visibilities) -> T:
         copy = self.copy()
         if copy.visibility is Undefined:
             copy.visibility = []
-        copy.visibility.extend(core.VisibilityCondition(**kwargs))
+        copy.visibility.extend(visibilities)
         return copy
+
+    def visibility(self: T, **kwargs) -> T:
+        return self._add_visibility(core.VisibilityCondition(**kwargs))
 
 
 class View(_PropertiesMixin, core.Root):
