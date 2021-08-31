@@ -108,19 +108,19 @@ class _VisibilityMixin:
         return copy
 
     def visibility_lt(self: T, **kwargs) -> T:
-        return self._add_visibility(core.VisibilityCondition(condition="LT", **kwargs))
+        return self._add_visibility(core.VisibilityCondition(operation="LT", **kwargs))
 
     def visibility_gt(self: T, **kwargs) -> T:
-        return self._add_visibility(core.VisibilityCondition(condition="GT", **kwargs))
+        return self._add_visibility(core.VisibilityCondition(operation="GT", **kwargs))
 
     def visibility_le(self: T, **kwargs) -> T:
         return self._add_visibility(
-            core.VisibilityCondition(condition="LTET", **kwargs)
+            core.VisibilityCondition(operation="LTET", **kwargs)
         )
 
     def visibility_ge(self: T, **kwargs) -> T:
         return self._add_visibility(
-            core.VisibilityCondition(condition="GTET", **kwargs)
+            core.VisibilityCondition(operation="GTET", **kwargs)
         )
 
 
