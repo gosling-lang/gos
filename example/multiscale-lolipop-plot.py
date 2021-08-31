@@ -35,13 +35,13 @@ lolipop = gos.overlay(
             stroke=gos.value("lightgray"),
             strokeWidth=gos.value(1),
             opacity=gos.value(0.3),
-        ).properties(visibility=[{
-            "measure": "zoomLevel",
-            "target": "mark",
-            "threshold": 100000,
-            "operation": "LT",
-            "transitionPadding": 100000
-        }])
+        ).visibility(
+            measure="zoomLevel",
+            target="mark",
+            threshold=100000,
+            operation="LT",
+            transitionPadding=100000,
+        )
     ),
     (
         gos.Track(clin_var_beddb).mark_point().encode(
@@ -50,13 +50,13 @@ lolipop = gos.overlay(
             row=gos.Channel("significance:N", domain=categories),
             size=gos.value(7),
             opacity=gos.value(0.8),
-        ).properties(visibility=[{
-            "measure": "zoomLevel",
-            "target": "mark",
-            "threshold": 1000000,
-            "operation": "LT",
-            "transitionPadding": 1000000
-        }])
+        ).visibility(
+            measure="zoomLevel",
+            target="mark",
+            threshold=1000000,
+            operation="LT",
+            transitionPadding=1000000,
+        )
     ),
     (
         gos.Track(clin_var_multivec).mark_bar().encode(
@@ -64,13 +64,13 @@ lolipop = gos.overlay(
             xe="end:G",
             y=gos.Channel("count:Q", axis="none"),
             color=gos.Channel("significance:N", domain=categories, range=colors, legend=True)
-        ).properties(visibility=[{
-            "measure": "zoomLevel",
-            "target": "mark",
-            "threshold": 500000,
-            "operation": "GT",
-            "transitionPadding": 500000
-        }])
+        ).visibility(
+            measure="zoomLevel",
+            target="mark",
+            threshold=500000,
+            operation="GT",
+            transitionPadding=500000
+        )
     ),
     width=800,
     height=150,
