@@ -107,8 +107,21 @@ class _VisibilityMixin:
         copy.visibility.extend(visibilities)
         return copy
 
-    def visibility(self: T, **kwargs) -> T:
-        return self._add_visibility(core.VisibilityCondition(**kwargs))
+    def visibility_lt(self: T, **kwargs) -> T:
+        return self._add_visibility(core.VisibilityCondition(condition="LT", **kwargs))
+
+    def visibility_gt(self: T, **kwargs) -> T:
+        return self._add_visibility(core.VisibilityCondition(condition="GT", **kwargs))
+
+    def visibility_le(self: T, **kwargs) -> T:
+        return self._add_visibility(
+            core.VisibilityCondition(condition="LTET", **kwargs)
+        )
+
+    def visibility_ge(self: T, **kwargs) -> T:
+        return self._add_visibility(
+            core.VisibilityCondition(condition="GTET", **kwargs)
+        )
 
 
 class View(_PropertiesMixin, core.Root):

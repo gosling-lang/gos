@@ -55,8 +55,7 @@ geneLabel = base.mark_text(dy=15).encode(
     size=gos.value(15)
 ).transform_filter(
     field="type", oneOf=["gene"]
-).visibility(
-    operation="less-than",
+).visibility_lt(
     measure="width",
     threshold="|xe-x|",
     transitionPadding=10,

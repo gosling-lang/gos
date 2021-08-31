@@ -35,11 +35,10 @@ lolipop = gos.overlay(
             stroke=gos.value("lightgray"),
             strokeWidth=gos.value(1),
             opacity=gos.value(0.3),
-        ).visibility(
+        ).visibility_lt(
             measure="zoomLevel",
             target="mark",
             threshold=100000,
-            operation="LT",
             transitionPadding=100000,
         )
     ),
@@ -50,11 +49,10 @@ lolipop = gos.overlay(
             row=gos.Channel("significance:N", domain=categories),
             size=gos.value(7),
             opacity=gos.value(0.8),
-        ).visibility(
+        ).visibility_lt(
             measure="zoomLevel",
             target="mark",
             threshold=1000000,
-            operation="LT",
             transitionPadding=1000000,
         )
     ),
@@ -64,12 +62,11 @@ lolipop = gos.overlay(
             xe="end:G",
             y=gos.Channel("count:Q", axis="none"),
             color=gos.Channel("significance:N", domain=categories, range=colors, legend=True)
-        ).visibility(
+        ).visibility_gt(
             measure="zoomLevel",
             target="mark",
             threshold=500000,
-            operation="GT",
-            transitionPadding=500000
+            transitionPadding=500000,
         )
     ),
     width=800,
