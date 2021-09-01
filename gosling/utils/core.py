@@ -19,6 +19,16 @@ def parse_shorthand(
     shorthand,
     parse_types=True,
 ):
+    """
+    >>> parse_shorthand('name') == {'field': 'name'}
+    True
+    >>> parse_shorthand('name:Q') == {'field': 'name', 'type': 'quantitative'}
+    True
+    >>> parse_shorthand('foo:G') == {'field': 'foo', 'type': 'genomic'}
+    True
+    >>> parse_shorthand('foo:N') == {'field': 'foo', 'type': 'nominal'}
+    True
+    """
     if not shorthand:
         return {}
 
