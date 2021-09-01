@@ -13,7 +13,7 @@ categories = [
     "Pathogenic/Likely_pathogenic", "Pathogenic",
 ]
 
-colors = ["#5A9F8C", "#029F73", "gray", "#CB96B3", "#CB71A3", "#CB3B8C"]
+colors = ["#5A9F8C", "#5A9F8C", "#029F73", "gray", "#CB96B3", "#CB71A3", "#CB3B8C"]
 
 clin_var_multivec = multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=clinvar-multivec",
