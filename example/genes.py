@@ -55,16 +55,11 @@ geneLabel = base.mark_text(dy=15).encode(
     size=gos.value(15)
 ).transform_filter(
     field="type", oneOf=["gene"]
-).properties(
-    visibility=[
-        gos.VisibilityCondition(
-          operation="less-than",
-          measure="width",
-          threshold="|xe-x|",
-          transitionPadding=10,
-          target="mark"
-        )
-    ]
+).visibility_lt(
+    measure="width",
+    threshold="|xe-x|",
+    transitionPadding=10,
+    target="mark",
 )
 
 exon = base.mark_rect().encode(

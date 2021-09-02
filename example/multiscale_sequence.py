@@ -15,10 +15,10 @@ text = gos.Track(data).mark_text().encode(
     size=gos.value(24),
     color=gos.value("white"),
     text="base:N",
-    visibility=[
-        gos.VisibilityCondition(operation="LT", measure="width", threshold="|xe-x|", transitionPadding=30, target="mark"),
-        gos.VisibilityCondition(operation="LT", measure="zoomLevel", threshold=10, target="track")
-    ]
+).visibility_lt(
+    measure="width", threshold="|xe-x|", transitionPadding=30, target="mark"
+).visibility_lt(
+    measure="zoomLevel", threshold=10, target="track"
 ).transform_filter_not("count", oneOf=[0])
 
 bar = gos.Track(data).mark_bar().encode(

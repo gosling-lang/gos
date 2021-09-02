@@ -13,7 +13,7 @@ categories = [
     "Pathogenic/Likely_pathogenic", "Pathogenic",
 ]
 
-colors = ["#5A9F8C", "#029F73", "gray", "#CB96B3", "#CB71A3", "#CB3B8C"]
+colors = ["#5A9F8C", "#5A9F8C", "#029F73", "gray", "#CB96B3", "#CB71A3", "#CB3B8C"]
 
 clin_var_multivec = multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=clinvar-multivec",
@@ -35,13 +35,12 @@ lolipop = gos.overlay(
             stroke=gos.value("lightgray"),
             strokeWidth=gos.value(1),
             opacity=gos.value(0.3),
-        ).properties(visibility=[{
-            "measure": "zoomLevel",
-            "target": "mark",
-            "threshold": 100000,
-            "operation": "LT",
-            "transitionPadding": 100000
-        }])
+        ).visibility_lt(
+            measure="zoomLevel",
+            target="mark",
+            threshold=100000,
+            transitionPadding=100000,
+        )
     ),
     (
         gos.Track(clin_var_beddb).mark_point().encode(
@@ -50,13 +49,12 @@ lolipop = gos.overlay(
             row=gos.Channel("significance:N", domain=categories),
             size=gos.value(7),
             opacity=gos.value(0.8),
-        ).properties(visibility=[{
-            "measure": "zoomLevel",
-            "target": "mark",
-            "threshold": 1000000,
-            "operation": "LT",
-            "transitionPadding": 1000000
-        }])
+        ).visibility_lt(
+            measure="zoomLevel",
+            target="mark",
+            threshold=1000000,
+            transitionPadding=1000000,
+        )
     ),
     (
         gos.Track(clin_var_multivec).mark_bar().encode(
@@ -64,13 +62,12 @@ lolipop = gos.overlay(
             xe="end:G",
             y=gos.Channel("count:Q", axis="none"),
             color=gos.Channel("significance:N", domain=categories, range=colors, legend=True)
-        ).properties(visibility=[{
-            "measure": "zoomLevel",
-            "target": "mark",
-            "threshold": 500000,
-            "operation": "GT",
-            "transitionPadding": 500000
-        }])
+        ).visibility_gt(
+            measure="zoomLevel",
+            target="mark",
+            threshold=500000,
+            transitionPadding=500000,
+        )
     ),
     width=800,
     height=150,
