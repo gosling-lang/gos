@@ -69,6 +69,13 @@ from gosling.experimental.data import bam, csv, bigwig # file resources
 from gosling.experimental.data import beddb, vector, matrix, multivec # higlass tile resources
 ```
 
+In order to use these utilities, you will need to install additional dependencies via:
+
+```bash
+pip install "gosling[all]"
+pip install clodius # optional, required for higlass tile resources
+```
+
 In the example above, we can replace the remote Higlass server URL with a local path to the
 corresponding cistrome multivec file (https://s3.amazonaws.com/gosling-lang.org/data/cistrome.multires.mv5, 4GB).
 **gos** automatically detects the local file and will starts a background Higlass server to
