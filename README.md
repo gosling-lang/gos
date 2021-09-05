@@ -60,17 +60,27 @@ for the [Gosling] specification are expected to be accessible via HTTP.
 Loading a local dataset can be challenging as it requires starting a simple web-server
 and/or a [Higlass server](https://gosling-lang.github.io/gosling-website/docs/data#pre-aggregated-datasets-higlass-server)
 for some pre-aggregated datasets. **gos** provides an experimental module that
-transparently serves data via a background ASGI server. For the example above, we can
-replace the Higlass tileset URL with a path for a local multivec file.
+transparently serves data via a background ASGI server. The various data utilites are 
+imported from the `gosling.experimental.data` module.
 
 ```python
 import gosling as gos
 from gosling.experimental.data import bam, csv, bigwig # file resources
 from gosling.experimental.data import beddb, vector, matrix, multivec # higlass tile resources
+```
 
-# starts background higlass server if local file is detected
+In the example above, we can replace the remote Higlass server URL with a local path to the
+corresponding cistrome multivec file (https://s3.amazonaws.com/gosling-lang.org/data/cistrome.multires.mv5, 4GB).
+**gos** automatically detects the local file and will starts a background Higlass server to
+power the visualization.
+
+```diff
+import gosling as gos
+from gosling.experimental.data import multivec
+
 data = multivec(
-	url='../data/cistrome.multires.mv5', # path to local multivec
+-   url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
++   url='../data/cistrome.multires.mv5', # path to local multivec
     row="sample",
     column="position",
     value="peak",
@@ -81,17 +91,7 @@ data = multivec(
 base_track = gos.Track(data, width=800, height=100)
 ```
 
-```diff
-data = multivec(
--   url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
-+   url='../data/cistrome.multires.mv5', # path to local multivec
-    row="sample",
-    column="position",
-    value="peak",
-    categories=["sample 1", "sample 2", "sample 3", "sample 4"],
-    binSize=4,
-)
-```
+Note that the visualizations will only render as long as your Python session is active.
 
 ## Installation
 
