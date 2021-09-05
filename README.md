@@ -57,7 +57,7 @@ gos.vertical(heatmap, bars, lines).properties(
 
 [Data sources](https://gosling-lang.github.io/gosling-website/docs/data)
 for the [Gosling] specification are expected to be accessible via HTTP.
-Loading a local dataset can be challenging since it requires an starting a web-server
+Loading a local dataset can be challenging since it requires starting a web-server
 and/or a [Higlass server](https://gosling-lang.github.io/gosling-website/docs/data#pre-aggregated-datasets-higlass-server)
 for some pre-aggregated datasets. **gos** provides an experimental module that
 transparently serves data via a background ASGI server. The various data utilites are 
