@@ -53,6 +53,45 @@ gos.vertical(heatmap, bars, lines).properties(
 
 <img src="https://github.com/manzt/gos/raw/main/images/example.gif" alt="Gosling visualization" width="800" />
 
+## Local data
+
+[Data sources](https://gosling-lang.github.io/gosling-website/docs/data)
+for the [Gosling] specification are expected to be accessible via HTTP.
+Loading a local dataset can be challenging as it requires starting a simple web-server
+and/or a [Higlass server](https://gosling-lang.github.io/gosling-website/docs/data#pre-aggregated-datasets-higlass-server)
+for some pre-aggregated datasets. **gos** provides an experimental module that
+transparently serves data via a background ASGI server.
+
+```python
+import gosling as gos
+from gosling.experimental.data import bam, csv, bigwig # file resources
+from gosling.experimental.data import beddb, vector, matrix, multivec # higlass tile resources
+
+# starts background higlass server if local file is detected
+multivec_data = multivec(
+    url='../data/cistrome.multires.mv5', # path to local multivec
+    row="sample",
+    column="position",
+    value="peak",
+    categories=["sample 1", "sample 2", "sample 3", "sample 4"],
+    binSize=4,
+)
+
+rearrangments = csv(
+    url="../data/rearrangements.bulk.1639.simple.filtered.pub", # path to local csv
+    headerNames=["chr1", "p1s", "p1e", "chr2", "p2s", "p2e", "type", "id", "f1", "f2", "f3", "f4", "f5", "f6"],
+    separator="\t",
+    genomicFieldsToConvert=[
+        {"chromosomeField": "chr1", "genomicFields": ["p1s", "p1e"]},
+        {"chromosomeField": "chr2", "genomicFields": ["p2s", "p2e"]},
+    ],
+)
+
+gos.vertial(
+	gos.Track(multivec_data).mark_bar().encode(...),
+	gos.Track(rearrangements).mark_withinLink().encode(...),
+)
+```
 
 ## Installation
 
