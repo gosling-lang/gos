@@ -20,9 +20,7 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.githubpages",
     "numpydoc.numpydoc",
-    # "altair.sphinxext.altairplot",
-    # "altair.sphinxext.altairgallery",
-    # "altair.sphinxext.schematable",
+    "gosling.sphinxext.gallery",
 ]
 
 autodoc_default_flags = ["members", "inherited-members"]

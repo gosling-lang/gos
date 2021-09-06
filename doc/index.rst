@@ -14,6 +14,13 @@ interactive genomic visualizations. The source is available on
 
    getting_started/installation
 
+   
+.. toctree::
+   :maxdepth: 1
+   :caption: Gallery
+
+   gallery/index
+
 .. toctree::
    :maxdepth: 1
    :caption: User Guide

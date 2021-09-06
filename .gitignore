@@ -13,3 +13,4 @@ Untitled*.ipynb
 node_modules/
 _build/
 generated/
+gallery/
