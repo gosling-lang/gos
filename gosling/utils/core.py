@@ -1,6 +1,7 @@
 import hashlib
 import itertools
 import re
+from typing import Any, Callable, List, Optional
 
 import jsonschema
 
@@ -141,3 +142,30 @@ def infer_encoding_types(args, kwargs, channels):
 
 def _compute_data_hash(data_str: str):
     return hashlib.md5(data_str.encode()).hexdigest()
+
+
+def use_signature(Obj: Any):
+    """Apply call signature and documentation of Obj to the decorated method"""
+
+    def decorate(f):
+        # call-signature of f is exposed via __wrapped__.
+        # we want it to mimic Obj.__init__
+        f.__wrapped__ = Obj.__init__
+        f._uses_signature = Obj
+
+        # Supplement the docstring of f with information from Obj
+        if Obj.__doc__:
+            doclines: List[str] = Obj.__doc__.splitlines()
+            if f.__doc__:
+                doc = f.__doc__ + "\n".join(doclines[1:])
+            else:
+                doc = "\n".join(doclines)
+            try:
+                f.__doc__ = doc
+            except AttributeError:
+                # __doc__ is not modifiable for classes in Python < 3.3
+                pass
+
+        return f
+
+    return decorate

@@ -11,3 +11,5 @@ Untitled*.ipynb
 
 .vscode
 node_modules/
+_build/
+generated/
