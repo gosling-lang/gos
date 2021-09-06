@@ -4,6 +4,19 @@
 It is built on top of the [Gosling] JSON specification, providing an
 simplified interface for authoring interactive genomic visualizations.
 
+
+## Installation
+
+**Here be dragons 🐉**
+
+> The API is *experimental* and under active development.
+> Feedback is much appreciated and most welcomed.
+
+```bash
+pip install gosling
+```
+
+
 ## Example
 
 ```python
@@ -99,17 +112,6 @@ base_track = gos.Track(data, width=800, height=100)
 ```
 
 Note that the visualizations will only render as long as your Python session is active.
-
-## Installation
-
-**Here be dragons 🐉**
-
-> The API is *experimental* and under active development.
-> Feedback is much appreciated and most welcomed.
-
-```bash
-pip install gosling
-```
 
 
 ## Example Gallery
