@@ -53,6 +53,52 @@ gos.vertical(heatmap, bars, lines).properties(
 
 <img src="https://github.com/manzt/gos/raw/main/images/example.gif" alt="Gosling visualization" width="800" />
 
+## Local data
+
+[Data sources](https://gosling-lang.github.io/gosling-website/docs/data)
+for the [Gosling] specification are expected to be accessible via HTTP.
+Loading a local dataset can be challenging since it requires starting a web-server
+and/or a [Higlass server](https://gosling-lang.github.io/gosling-website/docs/data#pre-aggregated-datasets-higlass-server)
+for some pre-aggregated datasets. **gos** provides an experimental module that
+transparently serves data via a background ASGI server. The various data utilites are 
+imported from the `gosling.experimental.data` module.
+
+```python
+import gosling as gos
+from gosling.experimental.data import bam, csv, bigwig # file resources
+from gosling.experimental.data import beddb, vector, matrix, multivec # higlass tile resources
+```
+
+In order to use these utilities, you will need to install additional dependencies via:
+
+```bash
+pip install "gosling[all]"
+pip install clodius # optional, required for higlass tile resources
+```
+
+In the example above, we can replace the remote Higlass server URL with a local path to the
+corresponding cistrome multivec file (https://s3.amazonaws.com/gosling-lang.org/data/cistrome.multires.mv5, 4GB).
+**gos** automatically detects the local file and will starts a background Higlass server to
+power the visualization.
+
+```diff
+import gosling as gos
+from gosling.experimental.data import multivec
+
+data = multivec(
+-   url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
++   url='../data/cistrome.multires.mv5', # path to local multivec
+    row="sample",
+    column="position",
+    value="peak",
+    categories=["sample 1", "sample 2", "sample 3", "sample 4"],
+    binSize=4,
+)
+
+base_track = gos.Track(data, width=800, height=100)
+```
+
+Note that the visualizations will only render as long as your Python session is active.
 
 ## Installation
 
