@@ -64,7 +64,7 @@ gos.vertical(heatmap, bars, lines).properties(
 )
 ```
 
-<img src="https://github.com/manzt/gos/raw/main/images/example.gif" alt="Gosling visualization" width="800" />
+<img src="https://github.com/manzt/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization" width="800" />
 
 ## Local data
 
