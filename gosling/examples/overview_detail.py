@@ -42,7 +42,7 @@ circular = gos.stack(
                 x=gos.Channel("start:G", linkingId="detail-2"),
                 color=gos.value("red")
             ),
-        ).properties(width=700, height=100)
+        ).properties(width=500, height=100)
     ),
     (
         gos.Track(rearrangments)
@@ -61,7 +61,7 @@ circular = gos.stack(
             )
             .transform_filter("chr1", oneOf=["1", "16", "14", "9", "6", "5", "3"])
             .transform_filter("chr2", oneOf=["1", "16", "14", "9", "6", "5", "3"])
-            .properties(width=700, height=100)
+            .properties(width=500, height=100)
     ),
 ).properties(static=True, layout="circular")
 
@@ -72,7 +72,7 @@ def detail(background, linkingId, legend, chromosome):
         x=gos.Channel("start:G", linkingId=linkingId, domain=domain),
         strokeWidth=gos.value(0.3),
         color=gos.Channel("sample:N", legend=legend),
-    ).properties(width=350, height=150)
+    ).properties(width=245, height=150)
 
 details = gos.horizontal(
     detail("blue", "detail-1", legend=False, chromosome="5"),

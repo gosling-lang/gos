@@ -5,7 +5,7 @@
   "scripts": {
     "format": "prettier --write 'js/**/*.ts' js/build.js",
     "lint": "prettier --check 'js/**/*.ts' js/build.js",
-    "build": "eleventy",
+    "build": "sphinx-build -b html doc dist",
     "build:js": "NODE_ENV=production node js/build.js"
   },
   "dependencies": {

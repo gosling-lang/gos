@@ -41,6 +41,9 @@ setuptools.setup(
             'pytest',
             'requests',
             'ipywidgets',
+            'furo',
+            'sphinx'
+            'numpydoc'
         ],
     },
     entry_points={},

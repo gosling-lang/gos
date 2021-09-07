@@ -1,5 +1,3 @@
-from rich import print
-
 import pathlib
 import warnings
 import jinja2
@@ -8,8 +6,6 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives import flag
 
-
-import gosling as gos
 from gosling.schema import SCHEMA_VERSION
 from gosling.schemapi import SchemaValidationError
 from gosling.utils.execeval import eval_block
@@ -26,6 +22,7 @@ TEMPLATE = jinja2.Template(
 <script>
   document.addEventListener("DOMContentLoaded", function(event) {
       var spec = {{ spec }};
+      console.log(spec);
       var opt = { padding: 0 };
       var el = document.querySelector('#{{ div_id }}');
       gosling.embed(el, spec, opt).catch(console.err);

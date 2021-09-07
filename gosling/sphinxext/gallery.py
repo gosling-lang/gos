@@ -58,7 +58,7 @@ def populate_examples():
         dict(
             docstring="",
             name=example.stem,
-            title=" ".join(example.stem.split("_")).capitalize(),
+            title=" ".join(list(map(lambda s: s.capitalize(), example.stem.split("_")))),
             code=example.read_text(),
             code_below=True,
         )
