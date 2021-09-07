@@ -13,22 +13,62 @@ HTML_TEMPLATE = jinja2.Template(
 </head>
 <body>
   <div id="{{ output_div }}"></div>
-  <script type="module">
-    import { embed } from 'http://localhost:8080/index.js';
+  <script>
+    function embed(gos) {
+        var el = document.getElementById('{{ output_div }}');
+        var spec = {{ spec }};
+        var opt = {{ embed_options }};
 
-    var el = document.getElementById('{{ output_div }}');
-    var spec = {{ spec }};
-    var opt = {{ embed_options }};
-    var output_area = this;
-    function showError(error) {
-        el.innerHTML = ('<div class="error" style="color:red;">'
-              + '<p>JavaScript Error: ' + error.message + '</p>'
-              + "<p>This usually means there's a typo in your chart specification. "
-              + "See the javascript console for the full traceback.</p>"
-              + '</div>');
-        throw error;
+        gos.embed(el, spec, opt).catch(err => {
+            el.innerHTML = `\
+<div class="error">
+    <p>JavaScript Error: ${error.message}</p>
+    <p>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.</p>
+</div>`;
+            throw error;
+        });
     }
-    embed(el, spec, opt).catch(showError);
+
+    if (!window.gosling) {
+
+        // Manually load scripts from window namespace since requirejs might not be
+        // available in all browser environments.
+        // https://github.com/DanielHreben/requirejs-toggle
+
+        window.__requirejsToggleBackup = { define: window.define, require: window.require, requirejs: window.requirejs };
+        for (const field of Object.keys(window.__requirejsToggleBackup)) {
+            window[field] = undefined;
+        }
+
+        // load dependencies sequentially
+        [
+          "{{ base_url }}/react@{{ react_version }}/umd/react.production.min.js",
+          "{{ base_url }}/react-dom@{{ react_version }}/umd/react-dom.production.min.js",
+          "{{ base_url }}/pixi.js@{{ pixijs_version }}/dist/browser/pixi.min.js",
+        ].forEach(src => {
+            var script = document.createElement('script');
+            script.src = src;
+            script.async = false;
+            document.head.appendChild(script);
+        });
+
+        // wait for gosling to load before restoring requirejs
+        var script = document.createElement('script');
+        script.onload = () => {
+            // restore requirejs after scripts have loaded
+            Object.assign(window, window.__requirejsToggleBackup);
+            delete window.__requirejsToggleBackup;
+
+            embed(window.gosling);
+        }
+        script.src = "{{ base_url }}/gosling.js@{{ gosling_version }}/dist/gosling.js",
+        script.async = false;
+        document.head.appendChild(script);
+
+    } else {
+
+        embed(window.gosling);
+    }
   </script>
 </body>
 </html>
@@ -38,11 +78,10 @@ HTML_TEMPLATE = jinja2.Template(
 
 def spec_to_html(
     spec,
-    gosling_version="",
+    gosling_version="0.9",
     higlass_version="1.11",
-    react_version="",
-    react_dom_version="",
-    pixijs_version="",
+    react_version="17",
+    pixijs_version="6",
     base_url="https://unpkg.com",
     output_div="vis",
     embed_options=None,
@@ -57,7 +96,6 @@ def spec_to_html(
         gosling_version=gosling_version,
         higlass_version=higlass_version,
         react_version=react_version,
-        react_dom_version=react_dom_version,
         pixijs_version=pixijs_version,
         base_url=base_url,
         output_div=output_div,
