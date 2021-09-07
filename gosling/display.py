@@ -8,22 +8,19 @@ HTML_TEMPLATE = jinja2.Template(
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    .error { color: red; }
-  </style>
+  <style>.error { color: red; }</style>
   <link rel="stylesheet" href="{{ base_url }}/higlass@{{ higlass_version }}/dist/hglib.css">
-  <script type="text/javascript" src="{{ base_url }}/gosling.js@{{ gosling_version }}/dist/gosling.js"></script>
-  <script type="text/javascript" src="{{ base_url }}/react@{{ react_version }}/umd/react.production.min.js"></script>
-  <script type="text/javascript" src="{{ base_url }}/react-dom@{{ react_dom_version }}/umd/react-dom.production.min.js"></script>
-  <script type="text/javascript" src="{{ base_url}}/pixi.js@{{ pixijs_version }}/dist/pixi.js"></script>
 </head>
 <body>
   <div id="{{ output_div }}"></div>
-  <script>
+  <script type="module">
+    import { embed } from 'http://localhost:8080/index.js';
+
+    var el = document.getElementById('{{ output_div }}');
     var spec = {{ spec }};
-    var embedOpt = {{ embed_options }};
+    var opt = {{ embed_options }};
     var output_area = this;
-    function showError(el, error) {
+    function showError(error) {
         el.innerHTML = ('<div class="error" style="color:red;">'
               + '<p>JavaScript Error: ' + error.message + '</p>'
               + "<p>This usually means there's a typo in your chart specification. "
@@ -31,8 +28,7 @@ HTML_TEMPLATE = jinja2.Template(
               + '</div>');
         throw error;
     }
-    gosling.embed(document.getElementById('{{ output_div }}'), spec, embedOpt)
-        .catch(error => showError(el, error));
+    embed(el, spec, opt).catch(showError);
   </script>
 </body>
 </html>
@@ -42,17 +38,17 @@ HTML_TEMPLATE = jinja2.Template(
 
 def spec_to_html(
     spec,
-    gosling_version,
-    higlass_version,
-    react_version,
-    react_dom_version,
-    pixijs_version,
-    base_url="https://cdn.jsdelivr.net/npm/",
+    gosling_version="",
+    higlass_version="1.11",
+    react_version="",
+    react_dom_version="",
+    pixijs_version="",
+    base_url="https://unpkg.com",
     output_div="vis",
     embed_options=None,
     json_kwds=None,
 ):
-    embed_options = embed_options or {}
+    embed_options = embed_options or dict(padding=0)
     json_kwds = json_kwds or {}
 
     return HTML_TEMPLATE.render(
@@ -122,7 +118,6 @@ class HTMLRenderer(BaseRenderer):
         kwargs = self.kwargs.copy()
         kwargs.update(metadata)
         html = spec_to_html(spec=spec, output_div=self.output_div, **kwargs)
-        print(html)
         return {"text/html": html}
 
 

@@ -1,6 +1,6 @@
 from typing import Iterable, TypeVar, Union
 from gosling.schema import Undefined, channels, core, mixins
-from gosling.display import JSRenderer  # , HTMLRenderer
+from gosling.display import JSRenderer, HTMLRenderer
 import gosling.utils as utils
 
 DEFAULT_WIDTH = 800
@@ -8,13 +8,7 @@ DEFAULT_HEIGHT = 180
 DEFAULT_MARK = "bar"
 
 renderers = {
-    # "html": HTMLRenderer(
-    #     gosling_version=GOSLING_VERSION,
-    #     higlass_version=HIGLASS_VERSION,
-    #     react_version=REACT_VERSION,
-    #     react_dom_version=REACT_DOM_VERSION,
-    #     pixijs_version=PIXIJS_VERSION,
-    # ),
+    "html": HTMLRenderer(),
     "js": JSRenderer(),
 }
 
@@ -198,7 +192,7 @@ class View(_PropertiesMixin, core.Root):
 
     def _repr_mimebundle_(self, include=None, exclude=None):
         dct = self.to_dict()
-        renderer = renderers.get("js")
+        renderer = renderers.get("html")
         return renderer(dct) if renderer else {}
 
     def display(self):
