@@ -32,8 +32,6 @@ Indices and tables
 ------------------
 
 * :ref:`genindex`
-* :ref:`modindex`
-
 
 .. _GitHub: http://github.com/manzt/gos
 .. _Git Issues: http://github.com/manzt/gos/issues

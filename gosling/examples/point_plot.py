@@ -17,6 +17,6 @@ track = gos.Track(data).mark_point().encode(
     y="peak:Q",
     size="peak:Q",
     color="sample:N",
-).properties(layout="linear", width=800, height=180)
+).properties(layout="linear", width=700, height=180)
 
 track.view(title="Basic Marks: Point", subtitle="Tutorial Examples")

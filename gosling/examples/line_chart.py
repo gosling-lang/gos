@@ -16,6 +16,6 @@ track = gos.Track(data).mark_line().encode(
     x=gos.Channel("position:G", domain=domain, axis="bottom"),
     y="peak:Q",
     size=gos.value(2),
-).properties(layout="linear", width=800, height=180)
+).properties(layout="linear", width=700, height=180)
 
 track.view(title="Basic Marks: Line", subtitle="Tutorial Examples")
