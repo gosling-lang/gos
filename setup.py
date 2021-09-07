@@ -41,8 +41,8 @@ setuptools.setup(
             'pytest',
             'requests',
             'ipywidgets',
-            'sphinx'
-            'numpydoc'
+            'sphinx',
+            'numpydoc',
             'furo',
         ],
     },
