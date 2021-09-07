@@ -14,7 +14,7 @@ data_server_requirements = [
 
 setuptools.setup(
     name="gosling",
-    version="0.0.2",
+    version="0.0.3",
     author="Trevor Manz",
     author_email="trevor.j.manz@gmail.com",
     description="Python bindings to generate gosling schema.",
