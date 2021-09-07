@@ -39,9 +39,6 @@ EXAMPLE_TEMPLATE = jinja2.Template(
     {% if code_below %}:code-below:{% endif %}
 
     {{ code | indent(4) }}
-
-.. toctree::
-   :hidden:
 """
 )
 
