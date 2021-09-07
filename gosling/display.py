@@ -1,3 +1,6 @@
+from dataclasses import dataclass, field
+from typing import Callable, Dict, Optional, TypeVar
+from gosling.schema import SCHEMA_VERSION
 import json
 import uuid
 
@@ -78,7 +81,7 @@ HTML_TEMPLATE = jinja2.Template(
 
 def spec_to_html(
     spec,
-    gosling_version="0.9",
+    gosling_version=SCHEMA_VERSION.lstrip("v"),
     higlass_version="1.11",
     react_version="17",
     pixijs_version="6",
@@ -169,3 +172,31 @@ class JSRenderer(BaseRenderer):
             {"application/javascript": js},
             {"jupyter-gosling": f"#{output_div}"},
         )
+
+@dataclass
+class RendererRegistry:
+    renderers: Dict[str, Callable] = field(default_factory=dict)
+    active: Optional[str] = None
+
+    def register(self, name: str, fn: Callable):
+        self.renderers[name] = fn
+
+    def enable(self, name: str):
+        assert name in self.renderers
+        self.active = name
+
+    def get(self):
+        assert isinstance(self.active, str) and self.active in self.renderers
+        return self.renderers[self.active]
+
+html_renderer = HTMLRenderer()
+js_renderer = JSRenderer()
+
+renderers = RendererRegistry()
+renderers.register("default", html_renderer)
+renderers.register("html", html_renderer)
+renderers.register("colab", html_renderer)
+renderers.register("kaggle", html_renderer)
+renderers.register("zeppelin", html_renderer)
+renderers.register("js", js_renderer)
+renderers.enable("default")
