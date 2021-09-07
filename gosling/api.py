@@ -242,7 +242,7 @@ class Track(
         return View(tracks=[self], **kwargs)
 
 
-def overlay(*tracks: Track, **kwargs) -> View:
+def overlay(*tracks: Union[Track, View], **kwargs) -> View:
     """Compose an overlaid view from multiple tracks or overliad tracks"""
     # Overlay requires a `width` and `height`. Check if provided as kwargs, otherwise
     # eagerly grab the width/height from the tracks, otherwise use defaults.
@@ -264,7 +264,7 @@ def overlay(*tracks: Track, **kwargs) -> View:
     )
 
 
-def stack(*tracks: Track, **kwargs) -> View:
+def stack(*tracks: Union[Track, View], **kwargs) -> View:
     """Compose a stacked view from multiple tracks or overlaid tracks."""
     return View(alignment="stack", tracks=tracks, **kwargs)
 
