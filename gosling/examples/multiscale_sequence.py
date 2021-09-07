@@ -30,6 +30,6 @@ bar = gos.Track(data).mark_bar().encode(
 gos.overlay(bar, text).properties(
     title="Multi-Scale Sequence Plot",
     xDomain=gos.Domain(interval=[1000000, 1000010]),
-    width=800,
+    width=725,
     height=100
 )

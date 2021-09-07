@@ -69,7 +69,7 @@ lolipop = gos.overlay(
             transitionPadding=500000,
         )
     ),
-    width=800,
+    width=725,
     height=150,
 )
 

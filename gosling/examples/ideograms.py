@@ -1,7 +1,7 @@
 import gosling as gos
 from gosling.data import csv, multivec
 
-def ideogram_with_bars(chromosome="1", width=800):
+def ideogram_with_bars(chromosome: str, width: int):
     """
     Ideograms
     """

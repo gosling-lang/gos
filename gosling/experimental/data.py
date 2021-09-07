@@ -71,14 +71,15 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
             url = data_server(data)
 
         # bam's index file url
-        if 'indexUrl' in kwargs:
-            fp = pathlib.Path(kwargs['indexUrl'])
+        if "indexUrl" in kwargs:
+            fp = pathlib.Path(kwargs["indexUrl"])
             if fp.is_file():
-                kwargs['indexUrl'] = data_server(fp)
-        
+                kwargs["indexUrl"] = data_server(fp)
+
         return dict(type=type_, url=url, **kwargs)
 
     return load
+
 
 # re-export json data util
 from gosling.data import json

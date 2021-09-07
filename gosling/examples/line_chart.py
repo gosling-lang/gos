@@ -12,11 +12,10 @@ data = multivec(
 
 domain = gos.Domain(chromosome="1", interval=[1, 30005000])
 
-track = gos.Track(data).mark_point().encode(
+track = gos.Track(data).mark_line().encode(
     x=gos.Channel("position:G", domain=domain, axis="bottom"),
     y="peak:Q",
-    size="peak:Q",
-    color="sample:N",
-).properties(layout="linear", width=800, height=180)
+    size=gos.value(2),
+).properties(layout="linear", width=725, height=180)
 
-track.view(title="Basic Marks: Point", subtitle="Tutorial Examples")
+track.view(title="Basic Marks: Line", subtitle="Tutorial Examples")

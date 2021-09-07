@@ -19,6 +19,7 @@ from schemapi.utils import (
     indent_arglist,
     resolve_references,
 )
+import generate_api_docs  # noqa: E402
 
 T = TypeVar("T")
 
@@ -65,7 +66,7 @@ class FieldChannelMixin(object):
         if shorthand is Undefined:
             parsed = {}
         elif isinstance(shorthand, str):
-            parsed = parse_shorthand(shorthand)
+            parsed = utils.parse_shorthand(shorthand)
             type_required = 'type' in self._kwds
             type_in_shorthand = 'type' in parsed
             type_defined_explicitly = self._get('type') is not Undefined
@@ -191,7 +192,7 @@ def toposort(graph: dict[str, list[T]]) -> list[T]:
 
 def copy_schemapi_util():
     """
-    Copy the schemapi utility and its test file into altair/utils/
+    Copy the schemapi utility and its test file into gosling/utils/
     """
     current_dir = here.parent
     # copy the schemapi utility file
@@ -275,7 +276,7 @@ def generate_channel_wrappers(schemafile, imports=None):
             "from . import core",
             # "import pandas as pd",
             "from gosling.schemapi import Undefined",
-            "from gosling.utils import parse_shorthand",
+            "import gosling.utils as utils",
         ]
     contents = [HEADER]
     contents.extend(imports)
@@ -322,7 +323,7 @@ def generate_channel_wrappers(schemafile, imports=None):
 
 MARK_METHOD = '''
 def mark_{mark}({def_arglist}) -> T:
-    """Set the chart's mark to '{mark}'
+    """Set the track's mark to '{mark}'
 
     For information on additional arguments, see :class:`{style_def}`
     """
@@ -438,3 +439,4 @@ def main(skip_download: Optional[bool] = False):
 if __name__ == "__main__":
     copy_schemapi_util()
     main()
+    generate_api_docs.write_api_file()

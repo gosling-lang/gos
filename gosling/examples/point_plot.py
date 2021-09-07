@@ -7,14 +7,16 @@ data = multivec(
     column="position",
     value="peak",
     categories=["sample 1"],
+    binSize=5,
 )
 
-domain = gos.Domain(chromosome="1", interval=[2000500, 3000500])
+domain = gos.Domain(chromosome="1", interval=[1, 30005000])
 
-track = gos.Track(data).mark_area().encode(
+track = gos.Track(data).mark_point().encode(
     x=gos.Channel("position:G", domain=domain, axis="bottom"),
     y="peak:Q",
-    size=gos.value(2),
-).properties(width=800, height=180, layout="linear")
+    size="peak:Q",
+    color="sample:N",
+).properties(layout="linear", width=725, height=180)
 
-track.view(title="Basic Marks: Area", subtitle="Tutorial Examples")
+track.view(title="Basic Marks: Point", subtitle="Tutorial Examples")

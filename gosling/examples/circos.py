@@ -1,7 +1,7 @@
 import gosling as gos
 from gosling.data import csv, vector
 
-WIDTH = 700
+WIDTH = 725
 
 tileset = vector(
     url="https://resgen.io/api/v1/tileset_info/?d=VLFaiSVjTjW6mkbjRjWREA",

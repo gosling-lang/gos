@@ -1,7 +1,7 @@
 import gosling as gos
 from gosling.data import bigwig, beddb, matrix, multivec
 
-size = 400
+size = 375
 scaled_size = size / 15
 
 # Data

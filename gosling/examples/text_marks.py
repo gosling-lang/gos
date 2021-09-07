@@ -18,6 +18,6 @@ track = gos.Track(data).mark_text(textStrokeWidth=0).encode(
     xe="end:G",
     color=gos.Channel("base:N", domain=["A", "T", "G", "C"]),
     text="base:N",
-).properties(width=800, height=180, stretch=True)
+).properties(width=725, height=180, stretch=True)
 
 track.view(title="Basic Marks: Text", subtitle="Tutorial Examples")

@@ -5,7 +5,17 @@ import pathlib
 import uuid
 import weakref
 from dataclasses import dataclass, field
-from typing import Dict, IO, Awaitable, Generator, List, MutableMapping, Optional, Tuple, Union
+from typing import (
+    Dict,
+    IO,
+    Awaitable,
+    Generator,
+    List,
+    MutableMapping,
+    Optional,
+    Tuple,
+    Union,
+)
 
 import starlette.applications
 import starlette.middleware.cors
@@ -25,7 +35,7 @@ class Resource(metaclass=abc.ABCMeta):
         provider: "Provider",
         headers: Dict[str, str],
         extension: Optional[str] = None,
-        route: Optional[str] = None
+        route: Optional[str] = None,
     ):
         if route is not None and extension is not None:
             raise ValueError("Should only provide one of route or extension.")
