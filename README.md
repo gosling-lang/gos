@@ -1,8 +1,16 @@
 # gos 🦆
 
+[![License](https://img.shields.io/pypi/l/gosling.svg?color=green)](https://github.com/manzt/gosling/raw/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/gosling.svg?color=green)](https://pypi.org/project/gosling)
+[![Python Version](https://img.shields.io/pypi/pyversions/gosling.svg?color=green)](https://python.org)
+[![tests](https://github.com/manzt/gos/workflows/Test/badge.svg)](https://github.com/manzt/gos/actions)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/manzt/gos/main?filepath=notebooks%2Fmultiple-coordinated-views.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/manzt/gos/blob/main/notebooks/multiple-coordinated-views.ipynb)
+
 **gos** is a declarative (epi)genomics visualization library for Python.
 It is built on top of the [Gosling] JSON specification, providing an
 simplified interface for authoring interactive genomic visualizations.
+
 
 
 ## Installation
