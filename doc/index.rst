@@ -3,6 +3,8 @@
 .. role:: raw-html(raw)
    :format: html
 
+.. image:: https://user-images.githubusercontent.com/9922882/109852545-e05f3400-7c22-11eb-90f3-7371e4ddeb42.png
+
 **gos** is a declarative (epi)genomics visualization library for Python. It is built on 
 top of the `Gosling`_ JSON specification, providing an simplified interface for authoring 
 interactive genomic visualizations. The source is available on
