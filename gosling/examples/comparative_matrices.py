@@ -1,3 +1,8 @@
+"""
+Comparative Matrices
+====================
+"""
+# category: composite visualizations
 import gosling as gos
 from gosling.data import bigwig, beddb, matrix, multivec
 
