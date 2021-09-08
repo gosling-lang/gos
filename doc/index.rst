@@ -18,12 +18,6 @@ interactive genomic visualizations. The source is available on
 
 .. toctree::
    :maxdepth: 1
-   :caption: Local Data
-
-   local_data/index
-
-.. toctree::
-   :maxdepth: 1
    :caption: Gallery
 
    gallery/index
@@ -33,6 +27,7 @@ interactive genomic visualizations. The source is available on
    :caption: User Guide
 
    user_guide/API
+   user_guide/local_data
 
 
 Indices and tables

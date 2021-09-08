@@ -2,8 +2,8 @@
 
 .. _local_data:
 
-Motivation & Installation
-=========================
+Local Data
+==========
 
 .. warning::
 
@@ -24,7 +24,10 @@ the `gosling.experimental.data` module.
     from gosling.experimental.data import beddb, vector, matrix, multivec # higlass tile resources
 
 
-In order to use these utilities, you will need to install additional dependencies via:
+Installation
+------------
+
+You will need to install additional dependencies to use this feature via:
 
 .. code-block:: bash
 
@@ -32,7 +35,7 @@ In order to use these utilities, you will need to install additional dependencie
     pip install clodius # optional, required for higlass tile resources
 
 Usage
-=====
+-----
 
 The **gos** example below incudes a `multivec data source`_; the url points to a 
 `Higlass server`_ endpoint for the corresponding tileset information. 
@@ -62,8 +65,8 @@ The **gos** example below incudes a `multivec data source`_; the url points to a
     track.view()
 
 
-In the example above, we can replace the remote Higlass server URL with a local path to the
-corresponding `cistrome multivec file`_ (4GB). **gos** automatically detects the local
+By changing the :code:`data` import and replacing the Higlass server URL with a local path 
+corresponding `cistrome multivec file`_ (4GB), **gos** automatically detects the local
 file and will starts a background Higlass server to power the visualization.
 
 
