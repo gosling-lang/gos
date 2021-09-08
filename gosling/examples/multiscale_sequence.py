@@ -1,3 +1,8 @@
+"""
+Multiscale Sequence Plot
+========================
+"""
+# category: interactive visualizations
 import gosling as gos
 from gosling.data import multivec
 

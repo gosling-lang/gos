@@ -1,3 +1,8 @@
+"""
+Overview + Details
+==================
+"""
+# category: interactive visualizations
 import gosling as gos
 from gosling.data import csv, multivec
 

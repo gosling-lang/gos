@@ -1,3 +1,8 @@
+"""
+Multiscale Lollipop Plot
+========================
+"""
+# category: interactive visualizations
 import gosling as gos
 from gosling.data import beddb, multivec
  

@@ -1,3 +1,8 @@
+"""
+Circos
+======
+"""
+# category: others
 import gosling as gos
 from gosling.data import csv, vector
 

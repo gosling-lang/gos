@@ -1,3 +1,12 @@
+"""
+Gene Annotation
+===============
+
+Re-implementation of `Higlass gene-annotations track`_
+
+.. _Higlass gene-annotations track: https://docs.higlass.io/track_types.html#gene-annotations
+"""
+# category: composite visualizations
 import gosling as gos
 from gosling.data import beddb
 
@@ -95,7 +104,6 @@ gos.overlay(
 ).properties(
     width=725, height=100,
     title="Gene Annotation",
-    subtitle="Reimplementation of HiGlass Gene Annotation Track",
     xDomain=gos.Domain(chromosome="1", interval=[103400000, 103700000]),
     assembly="hg38",
     layout="linear",
