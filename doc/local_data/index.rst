@@ -5,6 +5,10 @@
 Motivation & Installation
 =========================
 
+.. warning::
+
+   This feature is only available in local environments and not for remove systems (like Colab or MyBinder).
+
 `Data sources`_ for the Gosling_ specification are expected to be accessible via HTTP.
 Loading a local dataset can be challenging since it requires starting a web-server
 and/or a `Higlass server`_ for some pre-aggregated datasets. 
@@ -26,7 +30,6 @@ In order to use these utilities, you will need to install additional dependencie
 
     pip install 'gosling[all]' # installs extra deps for background data-server
     pip install clodius # optional, required for higlass tile resources
-
 
 Usage
 =====
@@ -81,7 +84,8 @@ file and will starts a background Higlass server to power the visualization.
     )
 
 
-Note that the visualizations will only render as long as your Python session is active.
+.. important::
+   Note that visualizations will only render as long as your Python session is active.
 
 .. _Data sources: https://gosling-lang.github.io/gosling-website/docs/data
 .. _Higlass server: https://gosling-lang.github.io/gosling-website/docs/data#pre-aggregated-datasets-higlass-server
