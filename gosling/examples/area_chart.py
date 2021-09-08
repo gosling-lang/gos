@@ -1,5 +1,5 @@
 """
-Bar Chart
+Area Chart
 =========
 """
 # category: basic marks

@@ -17,9 +17,6 @@ GALLERY_TEMPLATE = jinja2.Template(
 
 .. _{{ gallery_ref }}:
 
-{{ title }}
-{% for char in title %}-{% endfor %}
-
 This gallery contains a selection of examples of the visualizations **gos** can create.
 
 {% for category, examples in example_groups %}
