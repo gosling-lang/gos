@@ -107,6 +107,20 @@ jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
 jupyter nbextension enable gosling --py --sys-prefix
 ```
 
+## Release
+
+```bash
+git checkout main && git pull
+```
+
+Update version in `setup.py` and `docs/conf.py`:
+
+```bash
+git add setup.py docs/conf.py
+git commit -m "v0.[minor].[patch]"
+git tag -a v0.[minor].[patch] -m "v0.[minor].[patch]"
+git push --follow-tags
+```
 
 ## Design & implemenation
 
