@@ -79,10 +79,10 @@ gos.vertical(heatmap, bars, lines).properties(
 
 ## Example Gallery
 
-We have started a gallery of community examples in `gosling/examples/`. If you are 
-intereseted in contributing, please feel free to submit a PR! Checkout the
-[existing JSON examples](http://gosling-lang.org/examples/) if you are
-looking for inspiration.
+We have started a [gallery](https://gosling-lang.github.io/gos/gallery/index.html) of
+community examples in `gosling/examples/`. If you are intereseted in contributing, please
+feel free to submit a PR! Checkout the [existing JSON examples](http://gosling-lang.org/examples/)
+if you are looking for inspiration.
 
 
 ## Development
@@ -122,7 +122,7 @@ git tag -a v0.[minor].[patch] -m "v0.[minor].[patch]"
 git push --follow-tags
 ```
 
-## Design & implemenation
+## Design & Implemenation
 
 gos is inspired by and borrows heavily from [Altair] both in project philosophy
 and implementation. The internal Python API is auto-generated from the
