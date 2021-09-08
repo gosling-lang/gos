@@ -79,7 +79,7 @@ gos.vertical(heatmap, bars, lines).properties(
 
 ## Example Gallery
 
-We have started a gallery of community examples in `example/`. If you are 
+We have started a gallery of community examples in `gosling/examples/`. If you are 
 intereseted in contributing, please feel free to submit a PR! Checkout the
 [existing JSON examples](http://gosling-lang.org/examples/) if you are
 looking for inspiration.
@@ -88,7 +88,7 @@ looking for inspiration.
 ## Development
 
 ```bash
-pip install -e .
+pip install -e ".[dev]"
 ```
 
 The schema bindings (`gosling/schema/`) and JS static assets (`gosling/static/`)
