@@ -1,11 +1,11 @@
 # gos 🦆
 
-[![License](https://img.shields.io/pypi/l/gosling.svg?color=green)](https://github.com/manzt/gosling/raw/main/LICENSE)
+[![License](https://img.shields.io/pypi/l/gosling.svg?color=green)](https://github.com/gosling-lang/gosling/raw/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/gosling.svg?color=green)](https://pypi.org/project/gosling)
 [![Python Version](https://img.shields.io/pypi/pyversions/gosling.svg?color=green)](https://python.org)
-[![tests](https://github.com/manzt/gos/workflows/Test/badge.svg)](https://github.com/manzt/gos/actions)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/manzt/gos/main?filepath=notebooks%2Fmultiple-coordinated-views.ipynb)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/manzt/gos/blob/main/notebooks/multiple-coordinated-views.ipynb)
+[![tests](https://github.com/gosling-lang/gos/workflows/Test/badge.svg)](https://github.com/gosling-lang/gos/actions)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gosling-lang/gos/main?filepath=notebooks%2Fmultiple-coordinated-views.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gosling-lang/gos/blob/main/notebooks/multiple-coordinated-views.ipynb)
 
 **gos** is a declarative (epi)genomics visualization library for Python.
 It is built on top of the [Gosling] JSON specification, providing an
@@ -25,7 +25,7 @@ pip install gosling
 
 ## Documentation
 
-See the [Documentation Site](https://manzt.github.io/gos) for more information.
+See the [Documentation Site](https://gosling-lang.github.io/gos) for more information.
 
 ## Example
 
@@ -74,7 +74,7 @@ gos.vertical(heatmap, bars, lines).properties(
 )
 ```
 
-<img src="https://github.com/manzt/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization" width="800" />
+<img src="https://github.com/gosling-lang/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization" width="800" />
 
 
 ## Example Gallery
