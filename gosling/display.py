@@ -173,6 +173,7 @@ class JSRenderer(BaseRenderer):
             {"jupyter-gosling": f"#{output_div}"},
         )
 
+
 @dataclass
 class RendererRegistry:
     renderers: Dict[str, Callable] = field(default_factory=dict)
@@ -188,6 +189,7 @@ class RendererRegistry:
     def get(self):
         assert isinstance(self.active, str) and self.active in self.renderers
         return self.renderers[self.active]
+
 
 html_renderer = HTMLRenderer()
 js_renderer = JSRenderer()

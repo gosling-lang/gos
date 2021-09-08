@@ -40,7 +40,8 @@ class gosling_plot(nodes.General, nodes.Element):
 class GoslingPlotDirective(Directive):
     has_content = True
 
-    option_spec = { "code-below": flag }
+    option_spec = {"code-below": flag}
+
     def run(self):
         env = self.state.document.settings.env
         app = env.app
@@ -87,8 +88,6 @@ class GoslingPlotDirective(Directive):
             result += [plot_node]
 
         return result
-
-
 
 
 def html_visit_gosling_plot(self, node):

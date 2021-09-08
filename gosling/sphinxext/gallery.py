@@ -49,6 +49,7 @@ EXAMPLE_TEMPLATE = jinja2.Template(
 """
 )
 
+
 @dataclasses.dataclass
 class Example:
     name: str
@@ -94,15 +95,22 @@ class Example:
             category=category,
         )
 
+
 T = TypeVar("T")
-def prev_this_next(it: Iterable[T], sentinel=None) -> Iterable[Tuple[Optional[T], T, Optional[T]]]:
+
+
+def prev_this_next(
+    it: Iterable[T], sentinel=None
+) -> Iterable[Tuple[Optional[T], T, Optional[T]]]:
     """Utility to return (prev, this, next) tuples from an iterator"""
     i1, i2, i3 = itertools.tee(it, 3)
     next(i3, None)
     return zip(itertools.chain([sentinel], i1), i2, itertools.chain(i3, [sentinel]))
 
+
 def populate_examples():
     return sorted(map(Example.from_file, iter_examples()), key=lambda e: e.category)
+
 
 def main(app):
     srcdir = pathlib.Path(app.builder.srcdir)
@@ -131,7 +139,7 @@ def main(app):
         ex = dataclasses.asdict(example)
         ex["code_below"] = True
         if prev_ex:
-            ex["prev_ref"]= f"gallery_{prev_ex.name}"
+            ex["prev_ref"] = f"gallery_{prev_ex.name}"
         if next_ex:
             ex["next_ref"] = f"gallery_{next_ex.name}"
         with open(target_dir / (example.name + ".rst"), "w") as f:
