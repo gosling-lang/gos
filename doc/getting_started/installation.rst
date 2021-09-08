@@ -8,25 +8,7 @@ Installation
 
     $ pip install gosling
 
-
-Dependencies
-============
-
-**gos** has the following dependencies, all of which are installed automatically
-with the above installation commands:
-
-- python 3.7 or newer
-- jsonschema_
-- NumPy_
-- Pandas_
-
-To run the full test suite and build documentation requires a few additional dependencies:
-
-- pytest
-- jinja2
-- sphinx
-- m2r
-- ipython
+.. important:: Further setup is required if you have :ref:`local data<local_data>`
 
 Development Install
 ===================
@@ -43,7 +25,7 @@ To install development dependencies as well, run
 
 .. code-block:: bash
 
-    $ pip install -e .[dev]
+    $ pip install -e '.[dev]'
 
 .. _JupyterLab: http://jupyterlab.readthedocs.io/
 .. _Jupyter Notebook: https://jupyter-notebook.readthedocs.io/

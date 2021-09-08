@@ -2,8 +2,8 @@
 
 .. _local_data:
 
-Motivation
-==========
+Motivation & Installation
+=========================
 
 `Data sources`_ for the Gosling_ specification are expected to be accessible via HTTP.
 Loading a local dataset can be challenging since it requires starting a web-server
@@ -20,14 +20,11 @@ the `gosling.experimental.data` module.
     from gosling.experimental.data import beddb, vector, matrix, multivec # higlass tile resources
 
 
-Installation
-============
-
 In order to use these utilities, you will need to install additional dependencies via:
 
 .. code-block:: bash
 
-    pip install "gosling[all]" # installs extra deps for background data-server
+    pip install 'gosling[all]' # installs extra deps for background data-server
     pip install clodius # optional, required for higlass tile resources
 
 
@@ -63,9 +60,8 @@ The **gos** example below incudes a `multivec data source`_; the url points to a
 
 
 In the example above, we can replace the remote Higlass server URL with a local path to the
-corresponding cistrome multivec file (https://s3.amazonaws.com/gosling-lang.org/data/cistrome.multires.mv5, 4GB).
-**gos** automatically detects the local file and will starts a background Higlass server to
-power the visualization.
+corresponding `cistrome multivec file`_ (4GB). **gos** automatically detects the local
+file and will starts a background Higlass server to power the visualization.
 
 
 .. code-block:: diff
@@ -91,4 +87,4 @@ Note that the visualizations will only render as long as your Python session is 
 .. _Higlass server: https://gosling-lang.github.io/gosling-website/docs/data#pre-aggregated-datasets-higlass-server
 .. _multivec data source: http://gosling-lang.org/docs/data/#multivec
 .. _Gosling: http://gosling-lang.org/
-
+.. _cistrome multivec file: https://s3.amazonaws.com/gosling-lang.org/data/cistrome.multires.mv5

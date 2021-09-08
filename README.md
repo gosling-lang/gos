@@ -88,7 +88,7 @@ looking for inspiration.
 ## Development
 
 ```bash
-pip install -e ".[dev]"
+pip install -e '.[dev]'
 ```
 
 The schema bindings (`gosling/schema/`) and JS static assets (`gosling/static/`)
