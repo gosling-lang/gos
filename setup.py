@@ -42,7 +42,6 @@ setuptools.setup(
         'dev': data_server_requirements + [
             'pytest',
             'requests',
-            'ipywidgets',
             'sphinx',
             'numpydoc',
             'furo',

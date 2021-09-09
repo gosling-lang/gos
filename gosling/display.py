@@ -106,42 +106,6 @@ def spec_to_html(
     )
 
 
-JS_TEMPLATE = jinja2.Template(
-    """
-const spec = {{ spec }};
-const opt = {{ embed_options }};
-const id = "{{ output_div }}";
-
-const output_area = this;
-
-require(["nbextensions/jupyter-gosling/index"], function(gos) {
-  const target = document.createElement("div");
-  target.id = id;
-  target.className = "gosling-embed";
-
-  // element is a jQuery wrapped DOM element inside the output area
-  // see http://ipython.readthedocs.io/en/stable/api/generated/\
-  // IPython.display.html#IPython.display.Javascript.__init__
-  element[0].appendChild(target);
-
-  gos.render("#" + id, spec, opt, output_area);
-}, (err) => {
-    if (err.requireType !== "scripterror") throw(err);
-});
-"""
-)
-
-
-def spec_to_js(spec, output_div, embed_options=None, json_kwds=None):
-    embed_options = embed_options or {}
-    json_kwds = json_kwds or {}
-    return JS_TEMPLATE.render(
-        output_div=output_div,
-        spec=json.dumps(spec, **json_kwds),
-        embed_options=json.dumps(embed_options, **json_kwds),
-    )
-
-
 class BaseRenderer:
     def __init__(self, output_div="jupyter-gosling-{}", **kwargs):
         self._output_div = output_div
@@ -163,25 +127,14 @@ class HTMLRenderer(BaseRenderer):
         return {"text/html": html}
 
 
-class JSRenderer(BaseRenderer):
-    def __call__(self, spec, **metadata):
-        kwargs = self.kwargs.copy()
-        kwargs.update(metadata)
-        output_div = self.output_div
-        js = spec_to_js(spec=spec, output_div=output_div, **kwargs)
-        return (
-            {"application/javascript": js},
-            {"jupyter-gosling": f"#{output_div}"},
-        )
-
 
 @dataclass
 class RendererRegistry:
-    renderers: Dict[str, Callable] = field(default_factory=dict)
+    renderers: Dict[str, BaseRenderer] = field(default_factory=dict)
     active: Optional[str] = None
 
-    def register(self, name: str, fn: Callable):
-        self.renderers[name] = fn
+    def register(self, name: str, renderer: BaseRenderer):
+        self.renderers[name] = renderer
 
     def enable(self, name: str):
         assert name in self.renderers
@@ -193,7 +146,6 @@ class RendererRegistry:
 
 
 html_renderer = HTMLRenderer()
-js_renderer = JSRenderer()
 
 renderers = RendererRegistry()
 renderers.register("default", html_renderer)
@@ -201,5 +153,4 @@ renderers.register("html", html_renderer)
 renderers.register("colab", html_renderer)
 renderers.register("kaggle", html_renderer)
 renderers.register("zeppelin", html_renderer)
-renderers.register("js", js_renderer)
 renderers.enable("default")
