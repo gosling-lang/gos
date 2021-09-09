@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable, Dict, Optional
+from typing import Dict, Optional
 from gosling.schema import SCHEMA_VERSION
 import json
 import uuid
