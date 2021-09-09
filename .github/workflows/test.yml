@@ -20,17 +20,6 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 15
-
-      - name: Install Node dependencies
-        run: yarn --frozen-lockfile
-
-      - name: Build JavaScript
-        run: yarn build:js
-
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
