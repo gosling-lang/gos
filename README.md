@@ -17,7 +17,7 @@ simplified interface for authoring interactive genomic visualizations.
 
 **Here be dragons 🐉**
 
-> The API is under active development. Feedback is much appreciated and most welcomed.
+> The **gos** API is under active development. Feedback is appreciated and welcomed.
 
 ```bash
 pip install gosling
