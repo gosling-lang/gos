@@ -69,7 +69,7 @@ HTML_TEMPLATE = jinja2.Template(
             el.innerHTML = `\
 <div class="error">
     <p>JavaScript Error: ${error.message}</p>
-    <p>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.</p>
+    <p>This usually means there's a typo in your Gosling specification. See the javascript console for the full traceback.</p>
 </div>`;
             throw error;
         });
