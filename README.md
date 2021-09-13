@@ -8,7 +8,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gosling-lang/gos/blob/main/notebooks/multiple-coordinated-views.ipynb)
 
 **gos** is a declarative (epi)genomics visualization library for Python.
-It is built on top of the [Gosling] JSON specification, providing an
+It is built on top of the [Gosling] JSON specification, providing a
 simplified interface for authoring interactive genomic visualizations.
 
 
@@ -80,7 +80,7 @@ gos.vertical(heatmap, bars, lines).properties(
 ## Example Gallery
 
 We have started a [gallery](https://gosling-lang.github.io/gos/gallery/index.html) of
-community examples in `gosling/examples/`. If you are intereseted in contributing, please
+community examples in `gosling/examples/`. If you are interested in contributing, please
 feel free to submit a PR! Checkout the [existing JSON examples](http://gosling-lang.org/examples/)
 if you are looking for inspiration.
 
@@ -122,14 +122,14 @@ git tag -a v0.[minor].[patch] -m "v0.[minor].[patch]"
 git push --follow-tags
 ```
 
-## Design & Implemenation
+## Design & Implementation
 
 gos is inspired by and borrows heavily from [Altair] both in project philosophy
 and implementation. The internal Python API is auto-generated from the
 [Gosling] specification using code adapted directly from Altair to generate
-[Vega-Lite] bindings. This design choice gaurentees that visualizations are
+[Vega-Lite] bindings. This design choice guarantees that visualizations are
 type-checked in complete concordance with the [Gosling] specification, and that
-the Python API remains consitent with the evolving schema over time. Special thanks to
+the Python API remains consistent with the evolving schema over time. Special thanks to
 [Jake Vanderplas](https://github.com/jakevdp) and others on
 [`schemapi`](https://github.com/altair-viz/altair/tree/master/tools/schemapi).
 
