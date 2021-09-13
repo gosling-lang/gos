@@ -59,12 +59,13 @@ HTML_TEMPLATE = jinja2.Template(
         return window.gosling;
     };
 
-    loadGosling().then(gosling => {
-        var el = document.getElementById('{{ output_div }}');
-        var spec = {{ spec }};
-        var opt = {{ embed_options }};
+    var el = document.getElementById('{{ output_div }}');
+    var spec = {{ spec }};
+    var opt = {{ embed_options }};
 
-        gosling.embed(el, spec, opt).catch(err => {
+    loadGosling()
+        .then(gosling => gosling.embed(el, spec, opt))
+        .catch(err => {
             el.innerHTML = `\
 <div class="error">
     <p>JavaScript Error: ${error.message}</p>
@@ -72,7 +73,6 @@ HTML_TEMPLATE = jinja2.Template(
 </div>`;
             throw error;
         });
-    });
   </script>
 </body>
 </html>
