@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable, Dict, Optional, TypeVar
+from typing import Callable, Dict, Optional
 from gosling.schema import SCHEMA_VERSION
 import json
 import uuid
@@ -16,13 +16,55 @@ HTML_TEMPLATE = jinja2.Template(
 </head>
 <body>
   <div id="{{ output_div }}"></div>
-  <script>
-    function embed(gos) {
+  <script type="module">
+
+    async function loadScript(src) {
+        return new Promise(resolve => {
+            const script = document.createElement('script');
+            script.onload = resolve;
+            script.src = src;
+            script.async = false;
+            document.head.appendChild(script);
+        });
+    }
+
+    async function loadGosling() {
+        // Manually load scripts from window namespace since requirejs might not be
+        // available in all browser environments.
+        // https://github.com/DanielHreben/requirejs-toggle
+        if (!window.gosling) {
+            window.__requirejsToggleBackup = {
+                define: window.define,
+                require: window.require,
+                requirejs: window.requirejs,
+            };
+            for (const field of Object.keys(window.__requirejsToggleBackup)) {
+                window[field] = undefined;
+            }
+
+            // load dependencies sequentially
+            const sources = [
+                "{{ base_url }}/react@{{ react_version }}/umd/react.production.min.js",
+                "{{ base_url }}/react-dom@{{ react_version }}/umd/react-dom.production.min.js",
+                "{{ base_url }}/pixi.js@{{ pixijs_version }}/dist/browser/pixi.min.js",
+                "{{ base_url }}/gosling.js@{{ gosling_version }}/dist/gosling.js",
+            ];
+
+            for (const src of sources) await loadScript(src);
+
+            // restore requirejs after scripts have loaded
+            Object.assign(window, window.__requirejsToggleBackup);
+            delete window.__requirejsToggleBackup;
+        }
+        return window.gosling;
+    };
+
+    loadGosling().then(gosling => {
         var el = document.getElementById('{{ output_div }}');
         var spec = {{ spec }};
         var opt = {{ embed_options }};
 
-        gos.embed(el, spec, opt).catch(err => {
+        gosling.embed(el, spec, opt).catch(err => {
             el.innerHTML = `\
 <div class="error">
     <p>JavaScript Error: ${error.message}</p>
@@ -30,48 +72,7 @@ HTML_TEMPLATE = jinja2.Template(
 </div>`;
             throw error;
         });
-    }
-
-    if (!window.gosling) {
-
-        // Manually load scripts from window namespace since requirejs might not be
-        // available in all browser environments.
-        // https://github.com/DanielHreben/requirejs-toggle
-
-        window.__requirejsToggleBackup = { define: window.define, require: window.require, requirejs: window.requirejs };
-        for (const field of Object.keys(window.__requirejsToggleBackup)) {
-            window[field] = undefined;
-        }
-
-        // load dependencies sequentially
-        [
-          "{{ base_url }}/react@{{ react_version }}/umd/react.production.min.js",
-          "{{ base_url }}/react-dom@{{ react_version }}/umd/react-dom.production.min.js",
-          "{{ base_url }}/pixi.js@{{ pixijs_version }}/dist/browser/pixi.min.js",
-        ].forEach(src => {
-            var script = document.createElement('script');
-            script.src = src;
-            script.async = false;
-            document.head.appendChild(script);
-        });
-
-        // wait for gosling to load before restoring requirejs
-        var script = document.createElement('script');
-        script.onload = () => {
-            // restore requirejs after scripts have loaded
-            Object.assign(window, window.__requirejsToggleBackup);
-            delete window.__requirejsToggleBackup;
-
-            embed(window.gosling);
-        }
-        script.src = "{{ base_url }}/gosling.js@{{ gosling_version }}/dist/gosling.js",
-        script.async = false;
-        document.head.appendChild(script);
-
-    } else {
-
-        embed(window.gosling);
-    }
+    });
   </script>
 </body>
 </html>
