@@ -29,6 +29,8 @@ See the [Documentation Site](https://gosling-lang.github.io/gos) for more inform
 
 ## Example
 
+<img src="https://github.com/gosling-lang/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization" width="800" />
+
 ```python
 import gosling as gos
 from gosling.data import multivec
@@ -73,9 +75,6 @@ gos.vertical(heatmap, bars, lines).properties(
     xDomain=gos.Domain(chromosome="1", interval=[1, 3000500]),
 )
 ```
-
-<img src="https://github.com/gosling-lang/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization" width="800" />
-
 
 ## Example Gallery
 
