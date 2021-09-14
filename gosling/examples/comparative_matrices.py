@@ -48,7 +48,7 @@ micro_c = matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-m
 hi_c = matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-hic-hg38")
 
 epilogos_data = multivec(
-    url="https:/multivec.gosling-lang.org/api/v1/tileset_info/?d=epilogos-hg38",
+    url="https://server.gosling-lang.org/api/v1/tileset_info/?d=epilogos-hg38",
     row="category",
     column="position",
     value="value",
