@@ -90,20 +90,13 @@ if you are looking for inspiration.
 pip install -e '.[dev]'
 ```
 
-The schema bindings (`gosling/schema/`) and JS static assets (`gosling/static/`)
-are automatically generated using the following scripts. Please do not edit these
+The schema bindings (`gosling/schema/`) and docs (`doc/user_guide/API.rst`) are 
+automatically generated using the following. Please do not edit these
 files directly.
 
 ```bash
 # generate gosling/schema/*
 python tools/generate_schema_wrapper.py
-
-# generate gosling/static/{widget.js,index.js} from src/{widget.ts,index.ts}
-yarn install && yarn build:js
-
-# Only run this if editing/using gos.GoslingWidget
-jupyter nbextension install --py --symlink --overwrite --sys-prefix gosling
-jupyter nbextension enable gosling --py --sys-prefix
 ```
 
 ## Release
