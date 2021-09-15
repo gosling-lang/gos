@@ -1,7 +1,6 @@
 import pathlib
 from typing import Callable, Dict, Optional, Union
 
-import pandas as pd
 import gosling.experimental._tilesets as tilesets
 from gosling.experimental._provider import Provider, Resource, TilesetResource
 from gosling.utils.core import _compute_data_hash
@@ -89,17 +88,6 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
         return dict(type=type_, url=str(url), **kwargs)
 
     return load
-
-
-@pd.api.extensions.register_dataframe_accessor("gos")  # type: ignore
-class GosAccessor:
-    def __init__(self, df: pd.DataFrame):
-        self._df = df
-
-    def csv(self, **kwargs):
-        content = self._df.to_csv(index=False) or ""
-        url = data_server(content, extension="csv")
-        return dict(type="csv", url=url, **kwargs)
 
 
 # re-export json data util
