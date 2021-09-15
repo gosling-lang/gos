@@ -137,7 +137,7 @@ class FileResource(Resource):
         route: Optional[str] = None,
     ):
         self.filepath = filepath
-        extension = extension or filepath.suffix.lstrip('.')
+        extension = extension or filepath.suffix.lstrip(".")
         super().__init__(
             provider=provider, headers=headers, extension=extension, route=route
         )
