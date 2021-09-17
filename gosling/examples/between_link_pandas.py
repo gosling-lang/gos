@@ -22,7 +22,7 @@ df.chr = df.chr.apply(lambda x: x.replace("hs", "chr"))
 # Select ids that occur exact two times
 df = df[df.groupby("id")["id"].transform("size") == 2]
 
-# Wide to long (i.e., "chr, start, end" --> "first_chr, first_start, first_end, second_chr, second_start, second_end")
+# Long to wide (i.e., "chr, start, end" --> "first_chr, first_start, first_end, second_chr, second_start, second_end")
 df["cumcnt"] = df.groupby("id").cumcount()
 df = pd.DataFrame(df.pivot(index="id", columns="cumcnt")[["chr", "start", "end"]].to_records())
 df = df.rename(columns={
