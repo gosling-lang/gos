@@ -55,8 +55,8 @@ def set_encoding(track):
     )
 
 gos.overlay(
-    set_encoding(gos.Track(data_bg)).encode(stroke=gos.Channel("second_chr:N")),
-    set_encoding(gos.Track(data_hl)).encode(stroke=gos.value("lightgray"))
+    set_encoding(gos.Track(data_bg)).encode(stroke=gos.value("lightgray")),
+    set_encoding(gos.Track(data_hl)).encode(stroke=gos.Channel("second_chr:N"))
 ).properties(
     width=600,
     height=200
