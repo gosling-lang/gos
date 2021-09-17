@@ -52,7 +52,7 @@ The **gos** example below incudes a `multivec data source`_; the url points to a
         column="position",
         value="peak",
         categories=["sample 1", "sample 2", "sample 3", "sample 4"],
-        binSize=5,
+        binSize=4,
     )
 
     track = gos.Track(data).mark_rect().encode(

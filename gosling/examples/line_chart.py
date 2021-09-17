@@ -12,7 +12,7 @@ data = multivec(
     column="position",
     value="peak",
     categories=["sample 1"],
-    binSize=5,
+    binSize=4,
 )
 
 domain = gos.Domain(chromosome="1", interval=[1, 30005000])
