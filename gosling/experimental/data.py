@@ -85,7 +85,7 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
             if fp.is_file():
                 kwargs["indexUrl"] = data_server(fp)
 
-        return dict(type=type_, url=url, **kwargs)
+        return dict(type=type_, url=str(url), **kwargs)
 
     return load
 
