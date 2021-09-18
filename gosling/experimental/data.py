@@ -31,7 +31,10 @@ class GoslingDataServer:
         self._resources = {}
 
     def __call__(
-        self, data: Union[pathlib.Path, tilesets.Tileset], port: Optional[int] = None
+        self,
+        data: Union[str, pathlib.Path, tilesets.Tileset],
+        port: Optional[int] = None,
+        **kwargs,
     ):
         if self._provider is None:
             self._provider = Provider(allowed_origins=["*"]).start(port=port)
@@ -40,21 +43,27 @@ class GoslingDataServer:
             self._provider.stop().start(port=port)
 
         if isinstance(data, tilesets.Tileset):
-            key = "tileset"
-            path = data.filepath
+            kwargs["tileset"] = data
+            resource_id = _hash_path(data.filepath)
+        elif isinstance(data, pathlib.Path):
+            kwargs["filepath"] = data
+            resource_id = _hash_path(data)
         else:
-            key = "filepath"
-            path = data
+            kwargs["content"] = data
+            resource_id = _compute_data_hash(data)
 
-        resource_id = _hash_path(path)
         if resource_id not in self._resources:
-            self._resources[resource_id] = self._provider.create(**{key: data})
+            self._resources[resource_id] = self._provider.create(**kwargs)
 
         return self._resources[resource_id].url
 
     def __rich_repr__(self):
         yield "resources", self._resources
-        yield "port", self.port
+        try:
+            port = self.port
+        except RuntimeError:
+            port = None
+        yield "port", port
 
 
 data_server = GoslingDataServer()
@@ -76,7 +85,7 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
             if fp.is_file():
                 kwargs["indexUrl"] = data_server(fp)
 
-        return dict(type=type_, url=url, **kwargs)
+        return dict(type=type_, url=str(url), **kwargs)
 
     return load
 

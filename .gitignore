@@ -3,6 +3,7 @@ __pycache__/
 
 build/
 dist/
+test_notebooks/
 
 .ipynb_checkpoints
 Untitled*.ipynb
