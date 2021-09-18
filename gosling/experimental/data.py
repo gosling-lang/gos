@@ -59,7 +59,11 @@ class GoslingDataServer:
 
     def __rich_repr__(self):
         yield "resources", self._resources
-        yield "port", self.port
+        try:
+            port = self.port
+        except RuntimeError:
+            port = None
+        yield "port", port
 
 
 data_server = GoslingDataServer()
