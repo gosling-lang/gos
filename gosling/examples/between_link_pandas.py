@@ -1,8 +1,8 @@
 """
 Between Links Using Pandas
-======
+==========================
 """
-# category: others
+# category: skip
 import gosling as gos
 import pandas as pd
 
