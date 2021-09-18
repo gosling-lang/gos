@@ -127,7 +127,6 @@ class HTMLRenderer(BaseRenderer):
         return {"text/html": html}
 
 
-
 @dataclass
 class RendererRegistry:
     renderers: Dict[str, BaseRenderer] = field(default_factory=dict)

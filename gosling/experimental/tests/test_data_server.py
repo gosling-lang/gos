@@ -5,10 +5,11 @@ import pytest
 
 from gosling.api import Data
 from gosling.experimental.data import csv, data_server
-from gosling.schemapi import SchemaValidationError
+
+import pandas as pd
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def session_context(request: pytest.Session) -> None:
     # Reset the server at the end of the session.
     request.addfinalizer(data_server.reset)
@@ -54,13 +55,24 @@ def test_creates_resources(tmpdir: pytest.Testdir, session_context: Any):
     assert len(data_server._resources) == 2
 
 
+def test_df_extension(session_context: Any):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 4, 5],
+            "y": [1, 2, 3, 4, 5],
+            "cat": ["a", "b", "c", "d", "e"],
+        }
+    )
+    assert hasattr(df, "gos")
+    data = df.gos.csv()
+    assert "localhost" in data["url"]
+    assert data["type"] == "csv"
+    assert len(data_server._resources) == 1
+
+
 def test_missing_files(tmpdir: pytest.Testdir, session_context: Any):
     data_dir = pathlib.Path(tmpdir.mkdir("data"))
     tmp = data_dir / "data.csv"
-
-    # throws if passed a pathlib path
-    with pytest.raises(SchemaValidationError):
-        Data(**csv(url=tmp))
 
     # returns if passed a string
     data = csv(url=str(tmp))
