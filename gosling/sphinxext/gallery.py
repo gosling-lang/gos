@@ -112,7 +112,13 @@ def prev_this_next(
 
 
 def populate_examples():
-    return sorted(map(Example.from_file, iter_examples()), key=lambda e: e.category)
+    return sorted(
+        filter(
+            lambda e: e.category != "skip",
+            map(Example.from_file, iter_examples()),
+        ),
+        key=lambda e: e.category,
+    )
 
 
 def main(app):

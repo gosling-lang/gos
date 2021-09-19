@@ -15,8 +15,6 @@ simplified interface for authoring interactive genomic visualizations.
 
 ## Installation
 
-**Here be dragons 🐉**
-
 > The **gos** API is under active development. Feedback is appreciated and welcomed.
 
 ```bash
