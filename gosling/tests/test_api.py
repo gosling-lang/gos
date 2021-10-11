@@ -15,7 +15,7 @@ def basic_track() -> gos.Track:
         gos.Track(data)
         .mark_line()
         .encode(
-            x=gos.Channel("position:G", axis="top"),
+            x=gos.X("position:G", axis="top"),
             y="peak:Q",
         )
     )

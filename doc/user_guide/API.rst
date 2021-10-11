@@ -21,8 +21,39 @@ Encoding Channels
    :toctree: generated/channels/
    :nosignatures:
 
-   Channel
-   ChannelValue
+   Color
+   ColorValue
+   Column
+   ColumnValue
+   Opacity
+   OpacityValue
+   Row
+   RowValue
+   Size
+   SizeValue
+   Stroke
+   StrokeValue
+   StrokeWidth
+   StrokeWidthValue
+   Text
+   TextValue
+   X
+   X1
+   X1Value
+   X1e
+   X1eValue
+   XValue
+   Xe
+   XeValue
+   Y
+   Y1
+   Y1Value
+   Y1e
+   Y1eValue
+   YValue
+   Ye
+   YeValue
+
 API Functions
 -------------
 .. currentmodule:: gosling
@@ -37,6 +68,7 @@ API Functions
    stack
    value
    vertical
+
 Low-Level Schema Wrappers
 -------------------------
 .. currentmodule:: gosling
@@ -57,6 +89,8 @@ Low-Level Schema Wrappers
    ChannelType
    ChannelValue
    Chromosome
+   Color
+   Column
    CoverageTransform
    DataDeep
    DataTrack
@@ -65,7 +99,6 @@ Low-Level Schema Wrappers
    DisplaceTransform
    Displacement
    DisplacementType
-   Domain
    DomainChr
    DomainChrInterval
    DomainGene
@@ -74,6 +107,7 @@ Low-Level Schema Wrappers
    FieldType
    FilterTransform
    FlatTracks
+   GenomicDomain
    GlyphElement
    GoslingSchema
    GoslingSpec
@@ -95,6 +129,7 @@ Low-Level Schema Wrappers
    MultipleViews
    MultivecData
    OneOfFilter
+   Opacity
    Orientation
    OverlaidTrack
    OverlaidTracks
@@ -105,17 +140,26 @@ Low-Level Schema Wrappers
    Root
    RootSpecWithMultipleViews
    RootSpecWithSingleView
+   Row
    SchemaBase
    SingleTrack
    SingleView
+   Size
    SizeVisibilityCondition
    StackedTracks
    StrConcatTransform
    StrReplaceTransform
+   Stroke
+   StrokeWidth
    Style
    TemplateTrack
+   Text
    Tooltip
    Track
+   ValueExtent
    VectorData
    VisibilityCondition
+   X
+   Y
    ZoomLevelVisibilityCondition
+   ZoomLimits

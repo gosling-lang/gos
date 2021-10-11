@@ -123,7 +123,7 @@ def infer_encoding_types(args, kwargs, channels):
         #     warnings.warn("Unrecognized encoding channel '{}'".format(encoding))
         #     return obj
 
-        classes = name_to_channel["Channel"]  # for Channel for all encodings
+        classes = name_to_channel[encoding]
         cls = classes["value"] if "value" in obj else classes["field"]
 
         try:

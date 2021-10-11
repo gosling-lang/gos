@@ -101,56 +101,14 @@ class ChannelBind(GoslingSchema):
 class ChannelDeep(Channel):
     """ChannelDeep schema wrapper
 
-    Mapping(required=[])
-
-    Attributes
-    ----------
-
-    aggregate : :class:`Aggregate`
-
-    axis : :class:`AxisPosition`
-
-    baseline : anyOf(string, float)
-
-    domain : :class:`Domain`
-
-    field : string
-
-    flip : boolean
-
-    grid : boolean
-
-    legend : boolean
-
-    linkingId : string
-
-    mirrored : boolean
-
-    padding : float
-
-    range : :class:`Range`
-
-    sort : List(string)
-
-    stack : boolean
-
-    type : :class:`FieldType`
-
-    zeroBaseline : boolean
-
+    anyOf(:class:`X`, :class:`Y`, :class:`Row`, :class:`Color`, :class:`Size`, :class:`Stroke`,
+    :class:`StrokeWidth`, :class:`Opacity`, :class:`Text`)
     """
     _schema = {'$ref': '#/definitions/ChannelDeep'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, aggregate=Undefined, axis=Undefined, baseline=Undefined, domain=Undefined,
-                 field=Undefined, flip=Undefined, grid=Undefined, legend=Undefined, linkingId=Undefined,
-                 mirrored=Undefined, padding=Undefined, range=Undefined, sort=Undefined,
-                 stack=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(ChannelDeep, self).__init__(aggregate=aggregate, axis=axis, baseline=baseline,
-                                          domain=domain, field=field, flip=flip, grid=grid,
-                                          legend=legend, linkingId=linkingId, mirrored=mirrored,
-                                          padding=padding, range=range, sort=sort, stack=stack,
-                                          type=type, zeroBaseline=zeroBaseline, **kwds)
+    def __init__(self, *args, **kwds):
+        super(ChannelDeep, self).__init__(*args, **kwds)
 
 
 class ChannelType(GoslingSchema):
@@ -196,6 +154,62 @@ class Chromosome(GoslingSchema):
 
     def __init__(self, *args):
         super(Chromosome, self).__init__(*args)
+
+
+class Color(ChannelDeep):
+    """Color schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    baseline : anyOf(string, float)
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    legend : boolean
+
+    range : :class:`Range`
+
+    type : enum('quantitative', 'nominal')
+
+    zeroBaseline : boolean
+
+    """
+    _schema = {'$ref': '#/definitions/Color'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
+                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
+        super(Color, self).__init__(baseline=baseline, domain=domain, field=field, legend=legend,
+                                    range=range, type=type, zeroBaseline=zeroBaseline, **kwds)
+
+
+class Column(GoslingSchema):
+    """Column schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    range : :class:`ValueExtent`
+
+    type : string
+
+    """
+    _schema = {'$ref': '#/definitions/Column'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, domain=Undefined, field=Undefined, range=Undefined, type=Undefined, **kwds):
+        super(Column, self).__init__(domain=domain, field=field, range=range, type=type, **kwds)
 
 
 class DataDeep(GoslingSchema):
@@ -456,93 +470,6 @@ class DisplacementType(GoslingSchema):
         super(DisplacementType, self).__init__(*args)
 
 
-class Domain(GoslingSchema):
-    """Domain schema wrapper
-
-    anyOf(List(string), List(float), :class:`DomainInterval`, :class:`DomainChrInterval`,
-    :class:`DomainChr`, :class:`DomainGene`)
-    """
-    _schema = {'$ref': '#/definitions/Domain'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, *args, **kwds):
-        super(Domain, self).__init__(*args, **kwds)
-
-
-class DomainChr(Domain):
-    """DomainChr schema wrapper
-
-    Mapping(required=[chromosome])
-
-    Attributes
-    ----------
-
-    chromosome : :class:`Chromosome`
-
-    """
-    _schema = {'$ref': '#/definitions/DomainChr'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, chromosome=Undefined, **kwds):
-        super(DomainChr, self).__init__(chromosome=chromosome, **kwds)
-
-
-class DomainChrInterval(Domain):
-    """DomainChrInterval schema wrapper
-
-    Mapping(required=[chromosome, interval])
-
-    Attributes
-    ----------
-
-    chromosome : :class:`Chromosome`
-
-    interval : List([float, float])
-
-    """
-    _schema = {'$ref': '#/definitions/DomainChrInterval'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, chromosome=Undefined, interval=Undefined, **kwds):
-        super(DomainChrInterval, self).__init__(chromosome=chromosome, interval=interval, **kwds)
-
-
-class DomainGene(Domain):
-    """DomainGene schema wrapper
-
-    Mapping(required=[gene])
-
-    Attributes
-    ----------
-
-    gene : anyOf(string, List([string, string]))
-
-    """
-    _schema = {'$ref': '#/definitions/DomainGene'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, gene=Undefined, **kwds):
-        super(DomainGene, self).__init__(gene=gene, **kwds)
-
-
-class DomainInterval(Domain):
-    """DomainInterval schema wrapper
-
-    Mapping(required=[interval])
-
-    Attributes
-    ----------
-
-    interval : List([float, float])
-
-    """
-    _schema = {'$ref': '#/definitions/DomainInterval'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, interval=Undefined, **kwds):
-        super(DomainInterval, self).__init__(interval=interval, **kwds)
-
-
 class ExonSplitTransform(DataTransform):
     """ExonSplitTransform schema wrapper
 
@@ -590,6 +517,93 @@ class FilterTransform(DataTransform):
 
     def __init__(self, *args, **kwds):
         super(FilterTransform, self).__init__(*args, **kwds)
+
+
+class GenomicDomain(GoslingSchema):
+    """GenomicDomain schema wrapper
+
+    anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`,
+    :class:`DomainGene`)
+    """
+    _schema = {'$ref': '#/definitions/GenomicDomain'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, *args, **kwds):
+        super(GenomicDomain, self).__init__(*args, **kwds)
+
+
+class DomainChr(GenomicDomain):
+    """DomainChr schema wrapper
+
+    Mapping(required=[chromosome])
+
+    Attributes
+    ----------
+
+    chromosome : :class:`Chromosome`
+
+    """
+    _schema = {'$ref': '#/definitions/DomainChr'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, chromosome=Undefined, **kwds):
+        super(DomainChr, self).__init__(chromosome=chromosome, **kwds)
+
+
+class DomainChrInterval(GenomicDomain):
+    """DomainChrInterval schema wrapper
+
+    Mapping(required=[chromosome, interval])
+
+    Attributes
+    ----------
+
+    chromosome : :class:`Chromosome`
+
+    interval : List([float, float])
+
+    """
+    _schema = {'$ref': '#/definitions/DomainChrInterval'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, chromosome=Undefined, interval=Undefined, **kwds):
+        super(DomainChrInterval, self).__init__(chromosome=chromosome, interval=interval, **kwds)
+
+
+class DomainGene(GenomicDomain):
+    """DomainGene schema wrapper
+
+    Mapping(required=[gene])
+
+    Attributes
+    ----------
+
+    gene : anyOf(string, List([string, string]))
+
+    """
+    _schema = {'$ref': '#/definitions/DomainGene'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, gene=Undefined, **kwds):
+        super(DomainGene, self).__init__(gene=gene, **kwds)
+
+
+class DomainInterval(GenomicDomain):
+    """DomainInterval schema wrapper
+
+    Mapping(required=[interval])
+
+    Attributes
+    ----------
+
+    interval : List([float, float])
+
+    """
+    _schema = {'$ref': '#/definitions/DomainInterval'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, interval=Undefined, **kwds):
+        super(DomainInterval, self).__init__(interval=interval, **kwds)
 
 
 class GlyphElement(GoslingSchema):
@@ -1013,6 +1027,8 @@ class MultipleViews(GoslingSchema):
 
     yOffset : float
 
+    zoomLimits : :class:`ZoomLimits`
+
     """
     _schema = {'$ref': '#/definitions/MultipleViews'}
     _rootschema = GoslingSchema._rootschema
@@ -1020,12 +1036,13 @@ class MultipleViews(GoslingSchema):
     def __init__(self, views=Undefined, arrangement=Undefined, assembly=Undefined,
                  centerRadius=Undefined, layout=Undefined, linkingId=Undefined, orientation=Undefined,
                  spacing=Undefined, static=Undefined, style=Undefined, xAxis=Undefined,
-                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, **kwds):
+                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(MultipleViews, self).__init__(views=views, arrangement=arrangement, assembly=assembly,
                                             centerRadius=centerRadius, layout=layout,
                                             linkingId=linkingId, orientation=orientation,
                                             spacing=spacing, static=static, style=style, xAxis=xAxis,
-                                            xDomain=xDomain, xOffset=xOffset, yOffset=yOffset, **kwds)
+                                            xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
+                                            zoomLimits=zoomLimits, **kwds)
 
 
 class MultivecData(DataDeep):
@@ -1089,6 +1106,36 @@ class OneOfFilter(FilterTransform):
         super(OneOfFilter, self).__init__(field=field, oneOf=oneOf, type=type, **kwds)
 
 
+class Opacity(ChannelDeep):
+    """Opacity schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    baseline : anyOf(string, float)
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    range : :class:`ValueExtent`
+
+    type : enum('quantitative', 'nominal')
+
+    zeroBaseline : boolean
+
+    """
+    _schema = {'$ref': '#/definitions/Opacity'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, range=Undefined,
+                 type=Undefined, zeroBaseline=Undefined, **kwds):
+        super(Opacity, self).__init__(baseline=baseline, domain=domain, field=field, range=range,
+                                      type=type, zeroBaseline=zeroBaseline, **kwds)
+
+
 class Orientation(GoslingSchema):
     """Orientation schema wrapper
 
@@ -1117,9 +1164,9 @@ class PartialTrack(GoslingSchema):
 
     centerRadius : float
         Proportion of the radius of the center white space.
-    color : :class:`Channel`
+    color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
-    column : :class:`Channel`
+    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -1145,7 +1192,7 @@ class PartialTrack(GoslingSchema):
 
     mark : :class:`Mark`
 
-    opacity : :class:`Channel`
+    opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
 
@@ -1159,9 +1206,9 @@ class PartialTrack(GoslingSchema):
 
     prerelease : Mapping(required=[])
 
-    row : :class:`Channel`
+    row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
-    size : :class:`Channel`
+    size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
 
@@ -1171,9 +1218,9 @@ class PartialTrack(GoslingSchema):
 
     stretch : boolean
 
-    stroke : :class:`Channel`
+    stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
 
-    strokeWidth : :class:`Channel`
+    strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
 
@@ -1181,7 +1228,7 @@ class PartialTrack(GoslingSchema):
 
     template : string
 
-    text : :class:`Channel`
+    text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
 
@@ -1191,11 +1238,11 @@ class PartialTrack(GoslingSchema):
 
     width : float
 
-    x : :class:`Channel`
+    x : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1 : :class:`Channel`
+    x1 : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1e : :class:`Channel`
+    x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
 
@@ -1203,17 +1250,19 @@ class PartialTrack(GoslingSchema):
 
     xOffset : float
 
-    xe : :class:`Channel`
+    xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    y : :class:`Channel`
+    y : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1 : :class:`Channel`
+    y1 : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1e : :class:`Channel`
+    y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
 
-    ye : :class:`Channel`
+    ye : anyOf(:class:`Y`, :class:`ChannelValue`)
+
+    zoomLimits : :class:`ZoomLimits`
 
     """
     _schema = {'$ref': '#/definitions/PartialTrack'}
@@ -1232,7 +1281,7 @@ class PartialTrack(GoslingSchema):
                  title=Undefined, tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined,
                  x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
                  xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined,
-                 ye=Undefined, **kwds):
+                 ye=Undefined, zoomLimits=Undefined, **kwds):
         super(PartialTrack, self).__init__(_invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                            assembly=assembly, centerRadius=centerRadius, color=color,
                                            column=column, data=data, dataTransform=dataTransform,
@@ -1249,13 +1298,14 @@ class PartialTrack(GoslingSchema):
                                            template=template, text=text, title=title, tooltip=tooltip,
                                            visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
                                            xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
-                                           y1=y1, y1e=y1e, yOffset=yOffset, ye=ye, **kwds)
+                                           y1=y1, y1e=y1e, yOffset=yOffset, ye=ye,
+                                           zoomLimits=zoomLimits, **kwds)
 
 
 class Range(GoslingSchema):
     """Range schema wrapper
 
-    anyOf(List(string), List(float), :class:`PREDEFINED_COLORS`)
+    anyOf(:class:`ValueExtent`, :class:`PREDEFINED_COLORS`)
     """
     _schema = {'$ref': '#/definitions/Range'}
     _rootschema = GoslingSchema._rootschema
@@ -1342,6 +1392,8 @@ class RootSpecWithMultipleViews(GoslingSpec):
 
     yOffset : float
 
+    zoomLimits : :class:`ZoomLimits`
+
     """
     _schema = {'$ref': '#/definitions/RootSpecWithMultipleViews'}
     _rootschema = GoslingSchema._rootschema
@@ -1350,7 +1402,7 @@ class RootSpecWithMultipleViews(GoslingSpec):
                  centerRadius=Undefined, description=Undefined, layout=Undefined, linkingId=Undefined,
                  orientation=Undefined, spacing=Undefined, static=Undefined, style=Undefined,
                  subtitle=Undefined, title=Undefined, xAxis=Undefined, xDomain=Undefined,
-                 xOffset=Undefined, yOffset=Undefined, **kwds):
+                 xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(RootSpecWithMultipleViews, self).__init__(views=views, arrangement=arrangement,
                                                         assembly=assembly, centerRadius=centerRadius,
                                                         description=description, layout=layout,
@@ -1358,7 +1410,7 @@ class RootSpecWithMultipleViews(GoslingSpec):
                                                         spacing=spacing, static=static, style=style,
                                                         subtitle=subtitle, title=title, xAxis=xAxis,
                                                         xDomain=xDomain, xOffset=xOffset,
-                                                        yOffset=yOffset, **kwds)
+                                                        yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class RootSpecWithSingleView(GoslingSpec):
@@ -1372,6 +1424,38 @@ class RootSpecWithSingleView(GoslingSpec):
 
     def __init__(self, *args, **kwds):
         super(RootSpecWithSingleView, self).__init__(*args, **kwds)
+
+
+class Row(ChannelDeep):
+    """Row schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    grid : boolean
+
+    legend : boolean
+
+    padding : float
+
+    range : :class:`ValueExtent`
+
+    type : string
+
+    """
+    _schema = {'$ref': '#/definitions/Row'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, domain=Undefined, field=Undefined, grid=Undefined, legend=Undefined,
+                 padding=Undefined, range=Undefined, type=Undefined, **kwds):
+        super(Row, self).__init__(domain=domain, field=field, grid=grid, legend=legend, padding=padding,
+                                  range=range, type=type, **kwds)
 
 
 class SingleView(GoslingSchema):
@@ -1420,6 +1504,8 @@ class FlatTracks(SingleView):
 
     yOffset : float
 
+    zoomLimits : :class:`ZoomLimits`
+
     """
     _schema = {'$ref': '#/definitions/FlatTracks'}
     _rootschema = GoslingSchema._rootschema
@@ -1427,11 +1513,12 @@ class FlatTracks(SingleView):
     def __init__(self, tracks=Undefined, assembly=Undefined, centerRadius=Undefined, layout=Undefined,
                  linkingId=Undefined, orientation=Undefined, spacing=Undefined, static=Undefined,
                  style=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 yOffset=Undefined, **kwds):
+                 yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(FlatTracks, self).__init__(tracks=tracks, assembly=assembly, centerRadius=centerRadius,
                                          layout=layout, linkingId=linkingId, orientation=orientation,
                                          spacing=spacing, static=static, style=style, xAxis=xAxis,
-                                         xDomain=xDomain, xOffset=xOffset, yOffset=yOffset, **kwds)
+                                         xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
+                                         zoomLimits=zoomLimits, **kwds)
 
 
 class OverlaidTracks(SingleView):
@@ -1458,9 +1545,9 @@ class OverlaidTracks(SingleView):
 
     centerRadius : float
         Proportion of the radius of the center white space.
-    color : :class:`Channel`
+    color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
-    column : :class:`Channel`
+    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -1482,7 +1569,7 @@ class OverlaidTracks(SingleView):
 
     mark : :class:`Mark`
 
-    opacity : :class:`Channel`
+    opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
 
@@ -1494,9 +1581,9 @@ class OverlaidTracks(SingleView):
 
     prerelease : Mapping(required=[])
 
-    row : :class:`Channel`
+    row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
-    size : :class:`Channel`
+    size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
 
@@ -1506,15 +1593,15 @@ class OverlaidTracks(SingleView):
 
     stretch : boolean
 
-    stroke : :class:`Channel`
+    stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
 
-    strokeWidth : :class:`Channel`
+    strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
 
     subtitle : string
 
-    text : :class:`Channel`
+    text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
 
@@ -1522,11 +1609,11 @@ class OverlaidTracks(SingleView):
 
     visibility : List(:class:`VisibilityCondition`)
 
-    x : :class:`Channel`
+    x : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1 : :class:`Channel`
+    x1 : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1e : :class:`Channel`
+    x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
 
@@ -1534,17 +1621,19 @@ class OverlaidTracks(SingleView):
 
     xOffset : float
 
-    xe : :class:`Channel`
+    xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    y : :class:`Channel`
+    y : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1 : :class:`Channel`
+    y1 : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1e : :class:`Channel`
+    y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
 
-    ye : :class:`Channel`
+    ye : anyOf(:class:`Y`, :class:`ChannelValue`)
+
+    zoomLimits : :class:`ZoomLimits`
 
     """
     _schema = {'$ref': '#/definitions/OverlaidTracks'}
@@ -1562,7 +1651,8 @@ class OverlaidTracks(SingleView):
                  style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
                  tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
                  xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
-                 y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined, **kwds):
+                 y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined, zoomLimits=Undefined,
+                 **kwds):
         super(OverlaidTracks, self).__init__(alignment=alignment, height=height, tracks=tracks,
                                              width=width, _invalidTrack=_invalidTrack,
                                              _renderingId=_renderingId, assembly=assembly,
@@ -1580,7 +1670,40 @@ class OverlaidTracks(SingleView):
                                              text=text, title=title, tooltip=tooltip,
                                              visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
                                              xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1,
-                                             y1e=y1e, yOffset=yOffset, ye=ye, **kwds)
+                                             y1e=y1e, yOffset=yOffset, ye=ye, zoomLimits=zoomLimits,
+                                             **kwds)
+
+
+class Size(ChannelDeep):
+    """Size schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    baseline : anyOf(string, float)
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    legend : boolean
+
+    range : :class:`ValueExtent`
+
+    type : enum('quantitative', 'nominal')
+
+    zeroBaseline : boolean
+
+    """
+    _schema = {'$ref': '#/definitions/Size'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
+                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
+        super(Size, self).__init__(baseline=baseline, domain=domain, field=field, legend=legend,
+                                   range=range, type=type, zeroBaseline=zeroBaseline, **kwds)
 
 
 class StackedTracks(SingleView):
@@ -1603,9 +1726,9 @@ class StackedTracks(SingleView):
 
     centerRadius : float
         Proportion of the radius of the center white space.
-    color : :class:`Channel`
+    color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
-    column : :class:`Channel`
+    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -1629,7 +1752,7 @@ class StackedTracks(SingleView):
 
     mark : :class:`Mark`
 
-    opacity : :class:`Channel`
+    opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
 
@@ -1641,9 +1764,9 @@ class StackedTracks(SingleView):
 
     prerelease : Mapping(required=[])
 
-    row : :class:`Channel`
+    row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
-    size : :class:`Channel`
+    size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
 
@@ -1653,15 +1776,15 @@ class StackedTracks(SingleView):
 
     stretch : boolean
 
-    stroke : :class:`Channel`
+    stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
 
-    strokeWidth : :class:`Channel`
+    strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
 
     subtitle : string
 
-    text : :class:`Channel`
+    text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
 
@@ -1671,11 +1794,11 @@ class StackedTracks(SingleView):
 
     width : float
 
-    x : :class:`Channel`
+    x : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1 : :class:`Channel`
+    x1 : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1e : :class:`Channel`
+    x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
 
@@ -1683,17 +1806,19 @@ class StackedTracks(SingleView):
 
     xOffset : float
 
-    xe : :class:`Channel`
+    xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    y : :class:`Channel`
+    y : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1 : :class:`Channel`
+    y1 : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1e : :class:`Channel`
+    y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
 
-    ye : :class:`Channel`
+    ye : anyOf(:class:`Y`, :class:`ChannelValue`)
+
+    zoomLimits : :class:`ZoomLimits`
 
     """
     _schema = {'$ref': '#/definitions/StackedTracks'}
@@ -1711,7 +1836,8 @@ class StackedTracks(SingleView):
                  style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
                  tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined,
                  x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
-                 y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined, **kwds):
+                 y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(StackedTracks, self).__init__(tracks=tracks, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, alignment=alignment,
                                             assembly=assembly, centerRadius=centerRadius, color=color,
@@ -1729,7 +1855,8 @@ class StackedTracks(SingleView):
                                             text=text, title=title, tooltip=tooltip,
                                             visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
                                             xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
-                                            y1=y1, y1e=y1e, yOffset=yOffset, ye=ye, **kwds)
+                                            y1=y1, y1e=y1e, yOffset=yOffset, ye=ye,
+                                            zoomLimits=zoomLimits, **kwds)
 
 
 class StrConcatTransform(DataTransform):
@@ -1780,6 +1907,66 @@ class StrReplaceTransform(DataTransform):
     def __init__(self, field=Undefined, newField=Undefined, replace=Undefined, type=Undefined, **kwds):
         super(StrReplaceTransform, self).__init__(field=field, newField=newField, replace=replace,
                                                   type=type, **kwds)
+
+
+class Stroke(ChannelDeep):
+    """Stroke schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    baseline : anyOf(string, float)
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    range : :class:`Range`
+
+    type : enum('quantitative', 'nominal')
+
+    zeroBaseline : boolean
+
+    """
+    _schema = {'$ref': '#/definitions/Stroke'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, range=Undefined,
+                 type=Undefined, zeroBaseline=Undefined, **kwds):
+        super(Stroke, self).__init__(baseline=baseline, domain=domain, field=field, range=range,
+                                     type=type, zeroBaseline=zeroBaseline, **kwds)
+
+
+class StrokeWidth(ChannelDeep):
+    """StrokeWidth schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    baseline : anyOf(string, float)
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    range : :class:`ValueExtent`
+
+    type : enum('quantitative', 'nominal')
+
+    zeroBaseline : boolean
+
+    """
+    _schema = {'$ref': '#/definitions/StrokeWidth'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, range=Undefined,
+                 type=Undefined, zeroBaseline=Undefined, **kwds):
+        super(StrokeWidth, self).__init__(baseline=baseline, domain=domain, field=field, range=range,
+                                          type=type, zeroBaseline=zeroBaseline, **kwds)
 
 
 class Style(GoslingSchema):
@@ -1852,6 +2039,30 @@ class Style(GoslingSchema):
                                     outlineWidth=outlineWidth, textAnchor=textAnchor,
                                     textFontSize=textFontSize, textFontWeight=textFontWeight,
                                     textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+
+
+class Text(ChannelDeep):
+    """Text schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    domain : List(string)
+
+    field : string
+
+    range : List(string)
+
+    type : enum('quantitative', 'nominal')
+
+    """
+    _schema = {'$ref': '#/definitions/Text'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, domain=Undefined, field=Undefined, range=Undefined, type=Undefined, **kwds):
+        super(Text, self).__init__(domain=domain, field=field, range=range, type=type, **kwds)
 
 
 class Tooltip(GoslingSchema):
@@ -1953,6 +2164,8 @@ class DataTrack(Track):
 
     yOffset : float
 
+    zoomLimits : :class:`ZoomLimits`
+
     """
     _schema = {'$ref': '#/definitions/DataTrack'}
     _rootschema = GoslingSchema._rootschema
@@ -1963,7 +2176,7 @@ class DataTrack(Track):
                  orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
                  prerelease=Undefined, spacing=Undefined, startAngle=Undefined, static=Undefined,
                  style=Undefined, subtitle=Undefined, title=Undefined, xAxis=Undefined,
-                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, **kwds):
+                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(DataTrack, self).__init__(data=data, height=height, width=width,
                                         _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                         assembly=assembly, centerRadius=centerRadius, endAngle=endAngle,
@@ -1974,7 +2187,7 @@ class DataTrack(Track):
                                         prerelease=prerelease, spacing=spacing, startAngle=startAngle,
                                         static=static, style=style, subtitle=subtitle, title=title,
                                         xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
-                                        **kwds)
+                                        zoomLimits=zoomLimits, **kwds)
 
 
 class OverlaidTrack(Track):
@@ -2000,9 +2213,9 @@ class OverlaidTrack(Track):
 
     centerRadius : float
         Proportion of the radius of the center white space.
-    color : :class:`Channel`
+    color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
-    column : :class:`Channel`
+    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -2024,7 +2237,7 @@ class OverlaidTrack(Track):
 
     mark : :class:`Mark`
 
-    opacity : :class:`Channel`
+    opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
 
@@ -2036,9 +2249,9 @@ class OverlaidTrack(Track):
 
     prerelease : Mapping(required=[])
 
-    row : :class:`Channel`
+    row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
-    size : :class:`Channel`
+    size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
 
@@ -2048,15 +2261,15 @@ class OverlaidTrack(Track):
 
     stretch : boolean
 
-    stroke : :class:`Channel`
+    stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
 
-    strokeWidth : :class:`Channel`
+    strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
 
     subtitle : string
 
-    text : :class:`Channel`
+    text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
 
@@ -2064,11 +2277,11 @@ class OverlaidTrack(Track):
 
     visibility : List(:class:`VisibilityCondition`)
 
-    x : :class:`Channel`
+    x : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1 : :class:`Channel`
+    x1 : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1e : :class:`Channel`
+    x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
 
@@ -2076,17 +2289,19 @@ class OverlaidTrack(Track):
 
     xOffset : float
 
-    xe : :class:`Channel`
+    xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    y : :class:`Channel`
+    y : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1 : :class:`Channel`
+    y1 : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1e : :class:`Channel`
+    y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
 
-    ye : :class:`Channel`
+    ye : anyOf(:class:`Y`, :class:`ChannelValue`)
+
+    zoomLimits : :class:`ZoomLimits`
 
     """
     _schema = {'$ref': '#/definitions/OverlaidTrack'}
@@ -2104,7 +2319,7 @@ class OverlaidTrack(Track):
                  text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined,
                  x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
                  xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined,
-                 ye=Undefined, **kwds):
+                 ye=Undefined, zoomLimits=Undefined, **kwds):
         super(OverlaidTrack, self).__init__(height=height, overlay=overlay, width=width,
                                             _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                             assembly=assembly, centerRadius=centerRadius, color=color,
@@ -2121,7 +2336,8 @@ class OverlaidTrack(Track):
                                             text=text, title=title, tooltip=tooltip,
                                             visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
                                             xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1,
-                                            y1e=y1e, yOffset=yOffset, ye=ye, **kwds)
+                                            y1e=y1e, yOffset=yOffset, ye=ye, zoomLimits=zoomLimits,
+                                            **kwds)
 
 
 class SingleTrack(Track):
@@ -2148,9 +2364,9 @@ class SingleTrack(Track):
 
     centerRadius : float
         Proportion of the radius of the center white space.
-    color : :class:`Channel`
+    color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
-    column : :class:`Channel`
+    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     dataTransform : List(:class:`DataTransform`)
 
@@ -2168,7 +2384,7 @@ class SingleTrack(Track):
 
     linkingId : string
 
-    opacity : :class:`Channel`
+    opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
 
@@ -2180,9 +2396,9 @@ class SingleTrack(Track):
 
     prerelease : Mapping(required=[])
 
-    row : :class:`Channel`
+    row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
-    size : :class:`Channel`
+    size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
 
@@ -2192,15 +2408,15 @@ class SingleTrack(Track):
 
     stretch : boolean
 
-    stroke : :class:`Channel`
+    stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
 
-    strokeWidth : :class:`Channel`
+    strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
 
     subtitle : string
 
-    text : :class:`Channel`
+    text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
 
@@ -2208,11 +2424,11 @@ class SingleTrack(Track):
 
     visibility : List(:class:`VisibilityCondition`)
 
-    x : :class:`Channel`
+    x : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1 : :class:`Channel`
+    x1 : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    x1e : :class:`Channel`
+    x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
 
@@ -2220,17 +2436,19 @@ class SingleTrack(Track):
 
     xOffset : float
 
-    xe : :class:`Channel`
+    xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
-    y : :class:`Channel`
+    y : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1 : :class:`Channel`
+    y1 : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    y1e : :class:`Channel`
+    y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
 
-    ye : :class:`Channel`
+    ye : anyOf(:class:`Y`, :class:`ChannelValue`)
+
+    zoomLimits : :class:`ZoomLimits`
 
     """
     _schema = {'$ref': '#/definitions/SingleTrack'}
@@ -2248,7 +2466,7 @@ class SingleTrack(Track):
                  text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined,
                  x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
                  xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined,
-                 ye=Undefined, **kwds):
+                 ye=Undefined, zoomLimits=Undefined, **kwds):
         super(SingleTrack, self).__init__(data=data, height=height, mark=mark, width=width,
                                           _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                           assembly=assembly, centerRadius=centerRadius, color=color,
@@ -2265,7 +2483,7 @@ class SingleTrack(Track):
                                           text=text, title=title, tooltip=tooltip,
                                           visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
                                           xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1, y1e=y1e,
-                                          yOffset=yOffset, ye=ye, **kwds)
+                                          yOffset=yOffset, ye=ye, zoomLimits=zoomLimits, **kwds)
 
 
 class TemplateTrack(Track):
@@ -2333,6 +2551,8 @@ class TemplateTrack(Track):
 
     yOffset : float
 
+    zoomLimits : :class:`ZoomLimits`
+
     """
     _schema = {'$ref': '#/definitions/TemplateTrack'}
     _rootschema = GoslingSchema._rootschema
@@ -2344,7 +2564,7 @@ class TemplateTrack(Track):
                  outerRadius=Undefined, overlayOnPreviousTrack=Undefined, prerelease=Undefined,
                  spacing=Undefined, startAngle=Undefined, static=Undefined, style=Undefined,
                  subtitle=Undefined, title=Undefined, xAxis=Undefined, xDomain=Undefined,
-                 xOffset=Undefined, yOffset=Undefined, **kwds):
+                 xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(TemplateTrack, self).__init__(data=data, height=height, template=template, width=width,
                                             _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                             assembly=assembly, centerRadius=centerRadius,
@@ -2355,7 +2575,20 @@ class TemplateTrack(Track):
                                             prerelease=prerelease, spacing=spacing,
                                             startAngle=startAngle, static=static, style=style,
                                             subtitle=subtitle, title=title, xAxis=xAxis,
-                                            xDomain=xDomain, xOffset=xOffset, yOffset=yOffset, **kwds)
+                                            xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
+                                            zoomLimits=zoomLimits, **kwds)
+
+
+class ValueExtent(Range):
+    """ValueExtent schema wrapper
+
+    anyOf(List(string), List(float))
+    """
+    _schema = {'$ref': '#/definitions/ValueExtent'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, *args, **kwds):
+        super(ValueExtent, self).__init__(*args, **kwds)
 
 
 class VectorData(DataDeep):
@@ -2434,6 +2667,93 @@ class SizeVisibilityCondition(VisibilityCondition):
                                                       transitionPadding=transitionPadding, **kwds)
 
 
+class X(ChannelDeep):
+    """X schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    aggregate : :class:`Aggregate`
+
+    axis : :class:`AxisPosition`
+
+    domain : :class:`GenomicDomain`
+
+    field : string
+
+    grid : boolean
+
+    legend : boolean
+
+    linkingId : string
+
+    range : :class:`ValueExtent`
+
+    type : string
+
+    """
+    _schema = {'$ref': '#/definitions/X'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, aggregate=Undefined, axis=Undefined, domain=Undefined, field=Undefined,
+                 grid=Undefined, legend=Undefined, linkingId=Undefined, range=Undefined, type=Undefined,
+                 **kwds):
+        super(X, self).__init__(aggregate=aggregate, axis=axis, domain=domain, field=field, grid=grid,
+                                legend=legend, linkingId=linkingId, range=range, type=type, **kwds)
+
+
+class Y(ChannelDeep):
+    """Y schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    aggregate : :class:`Aggregate`
+
+    axis : :class:`AxisPosition`
+
+    baseline : anyOf(string, float)
+
+    domain : :class:`ValueExtent`
+
+    field : string
+
+    flip : boolean
+
+    grid : boolean
+
+    legend : boolean
+
+    linkingId : string
+
+    mirrored : boolean
+
+    padding : float
+
+    range : :class:`ValueExtent`
+
+    type : enum('quantitative', 'nominal', 'genomic')
+
+    zeroBaseline : boolean
+
+    """
+    _schema = {'$ref': '#/definitions/Y'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, aggregate=Undefined, axis=Undefined, baseline=Undefined, domain=Undefined,
+                 field=Undefined, flip=Undefined, grid=Undefined, legend=Undefined, linkingId=Undefined,
+                 mirrored=Undefined, padding=Undefined, range=Undefined, type=Undefined,
+                 zeroBaseline=Undefined, **kwds):
+        super(Y, self).__init__(aggregate=aggregate, axis=axis, baseline=baseline, domain=domain,
+                                field=field, flip=flip, grid=grid, legend=legend, linkingId=linkingId,
+                                mirrored=mirrored, padding=padding, range=range, type=type,
+                                zeroBaseline=zeroBaseline, **kwds)
+
+
 class ZoomLevelVisibilityCondition(VisibilityCondition):
     """ZoomLevelVisibilityCondition schema wrapper
 
@@ -2464,4 +2784,16 @@ class ZoomLevelVisibilityCondition(VisibilityCondition):
                                                            target=target, threshold=threshold,
                                                            conditionPadding=conditionPadding,
                                                            transitionPadding=transitionPadding, **kwds)
+
+
+class ZoomLimits(GoslingSchema):
+    """ZoomLimits schema wrapper
+
+    List([anyOf(float, None), anyOf(float, None)])
+    """
+    _schema = {'$ref': '#/definitions/ZoomLimits'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, *args):
+        super(ZoomLimits, self).__init__(*args)
 
