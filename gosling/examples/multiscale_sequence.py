@@ -4,9 +4,8 @@ Multiscale Sequence Plot
 """
 # category: interactive visualizations
 import gosling as gos
-from gosling.data import multivec
 
-data = multivec(
+data = gos.multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=sequence-multivec",
     row="base",
     column="position",

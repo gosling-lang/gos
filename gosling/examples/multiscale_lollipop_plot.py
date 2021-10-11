@@ -4,9 +4,8 @@ Multiscale Lollipop Plot
 """
 # category: interactive visualizations
 import gosling as gos
-from gosling.data import beddb, multivec
  
-clin_var_beddb = beddb(
+clin_var_beddb = gos.beddb(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=clinvar-beddb",
     genomicFields=[{"index": 1, "name": "start"}, {"index": 2, "name": "end"}],
     valueFields=[{"index": 7, "name": "significance", "type": "nominal"}],
@@ -20,7 +19,7 @@ categories = [
 
 colors = ["#5A9F8C", "#5A9F8C", "#029F73", "gray", "#CB96B3", "#CB71A3", "#CB3B8C"]
 
-clin_var_multivec = multivec(
+clin_var_multivec = gos.multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=clinvar-multivec",
     row="significance",
     column="position",

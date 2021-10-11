@@ -4,35 +4,34 @@ Comparative Matrices
 """
 # category: composite visualizations
 import gosling as gos
-from gosling.data import bigwig, beddb, matrix, multivec
 
 size = 375
 scaled_size = size / 15
 
 # Data
 
-HFFc6_H3K4me3 = bigwig(
+HFFc6_H3K4me3 = gos.bigwig(
     url="https://s3.amazonaws.com/gosling-lang.org/data/HFFc6_H3K4me3.bigWig",
     column="position",
     value="peak",
     binSize=8,
 )
 
-HFFc6_Atacseq = bigwig(
+HFFc6_Atacseq = gos.bigwig(
     url="https://s3.amazonaws.com/gosling-lang.org/data/HFFc6_Atacseq.mRp.clN.bigWig",
     column="position",
     value="peak",
     binSize=8
 )
 
-HFFC6_CTCF = bigwig(
+HFFC6_CTCF = gos.bigwig(
     url="https://s3.amazonaws.com/gosling-lang.org/data/HFFC6_CTCF.mRp.clN.bigWig",
     column="position",
     value="peak",
     binSize=8,
 )
 
-genes = beddb(
+genes = gos.beddb(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=gene-annotation",
     genomicFields=[
         {"index": 1, "name": "start"},
@@ -44,10 +43,10 @@ genes = beddb(
     ],
 )
 
-micro_c = matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-microc-hg38")
-hi_c = matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-hic-hg38")
+micro_c = gos.matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-microc-hg38")
+hi_c = gos.matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-hic-hg38")
 
-epilogos_data = multivec(
+epilogos_data = gos.multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=epilogos-hg38",
     row="category",
     column="position",

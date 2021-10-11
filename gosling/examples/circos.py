@@ -4,23 +4,22 @@ Circos
 """
 # category: others
 import gosling as gos
-from gosling.data import csv, vector
 
 WIDTH = 725
 
-tileset = vector(
+tileset = gos.vector(
     url="https://resgen.io/api/v1/tileset_info/?d=VLFaiSVjTjW6mkbjRjWREA",
     column="position",
     value="peak",
 )
 
-cytoband = csv(
+cytoband = gos.csv(
     url="https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/UCSC.HG38.Human.CytoBandIdeogram.csv",
     chromosomeField="Chromosome",
     genomicFields=["chromStart", "chromEnd"],
 )
 
-segdup = csv(
+segdup = gos.csv(
     url="https://raw.githubusercontent.com/vigsterkr/circos/master/data/5/segdup.txt",
     headerNames=["id", "chr", "p1", "p2"],
     chromosomePrefix="hs",
