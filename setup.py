@@ -32,7 +32,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     python_requires=">=3.7",
     install_requires=[
-        "jsonschema",
+        "jsonschema>=3.0,<4.0",
         "jinja2",
         "numpy",
         "pandas>=0.18",
