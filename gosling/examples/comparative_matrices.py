@@ -64,16 +64,16 @@ epilogos_data = gos.multivec(
 # Tracks & Views
 
 track1 = gos.Track(HFFc6_H3K4me3).mark_bar().encode(
-    x=gos.Channel("start:G", axis="top"),
+    x=gos.X("start:G", axis="top"),
     xe="end:G",
-    y=gos.Channel("peak:Q", axis="none"),
+    y=gos.Y("peak:Q", axis="none"),
     color=gos.value("darkgreen"),
 ).properties(title="HFFc6_H3K4me3", height=size, width=scaled_size)
 
 track2 = gos.Track(HFFc6_Atacseq).mark_bar().encode(
     x="start:G",
     xe="end:G",
-    y=gos.Channel("peak:Q", axis="none"),
+    y=gos.Y("peak:Q", axis="none"),
     color=gos.value("#E79F00"),
 ).properties(title="HFFc6_ATAC", height=size, width=scaled_size)
 
@@ -83,14 +83,14 @@ gene_anno_base = gos.Track(genes).encode(
     stroke=gos.value("white"),
     strokeWidth=gos.value(1),
     color=gos.value("#CB7AA7"),
-    row=gos.Channel("strand:N", domain=["+", "-"]),
+    row=gos.Row("strand:N", domain=["+", "-"]),
 )
 
 gene_overlay = gos.overlay(
     gos.Track(HFFC6_CTCF).mark_bar().encode(
         x="start:G",
         xe="end:G",
-        y=gos.Channel("peak:Q", axis="none"),
+        y=gos.Y("peak:Q", axis="none"),
         color=gos.value("#0072B2")
     ),
     gene_anno_base.mark_triangleRight(backgroundOpacity=0).encode(
@@ -115,17 +115,17 @@ top = gos.stack(
 )
 
 matrix = gos.Track(micro_c).mark_rect().encode(
-    x=gos.Channel("position1:G", axis="none"),
-    y=gos.Channel("position2:G", axis="none"),
-    color=gos.Channel("value:Q", range="warm"),
+    x=gos.X("position1:G", axis="none"),
+    y=gos.Y("position2:G", axis="none"),
+    color=gos.Color("value:Q", range="warm"),
 ).properties(title="HFFc6_Micro-C", width=size, height=size)
 
 
 bottom = gos.Track(epilogos_data).mark_bar().encode(
-    x=gos.Channel("start:G", axis="none"),
+    x=gos.X("start:G", axis="none"),
     xe="end:G",
-    y=gos.Channel("value:Q", axis="none"),
-    color=gos.Channel("category:N", range=[
+    y=gos.Y("value:Q", axis="none"),
+    color=gos.Color("category:N", range=[
         "#FF0000", "#FF4500", "#32CD32", "#008000", "#006400",
         "#C2E105", "#FFFF00", "#66CDAA", "#8A91D0", "#CD5C5C",
         "#E9967A", "#BDB76B", "#808080", "#C0C0C0", "gray"
@@ -151,8 +151,7 @@ right = gos.View(views=[left_matrix, right_matrix], spacing=30)
 gos.horizontal(left, right).properties(
     title="Matrix Visualization",
     subtitle="Comparison of Micro-C and Hi-C for HFFc6 Cells",
-    xDomain=gos.Domain(chromosome="7",
-    interval=[77700000, 81000000]),
+    xDomain=gos.GenomicDomain(chromosome="7", interval=[77700000, 81000000]),
     spacing=1,
     linkingId="-"
 )

@@ -30,13 +30,13 @@ segdup = gos.csv(
 )
 
 bars = gos.Track(tileset).mark_bar().encode(
-    x=gos.Channel("position:G", axis="top"),
-    y=gos.Channel("peak:Q", axis="right"),
+    x=gos.X("position:G", axis="top"),
+    y=gos.Y("peak:Q", axis="right"),
     color=gos.value("#EEEDA1"),
 ).properties(width=WIDTH, height=60)
 
 ideogram = gos.Track(cytoband).mark_rect().encode(
-    color=gos.Channel("Stain:N",
+    color=gos.Color("Stain:N",
         domain=["gneg", "gpos25", "gpos50", "gpos75", "gpos100", "gvar", "acen"],
         range=["white", "#D9D9D9", "#979797", "#636363", "black", "#F0F0F0", "#8D8D8D"],
     ),
@@ -63,7 +63,7 @@ link = gos.overlay(
         .transform_filter_not("chr", oneOf=["hs1"])
     ,
     link_base
-        .encode(stroke=gos.Channel("chr_2:N", range=colors), strokeWidth=gos.value(1.5))
+        .encode(stroke=gos.Stroke("chr_2:N", range=colors), strokeWidth=gos.value(1.5))
         .transform_filter("chr", oneOf=["hs1"])
 )
 

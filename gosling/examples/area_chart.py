@@ -13,10 +13,10 @@ data = gos.multivec(
     categories=["sample 1"],
 )
 
-domain = gos.Domain(chromosome="1", interval=[2000500, 3000500])
+domain = gos.GenomicDomain(chromosome="1", interval=[2000500, 3000500])
 
 track = gos.Track(data).mark_area().encode(
-    x=gos.Channel("position:G", domain=domain, axis="bottom"),
+    x=gos.X("position:G", domain=domain, axis="bottom"),
     y="peak:Q",
     size=gos.value(2),
 ).properties(width=725, height=180, layout="linear")

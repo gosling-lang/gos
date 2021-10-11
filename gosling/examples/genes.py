@@ -26,8 +26,8 @@ genes = gos.beddb(
 )
 
 base = gos.Track(genes).encode(
-    row=gos.Channel("strand:N", domain=["+", "-"]),
-    color=gos.Channel("strand:N", domain=["+", "-"], range=["#7585FF", "#FF8A85"]),
+    row=gos.Row("strand:N", domain=["+", "-"]),
+    color=gos.Color("strand:N", domain=["+", "-"], range=["#7585FF", "#FF8A85"]),
     tooltip=[
         gos.Tooltip(field="start", type="genomic", alt="Start Position"),
         gos.Tooltip(field="end", type="genomic", alt="End Position"),
@@ -39,7 +39,7 @@ base = gos.Track(genes).encode(
 )
 
 plusGeneHead = base.mark_triangleRight(align="left").encode(
-    x=gos.Channel("end:G", axis="top"),
+    x=gos.X("end:G", axis="top"),
     size=gos.value(15)
 ).transform_filter(
     field="type", oneOf=["gene"]
@@ -48,7 +48,7 @@ plusGeneHead = base.mark_triangleRight(align="left").encode(
 )
 
 minusGeneHead = base.mark_triangleLeft(align="right").encode(
-    x=gos.Channel("start:G", axis="top"),
+    x=gos.X("start:G", axis="top"),
     size=gos.value(15)
 ).transform_filter(
     field="type", oneOf=["gene"]
@@ -57,9 +57,9 @@ minusGeneHead = base.mark_triangleLeft(align="right").encode(
 )
 
 geneLabel = base.mark_text(dy=15).encode(
-    x=gos.Channel("start:G", axis="top"),
-    xe=gos.Channel("end:G"),
-    text=gos.Channel("name:N"),
+    x=gos.X("start:G", axis="top"),
+    xe="end:G",
+    text="name:N",
     size=gos.value(15)
 ).transform_filter(
     field="type", oneOf=["gene"]
@@ -71,16 +71,16 @@ geneLabel = base.mark_text(dy=15).encode(
 )
 
 exon = base.mark_rect().encode(
-    x=gos.Channel("start:G", axis="top"),
-    xe=gos.Channel("end:G"),
+    x=gos.X("start:G", axis="top"),
+    xe="end:G",
     size=gos.value(15)
 ).transform_filter(
     field="type", oneOf=["exon"]
 )
 
 plusGeneRange = base.mark_rule(linePattern={"type": "triangleRight", "size": 5}).encode(
-    x=gos.Channel("start:G", axis="top"),
-    xe=gos.Channel("end:G"),
+    x=gos.X("start:G", axis="top"),
+    xe="end:G",
     strokeWidth=gos.value(3),
 ).transform_filter(
     field="type", oneOf=["gene"]
@@ -89,8 +89,8 @@ plusGeneRange = base.mark_rule(linePattern={"type": "triangleRight", "size": 5})
 )
 
 minusGeneRange = base.mark_rule(linePattern={"type": "triangleLeft", "size": 5}).encode(
-    x=gos.Channel("start:G", axis="top"),
-    xe=gos.Channel("end:G"),
+    x=gos.X("start:G", axis="top"),
+    xe="end:G",
     strokeWidth=gos.value(3),
 ).transform_filter(
     field="type", oneOf=["gene"]
@@ -103,7 +103,7 @@ gos.overlay(
 ).properties(
     width=725, height=100,
     title="Gene Annotation",
-    xDomain=gos.Domain(chromosome="1", interval=[103400000, 103700000]),
+    xDomain=gos.GenomicDomain(chromosome="1", interval=[103400000, 103700000]),
     assembly="hg38",
     layout="linear",
     centerRadius=0.7,

@@ -39,11 +39,11 @@ circular = gos.stack(
         gos.overlay(
             base.mark_bar(),
             base.mark_brush().encode(
-                x=gos.Channel("start:G", linkingId="detail-1"),
+                x=gos.X("start:G", linkingId="detail-1"),
                 color=gos.value("blue")
             ),
             base.mark_brush().encode(
-                x=gos.Channel("start:G", linkingId="detail-2"),
+                x=gos.X("start:G", linkingId="detail-2"),
                 color=gos.value("red")
             ),
         ).properties(width=500, height=100)
@@ -56,7 +56,7 @@ circular = gos.stack(
                 xe="p1e:G",
                 x1="p2s:G",
                 x1e="p2e:G",
-                stroke=gos.Channel(
+                stroke=gos.Stroke(
                     "type:N",
                     domain=["deletion", "inversion", "translocation", "tandem-duplication"],
                 ),
@@ -71,11 +71,11 @@ circular = gos.stack(
 
 
 def detail(background, linkingId, legend, chromosome):
-    domain = gos.Domain(chromosome=chromosome)
+    domain = gos.GenomicDomain(chromosome=chromosome)
     return base.mark_bar(background=background, backgroundOpacity=0.1).encode(
-        x=gos.Channel("start:G", linkingId=linkingId, domain=domain),
+        x=gos.X("start:G", linkingId=linkingId, domain=domain),
         strokeWidth=gos.value(0.3),
-        color=gos.Channel("sample:N", legend=legend),
+        color=gos.Color("sample:N", legend=legend),
     ).properties(width=245, height=150)
 
 details = gos.horizontal(

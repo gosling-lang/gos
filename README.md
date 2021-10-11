@@ -44,24 +44,24 @@ data = gos.multivec(
 base_track = gos.Track(data, width=800, height=100)
 
 heatmap = base_track.mark_rect().encode(
-    x=gos.Channel("start:G", axis="top"),
+    x=gos.X("start:G", axis="top"),
     xe="end:G",
-    row=gos.Channel("sample:N", legend=True),
-    color=gos.Channel("peak:Q", legend=True),
+    row=gos.Row("sample:N", legend=True),
+    color=gos.Color("peak:Q", legend=True),
 )
 
 bars = base_track.mark_bar().encode(
-    x=gos.Channel("position:G", axis="top"),
+    x=gos.X("position:G", axis="top"),
     y="peak:Q",
     row="sample:N",
-    color=gos.Channel("sample:N", legend=True),
+    color=gos.Color("sample:N", legend=True),
 )
 
 lines = base_track.mark_line().encode(
-    x=gos.Channel("position:G", axis="top"),
+    x=gos.X("position:G", axis="top"),
     y="peak:Q",
     row="sample:N",
-    color=gos.Channel("sample:N", legend=True),
+    color=gos.Color("sample:N", legend=True),
 )
 
 gos.vertical(heatmap, bars, lines).properties(
