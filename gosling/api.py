@@ -23,8 +23,8 @@ class _EncodingMixin:
         """
         Add channel encodings to the track.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         column : :class:`Channel`
 
         opacity : :class:`Channel`
@@ -44,8 +44,6 @@ class _EncodingMixin:
         x1 : :class:`Channel`
 
         x1e : :class:`Channel`
-
-        xOffset : float
 
         xe : :class:`Channel`
 

@@ -16,7 +16,7 @@ class MarkMethodMixin(object):
                    outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                    textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                    textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'point'
+        """Set the track's mark to 'point'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -40,7 +40,7 @@ class MarkMethodMixin(object):
                   outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                   textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'line'
+        """Set the track's mark to 'line'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -64,7 +64,7 @@ class MarkMethodMixin(object):
                   outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                   textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'area'
+        """Set the track's mark to 'area'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -88,7 +88,7 @@ class MarkMethodMixin(object):
                  outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                  textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'bar'
+        """Set the track's mark to 'bar'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -112,7 +112,7 @@ class MarkMethodMixin(object):
                   outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                   textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'rect'
+        """Set the track's mark to 'rect'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -136,7 +136,7 @@ class MarkMethodMixin(object):
                   outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                   textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'text'
+        """Set the track's mark to 'text'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -160,7 +160,7 @@ class MarkMethodMixin(object):
                         outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                         textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                         textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'withinLink'
+        """Set the track's mark to 'withinLink'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -184,7 +184,7 @@ class MarkMethodMixin(object):
                          linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
                          textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
                          textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'betweenLink'
+        """Set the track's mark to 'betweenLink'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -208,7 +208,7 @@ class MarkMethodMixin(object):
                   outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                   textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'rule'
+        """Set the track's mark to 'rule'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -232,7 +232,7 @@ class MarkMethodMixin(object):
                           linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
                           textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
                           textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'triangleLeft'
+        """Set the track's mark to 'triangleLeft'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -256,7 +256,7 @@ class MarkMethodMixin(object):
                            linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
                            textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
                            textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'triangleRight'
+        """Set the track's mark to 'triangleRight'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -280,7 +280,7 @@ class MarkMethodMixin(object):
                             linkConnectionType=Undefined, outline=Undefined, outlineWidth=Undefined,
                             textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
                             textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'triangleBottom'
+        """Set the track's mark to 'triangleBottom'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -304,7 +304,7 @@ class MarkMethodMixin(object):
                    outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                    textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                    textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'brush'
+        """Set the track's mark to 'brush'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -328,7 +328,7 @@ class MarkMethodMixin(object):
                     outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                     textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                     textStrokeWidth=Undefined, **kwds) -> T:
-        """Set the chart's mark to 'header'
+        """Set the track's mark to 'header'
     
         For information on additional arguments, see :class:`Style`
         """

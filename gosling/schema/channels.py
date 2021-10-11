@@ -3,7 +3,7 @@
 
 from . import core
 from gosling.schemapi import Undefined
-from gosling.utils import parse_shorthand
+import gosling.utils as utils
 
 
 class FieldChannelMixin(object):
@@ -26,7 +26,7 @@ class FieldChannelMixin(object):
         if shorthand is Undefined:
             parsed = {}
         elif isinstance(shorthand, str):
-            parsed = parse_shorthand(shorthand)
+            parsed = utils.parse_shorthand(shorthand)
             type_required = 'type' in self._kwds
             type_in_shorthand = 'type' in parsed
             type_defined_explicitly = self._get('type') is not Undefined
