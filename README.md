@@ -31,9 +31,8 @@ See the [Documentation Site](https://gosling-lang.github.io/gos) for more inform
 
 ```python
 import gosling as gos
-from gosling.data import multivec
 
-data = multivec(
+data = gos.multivec(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
     row="sample",
     column="position",
