@@ -1,8 +1,8 @@
 import pathlib
-from typing import Callable, Dict, Optional, Union
+from typing import Callable, Dict, Optional, Union, Any, List
 
-import gosling.experimental._tilesets as tilesets
-from gosling.experimental._provider import Provider, Resource, TilesetResource
+import gosling.data._tilesets as tilesets
+from gosling.data._provider import Provider, Resource, TilesetResource
 from gosling.utils.core import _compute_data_hash
 
 
@@ -90,8 +90,10 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
     return load
 
 
-# re-export json data util
-from gosling.data import json
+# in-memory data
+def json(values: List[Dict[str, Any]], **kwargs):
+    return dict(type="json", values=values, **kwargs)
+
 
 # file resources
 bam = _create_loader("bam")
