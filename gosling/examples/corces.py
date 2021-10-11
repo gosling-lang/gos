@@ -8,20 +8,19 @@ Single-cell Epigenomic Analysis
 """
 # category: others
 import gosling as gos
-from gosling.data import beddb, bigwig, csv
 
 WIDTH = 600
 
 # DATA
 
-cytogenetic_band = csv(
+cytogenetic_band = gos.csv(
     url="https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/cytogenetic_band.csv",
     chromosomeField="Chr.",
     genomicFields=["ISCN_start", "ISCN_stop", "Basepair_start", "Basepair_stop"],
     quantitativeFields=["Band", "Density"],
 )
 
-gene_anno = beddb(
+gene_anno = gos.beddb(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=gene-annotation",
     genomicFields=[{"index": 1, "name": "start"}, {"index": 2, "name": "end"}],
     valueFields=[
@@ -111,7 +110,7 @@ genes = gos.overlay(
 
 def bar(title: str, color: str, file: str) -> gos.Track:
     url = f"https://s3.amazonaws.com/gosling-lang.org/data/{file}"
-    data = bigwig(url, column="position", value="peak")
+    data = gos.bigwig(url, column="position", value="peak")
     return gos.Track(data).mark_bar(outline="#20102F").encode(
         x="position:G",
         y=gos.Channel("peak:Q", axis="right"),
@@ -120,7 +119,7 @@ def bar(title: str, color: str, file: str) -> gos.Track:
 
 def link(tileset_id: str, stroke: str) -> gos.Track:
     url = f"https://server.gosling-lang.org/api/v1/tileset_info/?d={tileset_id}"
-    data = beddb(url, genomicFields=[{"name": "start", "index": 1}, {"name": "end", "index": 2}])
+    data = gos.beddb(url, genomicFields=[{"name": "start", "index": 1}, {"name": "end", "index": 2}])
     return gos.Track(data).mark_withinLink().encode(
         x="start:G",
         xe="end:G",

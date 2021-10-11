@@ -4,13 +4,12 @@ Ideograms
 """
 # category: composite visualizations
 import gosling as gos
-from gosling.data import csv, multivec
 
 def ideogram_with_bars(chromosome: str, width: int):
     """
     Ideograms
     """
-    data = csv(
+    data = gos.csv(
         url="https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/UCSC.HG38.Human.CytoBandIdeogram.csv",
         chromosomeField="Chromosome",
         genomicFields=["chromStart", "chromEnd"],
@@ -62,7 +61,7 @@ def ideogram_with_bars(chromosome: str, width: int):
     """
     Stacked Bar Charts
     """
-    mvdata = multivec(
+    mvdata = gos.multivec(
         url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
         row="sample",
         column="position",

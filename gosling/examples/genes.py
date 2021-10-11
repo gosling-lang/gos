@@ -8,9 +8,8 @@ Re-implementation of `Higlass gene-annotations track`_
 """
 # category: composite visualizations
 import gosling as gos
-from gosling.data import beddb
 
-genes = beddb(
+genes = gos.beddb(
     url="https://server.gosling-lang.org/api/v1/tileset_info/?d=gene-annotation",
     genomicFields=[
       {"index": 1, "name": "start"},

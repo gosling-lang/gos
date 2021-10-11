@@ -36,10 +36,9 @@ setuptools.setup(
         "jinja2",
         "numpy",
         "pandas>=0.18",
-    ],
+    ] + data_server_requirements,
     extras_require={
-        'all': data_server_requirements,
-        'dev': data_server_requirements + [
+        'dev': [
             'pytest',
             'requests',
             'sphinx',

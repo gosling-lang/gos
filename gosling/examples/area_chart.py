@@ -4,9 +4,8 @@ Area Chart
 """
 # category: basic marks
 import gosling as gos
-from gosling.data import multivec
 
-data = multivec(
+data = gos.multivec(
     url="https://resgen.io/api/v1/tileset_info/?d=UvVPeLHuRDiYA3qwFlm7xQ",
     row="sample",
     column="position",

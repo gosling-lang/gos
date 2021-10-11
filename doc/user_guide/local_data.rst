@@ -13,25 +13,23 @@ Local Data
 Loading a local dataset can be challenging since it requires starting a web-server
 and/or a `Higlass server`_ for some pre-aggregated datasets. 
 
-**gos** provides an experimental module that transparently serves data via a 
-background ASGI server. The various data utilites are imported from 
-the `gosling.experimental.data` module.
+The data utilities in **gos** will transparently serve data via a 
+background ASGI server if a local file path is detected. 
 
 .. code-block:: python
 
     import gosling as gos
-    from gosling.experimental.data import bam, csv, bigwig # file resources
-    from gosling.experimental.data import beddb, vector, matrix, multivec # higlass tile resources
+    # gos.bam, gos.csv, gos.bigwig # file resources
+    # gos.beddb, gos.vector, gos.matrix, gos.multivec # higlass tile resources
 
 
 Installation
 ------------
 
-You will need to install additional dependencies to use this feature via:
+You will need to install Clodius_ for any higlass tile resources:
 
 .. code-block:: bash
 
-    pip install 'gosling[all]' # installs extra deps for background data-server
     pip install clodius # optional, required for higlass tile resources
 
 Usage
@@ -44,9 +42,8 @@ The **gos** example below incudes a `multivec data source`_; the url points to a
     :code-below:
 
     import gosling as gos
-    from gosling.data import multivec
 
-    data = multivec(
+    data = gos.multivec(
         url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
         row="sample",
         column="position",
@@ -65,18 +62,16 @@ The **gos** example below incudes a `multivec data source`_; the url points to a
     track.view()
 
 
-By changing the :code:`data` import and replacing the Higlass server URL with a local path 
-corresponding `cistrome multivec file`_ (4GB), **gos** automatically detects the local
+By replacing the Higlass server URL with a local path corresponding 
+`cistrome multivec file`_ (4GB), **gos** automatically detects the local
 file and will starts a background Higlass server to power the visualization.
 
 
 .. code-block:: diff
 
     import gosling as gos
-    -from gosling.data import multivec
-    +from gosling.experimental.data import multivec
 
-    data = multivec(
+    data = gos.multivec(
     -   url="https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec",
     +   url='../data/cistrome.multires.mv5', # path to local multivec
         row="sample",
@@ -95,3 +90,4 @@ file and will starts a background Higlass server to power the visualization.
 .. _multivec data source: http://gosling-lang.org/docs/data/#multivec
 .. _Gosling: http://gosling-lang.org/
 .. _cistrome multivec file: https://s3.amazonaws.com/gosling-lang.org/data/cistrome.multires.mv5
+.. _Clodius: https://github.com/higlass/clodius

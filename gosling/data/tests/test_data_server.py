@@ -4,7 +4,7 @@ from typing import Any
 import pytest
 
 from gosling.api import Data
-from gosling.experimental.data import csv, data_server
+from gosling.data import csv, data_server
 
 import pandas as pd
 
