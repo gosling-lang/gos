@@ -8,8 +8,6 @@ Installation
 
     $ pip install gosling
 
-.. important:: Further setup is required if you have :ref:`local data<local_data>`
-
 Development Install
 ===================
 
