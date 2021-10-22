@@ -1,6 +1,8 @@
 from typing import Iterable, TypeVar, Union
+import pathlib
+
 from gosling.schema import Undefined, channels, core, mixins
-from gosling.display import renderers
+from gosling.display import renderers, spec_to_html
 import gosling.utils as utils
 
 DEFAULT_WIDTH = 800
@@ -193,6 +195,11 @@ class View(_PropertiesMixin, core.Root):
         from IPython.display import display
 
         display(self)
+
+    def save(self, path: Union[pathlib.Path, str]):
+        spec = self.to_dict()
+        with open(path, mode="w") as f:
+            f.write(spec_to_html(spec))
 
 
 # View utilities
