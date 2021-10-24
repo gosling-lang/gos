@@ -175,11 +175,8 @@ class Themes:
     active: Optional[str] = None
 
     def enable(self, name: str):
-        assert name in supported_themes
+        assert name in supported_themes, f"theme must be one of {supported_themes}."
         self.active = name
-
-    def list(self):
-        return list(supported_themes)
 
 
 themes = Themes()
