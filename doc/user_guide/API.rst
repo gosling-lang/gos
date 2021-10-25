@@ -53,7 +53,6 @@ Encoding Channels
    YValue
    Ye
    YeValue
-
 API Functions
 -------------
 .. currentmodule:: gosling
@@ -68,7 +67,6 @@ API Functions
    stack
    value
    vertical
-
 Low-Level Schema Wrappers
 -------------------------
 .. currentmodule:: gosling
@@ -91,6 +89,7 @@ Low-Level Schema Wrappers
    Chromosome
    Color
    Column
+   CombineMatesTransform
    CoverageTransform
    DataDeep
    DataTrack
@@ -108,6 +107,7 @@ Low-Level Schema Wrappers
    FilterTransform
    FlatTracks
    GenomicDomain
+   GenomicLengthTransform
    GlyphElement
    GoslingSchema
    GoslingSpec

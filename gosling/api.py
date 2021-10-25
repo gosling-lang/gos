@@ -202,7 +202,6 @@ class View(_PropertiesMixin, core.Root):
         with open(path, mode="w") as f:
             f.write(html_str)
 
-
 # View utilities
 
 

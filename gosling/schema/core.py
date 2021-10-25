@@ -229,43 +229,54 @@ class BAMData(DataDeep):
     """BAMData schema wrapper
 
     Mapping(required=[type, url, indexUrl])
+    Binary Alignment Map (BAM) is the comprehensive raw data of genome sequencing; it consists
+    of the lossless, compressed binary representation of the Sequence Alignment Map-files.
 
     Attributes
     ----------
 
     indexUrl : string
-
+        URL link to the index file of the BAM file
     type : string
 
     url : string
+        URL link to the BAM data file
+    loadMates : boolean
+
+    maxInsertSize : float
 
     """
     _schema = {'$ref': '#/definitions/BAMData'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, **kwds):
-        super(BAMData, self).__init__(indexUrl=indexUrl, type=type, url=url, **kwds)
+    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, loadMates=Undefined,
+                 maxInsertSize=Undefined, **kwds):
+        super(BAMData, self).__init__(indexUrl=indexUrl, type=type, url=url, loadMates=loadMates,
+                                      maxInsertSize=maxInsertSize, **kwds)
 
 
 class BEDDBData(DataDeep):
     """BEDDBData schema wrapper
 
     Mapping(required=[type, url, genomicFields])
+    Regular BED or similar files can be pre-aggregated for the scalable data exploration. Find
+    our more about this format at [HiGlass
+    Docs](https://docs.higlass.io/data_preparation.html#bed-files).
 
     Attributes
     ----------
 
     genomicFields : List(Mapping(required=[index, name]))
-
+        Specify the name of genomic data fields.
     type : string
 
     url : string
-
+        Specify the URL address of the data file.
     exonIntervalFields : List([Mapping(required=[index, name]), Mapping(required=[index,
     name])])
-
+        experimental
     valueFields : List(Mapping(required=[index, name, type]))
-
+        Specify the column indexes, field names, and field types.
     """
     _schema = {'$ref': '#/definitions/BEDDBData'}
     _rootschema = GoslingSchema._rootschema
@@ -286,19 +297,19 @@ class BIGWIGData(DataDeep):
     ----------
 
     column : string
-
+        Assign a field name of the middle position of genomic intervals.
     type : string
 
     url : string
-
+        Specify the URL address of the data file.
     value : string
-
+        Assign a field name of quantitative values.
     binSize : float
-
+        Binning the genomic interval in tiles (unit size: 256).
     end : string
-
+        Assign a field name of the end position of genomic intervals.
     start : string
-
+        Assign a field name of the start position of genomic intervals.
     """
     _schema = {'$ref': '#/definitions/BIGWIGData'}
     _rootschema = GoslingSchema._rootschema
@@ -313,6 +324,8 @@ class CSVData(DataDeep):
     """CSVData schema wrapper
 
     Mapping(required=[type, url])
+    Any small enough tabular data files, such as tsv, csv, BED, BEDPE, and GFF, can be loaded
+    using "csv" data specification.
 
     Attributes
     ----------
@@ -320,25 +333,27 @@ class CSVData(DataDeep):
     type : string
 
     url : string
-
+        Specify the URL address of the data file.
     chromosomeField : string
-
+        Specify the name of chromosome data fields.
     chromosomePrefix : string
-
+        experimental
     genomicFields : List(string)
-
+        Specify the name of genomic data fields.
     genomicFieldsToConvert : List(Mapping(required=[chromosomeField, genomicFields]))
-
+        experimental
     headerNames : List(string)
-
+        Specify the names of data fields if a CSV file is headerless.
     longToWideId : string
-
+        experimental
     quantitativeFields : List(string)
-
+        Specify the name of quantitative data fields.
     sampleLength : float
+        Specify the number of rows loaded from the URL.
 
+        __Default:__ `1000`
     separator : string
-
+        Specify file separator, __Default:__ ','
     """
     _schema = {'$ref': '#/definitions/CSVData'}
     _rootschema = GoslingSchema._rootschema
@@ -360,13 +375,45 @@ class DataTransform(GoslingSchema):
 
     anyOf(:class:`FilterTransform`, :class:`StrConcatTransform`, :class:`StrReplaceTransform`,
     :class:`LogTransform`, :class:`DisplaceTransform`, :class:`ExonSplitTransform`,
-    :class:`CoverageTransform`, :class:`JSONParseTransform`)
+    :class:`GenomicLengthTransform`, :class:`CoverageTransform`, :class:`CombineMatesTransform`,
+    :class:`JSONParseTransform`)
     """
     _schema = {'$ref': '#/definitions/DataTransform'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, *args, **kwds):
         super(DataTransform, self).__init__(*args, **kwds)
+
+
+class CombineMatesTransform(DataTransform):
+    """CombineMatesTransform schema wrapper
+
+    Mapping(required=[type, idField])
+    By looking up ids, combine mates (a pair of reads) into a single row, performing
+    long-to-wide operation. Result data have `{field}` and `{field}_2` names.
+
+    Attributes
+    ----------
+
+    idField : string
+
+    type : string
+
+    isLongField : string
+
+    maintainDuplicates : boolean
+
+    maxInsertSize : float
+
+    """
+    _schema = {'$ref': '#/definitions/CombineMatesTransform'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, idField=Undefined, type=Undefined, isLongField=Undefined,
+                 maintainDuplicates=Undefined, maxInsertSize=Undefined, **kwds):
+        super(CombineMatesTransform, self).__init__(idField=idField, type=type, isLongField=isLongField,
+                                                    maintainDuplicates=maintainDuplicates,
+                                                    maxInsertSize=maxInsertSize, **kwds)
 
 
 class CoverageTransform(DataTransform):
@@ -385,7 +432,7 @@ class CoverageTransform(DataTransform):
     type : string
 
     groupField : string
-
+        The name of a nominal field to group rows by in prior to piling-up
     newField : string
 
     """
@@ -402,6 +449,7 @@ class Datum(GoslingSchema):
     """Datum schema wrapper
 
     Mapping(required=[])
+    Values in the form of JSON.
     """
     _schema = {'$ref': '#/definitions/Datum'}
     _rootschema = GoslingSchema._rootschema
@@ -421,13 +469,13 @@ class DisplaceTransform(DataTransform):
     boundingBox : Mapping(required=[startField, endField])
 
     method : :class:`DisplacementType`
-
+        A string that specifies the type of diseplancement.
     newField : string
 
     type : string
 
     maxRows : float
-
+        Specify maximum rows to be generated (default has no limit).
     """
     _schema = {'$ref': '#/definitions/DisplaceTransform'}
     _rootschema = GoslingSchema._rootschema
@@ -606,6 +654,33 @@ class DomainInterval(GenomicDomain):
         super(DomainInterval, self).__init__(interval=interval, **kwds)
 
 
+class GenomicLengthTransform(DataTransform):
+    """GenomicLengthTransform schema wrapper
+
+    Mapping(required=[type, startField, endField, newField])
+    Calculate genomic length using two genomic fields
+
+    Attributes
+    ----------
+
+    endField : string
+
+    newField : string
+
+    startField : string
+
+    type : string
+
+    """
+    _schema = {'$ref': '#/definitions/GenomicLengthTransform'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, endField=Undefined, newField=Undefined, startField=Undefined, type=Undefined,
+                 **kwds):
+        super(GenomicLengthTransform, self).__init__(endField=endField, newField=newField,
+                                                     startField=startField, type=type, **kwds)
+
+
 class GlyphElement(GoslingSchema):
     """GlyphElement schema wrapper
 
@@ -687,19 +762,21 @@ class GoslingSpec(GoslingSchema):
 class IncludeFilter(FilterTransform):
     """IncludeFilter schema wrapper
 
-    Mapping(required=[type, field, include])
+    Mapping(required=[field, include, type])
 
     Attributes
     ----------
 
     field : string
-
+        A filter is applied based on the values of the specified data field
     include : string
-
+        Check whether the value includes a substring.
     type : string
 
     not : boolean
+        when `{"not": true}`, apply a NOT logical operation to the filter.
 
+        __Default:__ false
     """
     _schema = {'$ref': '#/definitions/IncludeFilter'}
     _rootschema = GoslingSchema._rootschema
@@ -712,24 +789,28 @@ class JSONData(DataDeep):
     """JSONData schema wrapper
 
     Mapping(required=[type, values])
+    The JSON data format allows users to include data directly in the Gosling's JSON
+    specification.
 
     Attributes
     ----------
 
     type : string
-
+        Define data type.
     values : List(:class:`Datum`)
-
+        Values in the form of JSON.
     chromosomeField : string
-
+        Specify the name of chromosome data fields.
     genomicFields : List(string)
-
+        Specify the name of genomic data fields.
     genomicFieldsToConvert : List(Mapping(required=[chromosomeField, genomicFields]))
-
+        experimental
     quantitativeFields : List(string)
-
+        Specify the name of quantitative data fields.
     sampleLength : float
+        Specify the number of rows loaded from the URL.
 
+        __Default:__ 1000
     """
     _schema = {'$ref': '#/definitions/JSONData'}
     _rootschema = GoslingSchema._rootschema
@@ -754,13 +835,13 @@ class JSONParseTransform(DataTransform):
     ----------
 
     baseGenomicField : string
-
+        Base genomic position when parsing relative position.
     field : string
-
+        The field that contains the JSON object array.
     genomicField : string
-
+        Relative genomic position to parse.
     genomicLengthField : string
-
+        Length of genomic interval.
     type : string
 
     """
@@ -812,9 +893,9 @@ class LogTransform(DataTransform):
     type : string
 
     base : :class:`LogBase`
-
+        If not specified, 10 is used.
     newField : string
-
+        If specified, store transformed values in a new field.
     """
     _schema = {'$ref': '#/definitions/LogTransform'}
     _rootschema = GoslingSchema._rootschema
@@ -1000,33 +1081,47 @@ class MultipleViews(GoslingSchema):
     ----------
 
     views : List(anyOf(:class:`SingleView`, :class:`MultipleViews`))
-
+        An array of view specifications
     arrangement : enum('parallel', 'serial', 'horizontal', 'vertical')
-
+        Specify how multiple views are arranged.
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
 
     """
@@ -1049,28 +1144,34 @@ class MultivecData(DataDeep):
     """MultivecData schema wrapper
 
     Mapping(required=[type, url, column, row, value])
+    Two-dimensional quantitative values, one axis for genomic coordinate and the other for
+    different samples, can be converted into HiGlass' `"multivec"` data. For example, multiple
+    BigWig files can be converted into a single multivec file. You can also convert sequence
+    data (FASTA) into this format where rows will be different nucleotide bases (e.g., A, T, G,
+    C) and quantitative values represent the frequency. Find out more about this format at
+    [HiGlass Docs](https://docs.higlass.io/data_preparation.html#multivec-files).
 
     Attributes
     ----------
 
     column : string
-
+        Assign a field name of the middle position of genomic intervals.
     row : string
-
+        Assign a field name of samples.
     type : string
 
     url : string
-
+        Specify the URL address of the data file.
     value : string
-
+        Assign a field name of quantitative values.
     binSize : float
-
+        Binning the genomic interval in tiles (unit size: 256).
     categories : List(string)
-
+        assign names of individual samples.
     end : string
-
+        Assign a field name of the end position of genomic intervals.
     start : string
-
+        Assign a field name of the start position of genomic intervals.
     """
     _schema = {'$ref': '#/definitions/MultivecData'}
     _rootschema = GoslingSchema._rootschema
@@ -1085,19 +1186,21 @@ class MultivecData(DataDeep):
 class OneOfFilter(FilterTransform):
     """OneOfFilter schema wrapper
 
-    Mapping(required=[type, field, oneOf])
+    Mapping(required=[field, oneOf, type])
 
     Attributes
     ----------
 
     field : string
-
+        A filter is applied based on the values of the specified data field
     oneOf : anyOf(List(string), List(float))
-
+        Check whether the value is an element in the provided list.
     type : string
 
     not : boolean
+        when `{"not": true}`, apply a NOT logical operation to the filter.
 
+        __Default:__ false
     """
     _schema = {'$ref': '#/definitions/OneOfFilter'}
     _rootschema = GoslingSchema._rootschema
@@ -1157,13 +1260,18 @@ class PartialTrack(GoslingSchema):
     ----------
 
     _invalidTrack : boolean
-
+        internal
     _renderingId : string
-
+        internal
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
     column : anyOf(:class:`Column`, :class:`ChannelValue`)
@@ -1177,27 +1285,29 @@ class PartialTrack(GoslingSchema):
     encoding : Mapping(required=[])
 
     endAngle : float
-
+        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     flipY : boolean
 
     height : float
-
+        Specify the track height in pixels.
     id : string
 
     innerRadius : float
-
+        Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     mark : :class:`Mark`
 
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     outerRadius : float
-
+        Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlay : List(Mapping(required=[]))
 
     overlayOnPreviousTrack : boolean
@@ -1205,17 +1315,23 @@ class PartialTrack(GoslingSchema):
     overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
-
+        internal
     row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     startAngle : float
-
+        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     stretch : boolean
 
     stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
@@ -1223,7 +1339,10 @@ class PartialTrack(GoslingSchema):
     strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     template : string
@@ -1231,13 +1350,13 @@ class PartialTrack(GoslingSchema):
     text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
-
+        If defined, will show the textual label on the left-top corner of a track.
     tooltip : List(:class:`Tooltip`)
 
     visibility : List(:class:`VisibilityCondition`)
 
     width : float
-
+        Specify the track width in pixels.
     x : anyOf(:class:`X`, :class:`ChannelValue`)
 
     x1 : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -1245,11 +1364,11 @@ class PartialTrack(GoslingSchema):
     x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
     y : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -1259,7 +1378,7 @@ class PartialTrack(GoslingSchema):
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     zoomLimits : :class:`ZoomLimits`
@@ -1329,19 +1448,21 @@ class PREDEFINED_COLORS(Range):
 class RangeFilter(FilterTransform):
     """RangeFilter schema wrapper
 
-    Mapping(required=[type, field, inRange])
+    Mapping(required=[field, inRange, type])
 
     Attributes
     ----------
 
     field : string
-
+        A filter is applied based on the values of the specified data field
     inRange : List(float)
-
+        Check whether the value is in a number range.
     type : string
 
     not : boolean
+        when `{"not": true}`, apply a NOT logical operation to the filter.
 
+        __Default:__ false
     """
     _schema = {'$ref': '#/definitions/RangeFilter'}
     _rootschema = GoslingSchema._rootschema
@@ -1359,39 +1480,53 @@ class RootSpecWithMultipleViews(GoslingSpec):
     ----------
 
     views : List(anyOf(:class:`SingleView`, :class:`MultipleViews`))
-
+        An array of view specifications
     arrangement : enum('parallel', 'serial', 'horizontal', 'vertical')
-
+        Specify how multiple views are arranged.
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     description : string
 
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     title : string
 
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
 
     """
@@ -1481,29 +1616,43 @@ class FlatTracks(SingleView):
     tracks : List(:class:`Track`)
 
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
 
     """
@@ -1532,19 +1681,24 @@ class OverlaidTracks(SingleView):
     alignment : string
 
     height : float
-
+        Specify the track height in pixels.
     tracks : List(:class:`PartialTrack`)
 
     width : float
-
+        Specify the track width in pixels.
     _invalidTrack : boolean
-
+        internal
     _renderingId : string
-
+        internal
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
     column : anyOf(:class:`Column`, :class:`ChannelValue`)
@@ -1556,41 +1710,49 @@ class OverlaidTracks(SingleView):
     displacement : :class:`Displacement`
 
     endAngle : float
-
+        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     flipY : boolean
 
     id : string
 
     innerRadius : float
-
+        Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     mark : :class:`Mark`
 
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     outerRadius : float
-
+        Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
 
     overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
-
+        internal
     row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     startAngle : float
-
+        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     stretch : boolean
 
     stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
@@ -1598,13 +1760,16 @@ class OverlaidTracks(SingleView):
     strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
-
+        If defined, will show the textual label on the left-top corner of a track.
     tooltip : List(:class:`Tooltip`)
 
     visibility : List(:class:`VisibilityCondition`)
@@ -1616,11 +1781,11 @@ class OverlaidTracks(SingleView):
     x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
     y : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -1630,7 +1795,7 @@ class OverlaidTracks(SingleView):
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     zoomLimits : :class:`ZoomLimits`
@@ -1717,15 +1882,20 @@ class StackedTracks(SingleView):
     tracks : List(anyOf(:class:`PartialTrack`, :class:`OverlaidTracks`))
 
     _invalidTrack : boolean
-
+        internal
     _renderingId : string
-
+        internal
     alignment : string
 
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
     column : anyOf(:class:`Column`, :class:`ChannelValue`)
@@ -1737,43 +1907,51 @@ class StackedTracks(SingleView):
     displacement : :class:`Displacement`
 
     endAngle : float
-
+        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     flipY : boolean
 
     height : float
-
+        Specify the track height in pixels.
     id : string
 
     innerRadius : float
-
+        Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     mark : :class:`Mark`
 
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     outerRadius : float
-
+        Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
 
     overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
-
+        internal
     row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     startAngle : float
-
+        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     stretch : boolean
 
     stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
@@ -1781,19 +1959,22 @@ class StackedTracks(SingleView):
     strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
-
+        If defined, will show the textual label on the left-top corner of a track.
     tooltip : List(:class:`Tooltip`)
 
     visibility : List(:class:`VisibilityCondition`)
 
     width : float
-
+        Specify the track width in pixels.
     x : anyOf(:class:`X`, :class:`ChannelValue`)
 
     x1 : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -1801,11 +1982,11 @@ class StackedTracks(SingleView):
     x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
     y : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -1815,7 +1996,7 @@ class StackedTracks(SingleView):
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     zoomLimits : :class:`ZoomLimits`
@@ -1978,47 +2159,57 @@ class Style(GoslingSchema):
     ----------
 
     align : enum('left', 'right')
-
+        Specify the alignment of marks. This property is currently only supported for
+        `triangle` marks.
     background : string
 
     backgroundOpacity : float
 
     bazierLink : boolean
-
+        Specify whether to use bazier curves for the `link` marks.
     circularLink : boolean
-
+        Deprecated: draw arc instead of bazier curve?
     curve : enum('top', 'bottom', 'left', 'right')
-
+        Specify the curve of `rule` marks.
     dashed : List([float, float])
-
+        Specify the pattern of dashes and gaps for `rule` marks.
     dx : float
-
+        Offset the position of marks in x direction. This property is currently only
+        supported for `text` marks
     dy : float
-
+        Offset the position of marks in y direction. This property is currently only
+        supported for `text` marks.
     enableSmoothPath : boolean
+        Whether to enable smooth paths when drawing curves.
 
+        __Default__: false
     inlineLegend : boolean
-
+        Specify whether to show legend in a single horizontal line?
     legendTitle : string
-
+        If defined, show legend title on the top or left
     linePattern : Mapping(required=[type, size])
-
+        Specify the pattern of dashes and gaps for `rule` marks.
     linkConnectionType : enum('straight', 'curve', 'corner')
+        Specify the connetion type of `betweenLink` marks.
 
+        __Default__: "corner"
     outline : string
 
     outlineWidth : float
 
     textAnchor : enum('start', 'middle', 'end')
-
+        Specify the alignment of `text` marks to a given point.
     textFontSize : float
-
+        Specify the font size of `text` marks. Can also be specified using the `size`
+        channel option of `text` marks.
     textFontWeight : enum('bold', 'normal')
-
+        Specify the font weight of `text` marks.
     textStroke : string
-
+        Specify the stroke of `text` marks. Can also be specified using the `stroke` channel
+        option of `text` marks.
     textStrokeWidth : float
-
+        Specify the stroke width of `text` marks. Can also be specified using the
+        `strokeWidth` channel option of `text` marks.
     """
     _schema = {'$ref': '#/definitions/Style'}
     _rootschema = GoslingSchema._rootschema
@@ -2115,55 +2306,71 @@ class DataTrack(Track):
     data : :class:`DataDeep`
 
     height : float
-
+        Specify the track height in pixels.
     width : float
-
+        Specify the track width in pixels.
     _invalidTrack : boolean
-
+        internal
     _renderingId : string
-
+        internal
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
-    endAngle : float
 
+        __Default:__ 0.3
+    endAngle : float
+        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     id : string
 
     innerRadius : float
-
+        Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     outerRadius : float
-
+        Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
 
     prerelease : Mapping(required=[])
-
+        internal
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     startAngle : float
-
+        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     title : string
-
+        If defined, will show the textual label on the left-top corner of a track.
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
 
     """
@@ -2200,19 +2407,24 @@ class OverlaidTrack(Track):
     ----------
 
     height : float
-
+        Specify the track height in pixels.
     overlay : List(Mapping(required=[]))
 
     width : float
-
+        Specify the track width in pixels.
     _invalidTrack : boolean
-
+        internal
     _renderingId : string
-
+        internal
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
     column : anyOf(:class:`Column`, :class:`ChannelValue`)
@@ -2224,41 +2436,49 @@ class OverlaidTrack(Track):
     displacement : :class:`Displacement`
 
     endAngle : float
-
+        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     flipY : boolean
 
     id : string
 
     innerRadius : float
-
+        Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     mark : :class:`Mark`
 
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     outerRadius : float
-
+        Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
 
     overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
-
+        internal
     row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     startAngle : float
-
+        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     stretch : boolean
 
     stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
@@ -2266,13 +2486,16 @@ class OverlaidTrack(Track):
     strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
-
+        If defined, will show the textual label on the left-top corner of a track.
     tooltip : List(:class:`Tooltip`)
 
     visibility : List(:class:`VisibilityCondition`)
@@ -2284,11 +2507,11 @@ class OverlaidTrack(Track):
     x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
     y : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -2298,7 +2521,7 @@ class OverlaidTrack(Track):
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     zoomLimits : :class:`ZoomLimits`
@@ -2351,19 +2574,24 @@ class SingleTrack(Track):
     data : :class:`DataDeep`
 
     height : float
-
+        Specify the track height in pixels.
     mark : :class:`Mark`
 
     width : float
-
+        Specify the track width in pixels.
     _invalidTrack : boolean
-
+        internal
     _renderingId : string
-
+        internal
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
 
     column : anyOf(:class:`Column`, :class:`ChannelValue`)
@@ -2373,39 +2601,47 @@ class SingleTrack(Track):
     displacement : :class:`Displacement`
 
     endAngle : float
-
+        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     flipY : boolean
 
     id : string
 
     innerRadius : float
-
+        Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     outerRadius : float
-
+        Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
 
     overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
-
+        internal
     row : anyOf(:class:`Row`, :class:`ChannelValue`)
 
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     startAngle : float
-
+        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     stretch : boolean
 
     stroke : anyOf(:class:`Stroke`, :class:`ChannelValue`)
@@ -2413,13 +2649,16 @@ class SingleTrack(Track):
     strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     text : anyOf(:class:`Text`, :class:`ChannelValue`)
 
     title : string
-
+        If defined, will show the textual label on the left-top corner of a track.
     tooltip : List(:class:`Tooltip`)
 
     visibility : List(:class:`VisibilityCondition`)
@@ -2431,11 +2670,11 @@ class SingleTrack(Track):
     x1e : anyOf(:class:`X`, :class:`ChannelValue`)
 
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
 
     y : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -2445,7 +2684,7 @@ class SingleTrack(Track):
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
 
     zoomLimits : :class:`ZoomLimits`
@@ -2490,7 +2729,7 @@ class TemplateTrack(Track):
     """TemplateTrack schema wrapper
 
     Mapping(required=[data, height, template, width])
-    Template specification that will be internally converted into `SingleTrack` for rendering
+    Template specification that will be internally converted into `SingleTrack` for rendering.
 
     Attributes
     ----------
@@ -2498,59 +2737,75 @@ class TemplateTrack(Track):
     data : :class:`DataDeep`
 
     height : float
-
+        Specify the track height in pixels.
     template : string
 
     width : float
-
+        Specify the track width in pixels.
     _invalidTrack : boolean
-
+        internal
     _renderingId : string
-
+        internal
     assembly : :class:`Assembly`
+        A string that specifies the genome builds to use. Currently support `"hg38"`,
+        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
+        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
     centerRadius : float
         Proportion of the radius of the center white space.
+
+        __Default:__ 0.3
     encoding : Mapping(required=[])
 
     endAngle : float
-
+        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     id : string
 
     innerRadius : float
-
+        Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
-
+        Specify the layout type of all tracks.
     linkingId : string
-
+        Specify an ID for [linking multiple
+        views](http://gosling-lang.org/docs/user-interaction#linking-views)
     orientation : :class:`Orientation`
-
+        Specify the orientation.
     outerRadius : float
-
+        Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
 
     prerelease : Mapping(required=[])
-
+        internal
     spacing : float
+        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
+        - If `{"layout": "circular"}`, specify the space between tracks in percentage
+        ranging from 0 to 100.
     startAngle : float
-
+        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
+        "circular"}`).
     static : boolean
-
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
     style : :class:`Style`
-
+        Define the
+        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
+        multive views. Will be overriden by the style of children elements (e.g., view,
+        track).
     subtitle : string
 
     title : string
-
+        If defined, will show the textual label on the left-top corner of a track.
     xAxis : :class:`AxisPosition`
-
+        not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
 
     xOffset : float
-
+        Specify the x offset of views in the unit of pixels
     yOffset : float
-
+        Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
 
     """
@@ -2595,24 +2850,27 @@ class VectorData(DataDeep):
     """VectorData schema wrapper
 
     Mapping(required=[type, url, column, value])
+    One-dimensional quantitative values along genomic position (e.g., bigwig) can be converted
+    into HiGlass' `"vector"` format data. Find out more about this format at [HiGlass
+    Docs](https://docs.higlass.io/data_preparation.html#bigwig-files).
 
     Attributes
     ----------
 
     column : string
-
+        Assign a field name of the middle position of genomic intervals.
     type : string
 
     url : string
-
+        Specify the URL address of the data file.
     value : string
-
+        Assign a field name of quantitative values.
     binSize : float
-
+        Binning the genomic interval in tiles (unit size: 256).
     end : string
-
+        Assign a field name of the end position of genomic intervals.
     start : string
-
+        Assign a field name of the start position of genomic intervals.
     """
     _schema = {'$ref': '#/definitions/VectorData'}
     _rootschema = GoslingSchema._rootschema
@@ -2644,17 +2902,35 @@ class SizeVisibilityCondition(VisibilityCondition):
     ----------
 
     measure : enum('width', 'height')
-
+        Specify which aspect of the `target` will be compared to the `threshold`.
     operation : :class:`LogicalOperation`
+        A string that pecifies the logical operation to conduct between `threshold` and the
+        `measure` of `target`. Support
 
+        - greater than : "greater-than", "gt", "GT"
+
+        - less than : "less-than", "lt", "LT"
+
+        - greater than or equal to : "greater-than-or-equal-to", "gtet", "GTET"
+
+        - less than or equal to : "less-than-or-equal-to", "ltet", "LTET"
     target : enum('track', 'mark')
-
+        Target specifies the object that you want to compare with the threshold.
     threshold : anyOf(float, string)
+        Specify the threshold as one of:
 
+        - A number representing a fixed threshold in the unit of pixels;
+
+        - `"|xe-x|"`, using the distance between `xe` and `x` as threshold
     conditionPadding : float
+        Specify the buffer size (in pixel) of width or height when calculating the
+        visibility.
 
+        __Default__: 0
     transitionPadding : float
+        Specify the buffer size (in pixel) of width or height for smooth transition.
 
+        __Default__: 0
     """
     _schema = {'$ref': '#/definitions/SizeVisibilityCondition'}
     _rootschema = GoslingSchema._rootschema
@@ -2763,17 +3039,31 @@ class ZoomLevelVisibilityCondition(VisibilityCondition):
     ----------
 
     measure : string
-
+        Specify which aspect of the `target` will be compared to the `threshold`.
     operation : :class:`LogicalOperation`
+        A string that pecifies the logical operation to conduct between `threshold` and the
+        `measure` of `target`. Support
 
+        - greater than : "greater-than", "gt", "GT"
+
+        - less than : "less-than", "lt", "LT"
+
+        - greater than or equal to : "greater-than-or-equal-to", "gtet", "GTET"
+
+        - less than or equal to : "less-than-or-equal-to", "ltet", "LTET"
     target : enum('track', 'mark')
-
+        Target specifies the object that you want to compare with the threshold.
     threshold : float
-
+        Set a threshold in the unit of base pairs (bp)
     conditionPadding : float
+        Specify the buffer size (in pixel) of width or height when calculating the
+        visibility.
 
+        __Default__: 0
     transitionPadding : float
+        Specify the buffer size (in pixel) of width or height for smooth transition.
 
+        __Default__: 0
     """
     _schema = {'$ref': '#/definitions/ZoomLevelVisibilityCondition'}
     _rootschema = GoslingSchema._rootschema
