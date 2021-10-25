@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, Set
 from gosling.schema import SCHEMA_VERSION
 import json
 import uuid
@@ -153,40 +153,43 @@ renderers.register("kaggle", html_renderer)
 renderers.register("zeppelin", html_renderer)
 renderers.enable("default")
 
-THEMES = {
-    "light",
-    "dark",
-    "warm",
-    "ggplot",
-    "igv",
-    "ensembl",
-    "jbrowse",
-    "ucsc",
-    "washu",
-    "excel",
-    "google",
-}
-
 
 @dataclass
 class ThemesRegistry:
+    themes: Set[str]
     custom_themes: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     active: Optional[str] = None
 
     def register(self, name: str, theme: Dict[str, Any]):
-        assert name not in THEMES, f"cannot override built-in themes, {THEMES}"
+        assert (
+            name not in self.themes
+        ), f"cannot override built-in themes, {self.themes}"
         self.custom_themes[name] = theme
 
     def enable(self, name: str):
         assert (
-            name in self.custom_themes or name in THEMES
-        ), f"theme must be one of {THEMES}."
+            name in self.custom_themes or name in self.themes
+        ), f"theme must be one of {self.themes} or {set(self.custom_themes.keys())}."
         self.active = name
 
     def get(self):
-        if self.active in THEMES or self.active is None:
+        if self.active in self.themes or self.active is None:
             return self.active
         return self.custom_themes[self.active]
 
 
-themes = ThemesRegistry()
+themes = ThemesRegistry(
+    {
+        "light",
+        "dark",
+        "warm",
+        "ggplot",
+        "igv",
+        "ensembl",
+        "jbrowse",
+        "ucsc",
+        "washu",
+        "excel",
+        "google",
+    }
+)
