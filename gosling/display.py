@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 from gosling.schema import SCHEMA_VERSION
 import json
 import uuid
@@ -91,7 +91,7 @@ def spec_to_html(
     embed_options=None,
     json_kwds=None,
 ):
-    embed_options = embed_options or dict(padding=0, theme=themes.active)
+    embed_options = embed_options or dict(padding=0, theme=themes.get())
     json_kwds = json_kwds or {}
 
     return HTML_TEMPLATE.render(
@@ -145,7 +145,6 @@ class RendererRegistry:
 
 
 html_renderer = HTMLRenderer()
-
 renderers = RendererRegistry()
 renderers.register("default", html_renderer)
 renderers.register("html", html_renderer)
@@ -154,8 +153,7 @@ renderers.register("kaggle", html_renderer)
 renderers.register("zeppelin", html_renderer)
 renderers.enable("default")
 
-
-supported_themes = {
+THEMES = {
     "light",
     "dark",
     "warm",
@@ -171,12 +169,24 @@ supported_themes = {
 
 
 @dataclass
-class Themes:
+class ThemesRegistry:
+    custom_themes: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     active: Optional[str] = None
 
+    def register(self, name: str, theme: Dict[str, Any]):
+        assert name not in THEMES, f"cannot override built-in themes, {THEMES}"
+        self.custom_themes[name] = theme
+
     def enable(self, name: str):
-        assert name in supported_themes, f"theme must be one of {supported_themes}."
+        assert (
+            name in self.custom_themes or name in THEMES
+        ), f"theme must be one of {THEMES}."
         self.active = name
 
+    def get(self):
+        if self.active in THEMES or self.active is None:
+            return self.active
+        return self.custom_themes[self.active]
 
-themes = Themes()
+
+themes = ThemesRegistry()
