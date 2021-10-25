@@ -91,7 +91,7 @@ def spec_to_html(
     embed_options=None,
     json_kwds=None,
 ):
-    embed_options = embed_options or dict(padding=0)
+    embed_options = embed_options or dict(padding=0, theme=themes.active)
     json_kwds = json_kwds or {}
 
     return HTML_TEMPLATE.render(
@@ -153,3 +153,30 @@ renderers.register("colab", html_renderer)
 renderers.register("kaggle", html_renderer)
 renderers.register("zeppelin", html_renderer)
 renderers.enable("default")
+
+
+supported_themes = {
+    "light",
+    "dark",
+    "warm",
+    "ggplot",
+    "igv",
+    "ensembl",
+    "jbrowse",
+    "ucsc",
+    "washu",
+    "excel",
+    "google",
+}
+
+
+@dataclass
+class Themes:
+    active: Optional[str] = None
+
+    def enable(self, name: str):
+        assert name in supported_themes, f"theme must be one of {supported_themes}."
+        self.active = name
+
+
+themes = Themes()

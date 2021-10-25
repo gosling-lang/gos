@@ -2,7 +2,7 @@ import pandas as pd
 
 from gosling.schema import *
 from gosling.api import *
-from gosling.display import renderers
+from gosling.display import renderers, themes
 from gosling.data import (
     GoslingDataServer,
     data_server,
