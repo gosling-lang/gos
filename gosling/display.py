@@ -175,7 +175,9 @@ class ThemesRegistry:
         self.active = name
 
     def get(self) -> Union[None, str, CustomTheme]:
-        if self.active in self.themes or self.active is None:
+        if self.active is None:
+            return None
+        if self.active in self.themes: 
             return self.active
         return self.custom_themes[self.active]
 
