@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Any, Set
+from typing import Dict, Optional, Any, Set, Union
 from gosling.schema import SCHEMA_VERSION
 import json
 import uuid
@@ -79,24 +79,24 @@ HTML_TEMPLATE = jinja2.Template(
 """
 )
 
+GoslingSpec = Dict[str, Any]
+
 
 def spec_to_html(
-    spec,
-    gosling_version=SCHEMA_VERSION.lstrip("v"),
-    higlass_version="1.11",
-    react_version="17",
-    pixijs_version="6",
-    base_url="https://unpkg.com",
-    output_div="vis",
-    embed_options=None,
-    json_kwds=None,
+    spec: GoslingSpec,
+    gosling_version: str = SCHEMA_VERSION.lstrip("v"),
+    higlass_version: str = "1.11",
+    react_version: str = "17",
+    pixijs_version: str = "6",
+    base_url: str = "https://unpkg.com",
+    output_div: str = "vis",
+    embed_options: Dict[str, Any] = None,
 ):
     embed_options = embed_options or dict(padding=0, theme=themes.get())
-    json_kwds = json_kwds or {}
 
     return HTML_TEMPLATE.render(
-        spec=json.dumps(spec, **json_kwds),
-        embed_options=json.dumps(embed_options, **json_kwds),
+        spec=json.dumps(spec),
+        embed_options=json.dumps(embed_options),
         gosling_version=gosling_version,
         higlass_version=higlass_version,
         react_version=react_version,
@@ -106,40 +106,40 @@ def spec_to_html(
     )
 
 
-class BaseRenderer:
-    def __init__(self, output_div="jupyter-gosling-{}", **kwargs):
+class Renderer:
+    def __init__(self, output_div: str = "jupyter-gosling-{}", **kwargs: Any):
         self._output_div = output_div
         self.kwargs = kwargs
 
     @property
-    def output_div(self):
+    def output_div(self) -> str:
         return self._output_div.format(uuid.uuid4().hex)
 
-    def __call__(self, spec, **metadata):
+    def __call__(self, spec: GoslingSpec, **meta: Any) -> Dict[str, Any]:
         raise NotImplementedError()
 
 
-class HTMLRenderer(BaseRenderer):
-    def __call__(self, spec, **metadata):
+class HTMLRenderer(Renderer):
+    def __call__(self, spec: GoslingSpec, **meta: Any):
         kwargs = self.kwargs.copy()
-        kwargs.update(metadata)
+        kwargs.update(meta)
         html = spec_to_html(spec=spec, output_div=self.output_div, **kwargs)
         return {"text/html": html}
 
 
 @dataclass
 class RendererRegistry:
-    renderers: Dict[str, BaseRenderer] = field(default_factory=dict)
+    renderers: Dict[str, Renderer] = field(default_factory=dict)
     active: Optional[str] = None
 
-    def register(self, name: str, renderer: BaseRenderer):
+    def register(self, name: str, renderer: Renderer) -> None:
         self.renderers[name] = renderer
 
-    def enable(self, name: str):
+    def enable(self, name: str) -> None:
         assert name in self.renderers
         self.active = name
 
-    def get(self):
+    def get(self) -> Renderer:
         assert isinstance(self.active, str) and self.active in self.renderers
         return self.renderers[self.active]
 
@@ -153,26 +153,28 @@ renderers.register("kaggle", html_renderer)
 renderers.register("zeppelin", html_renderer)
 renderers.enable("default")
 
+CustomTheme = Dict[str, Any]
+
 
 @dataclass
 class ThemesRegistry:
     themes: Set[str]
-    custom_themes: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    custom_themes: Dict[str, CustomTheme] = field(default_factory=dict)
     active: Optional[str] = None
 
-    def register(self, name: str, theme: Dict[str, Any]):
+    def register(self, name: str, theme: CustomTheme) -> None:
         assert (
             name not in self.themes
         ), f"cannot override built-in themes, {self.themes}"
         self.custom_themes[name] = theme
 
-    def enable(self, name: str):
+    def enable(self, name: str) -> None:
         assert (
             name in self.custom_themes or name in self.themes
         ), f"theme must be one of {self.themes} or {set(self.custom_themes.keys())}."
         self.active = name
 
-    def get(self):
+    def get(self) -> Union[None, str, CustomTheme]:
         if self.active in self.themes or self.active is None:
             return self.active
         return self.custom_themes[self.active]
