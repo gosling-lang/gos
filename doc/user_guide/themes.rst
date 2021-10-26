@@ -29,7 +29,7 @@ theme from scratch, and registering it globally.
 
     import gosling as gosling
 
-    my_theme = { "base": "dark", "axis": { "baselineColor": "green" }
+    my_theme = { "base": "dark", "axis": { "baselineColor": "green" } }
     gos.themes.register("my-theme", my_theme) # add theme to registry
     gos.themes.enable("my-theme") # enable custom theme
 
