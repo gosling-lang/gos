@@ -5,8 +5,7 @@
 Themes
 ======
 
-Themes modify the look of Gosling visualizations. To enable themes with **gos**, use
-the :code:`gos.themes` namespace:
+To enable themes with **gos**, use the :code:`gos.themes` registry:
 
 .. code-block:: python
 
@@ -16,14 +15,14 @@ the :code:`gos.themes` namespace:
     gos.Track(...).encode(...).view()
 
 
-You can explore built-in themes in the `Theme Playground`_.
+You can explore the available built-in themes in the `Theme Playground`_.
 
 
 Custom Themes
 =============
 
-A custom theme may be specified by modifying by existing built-in theme, or creating a 
-theme from scratch, and registering it globally.
+A custom theme may be specified by extending an existing built-in theme, or creating a 
+theme from scratch, and adding it to the :code:`gos.themes` registry.
 
 .. code-block:: python
 
