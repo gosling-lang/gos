@@ -400,6 +400,7 @@ def main(skip_download: Optional[bool] = False):
     )
 
     # extract theme names
+    # TODO(2021-11-01): Use same version as schema, not latest. Should be able to remove for >= v0.9.9
     with request.urlopen(theme_url(library, version="master")) as f:
         themes_schema = json.loads(f.read())
         themes = set(themes_schema["definitions"]["ThemeType"]["enum"])
