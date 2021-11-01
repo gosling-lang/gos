@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Any, Set, Union
-from gosling.schema import SCHEMA_VERSION
+from gosling.schema import SCHEMA_VERSION, THEMES
 import json
 import uuid
 
@@ -182,18 +182,4 @@ class ThemesRegistry:
         return self.custom_themes[self.active]
 
 
-themes = ThemesRegistry(
-    {
-        "light",
-        "dark",
-        "warm",
-        "ggplot",
-        "igv",
-        "ensembl",
-        "jbrowse",
-        "ucsc",
-        "washu",
-        "excel",
-        "google",
-    }
-)
+themes = ThemesRegistry(THEMES)

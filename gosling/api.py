@@ -2,8 +2,8 @@ from typing import Iterable, TypeVar, Union
 import pathlib
 
 from gosling.schema import Undefined, channels, core, mixins
-from gosling.display import renderers, spec_to_html
 import gosling.utils as utils
+import gosling.display as display
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 180
@@ -187,7 +187,7 @@ class View(_PropertiesMixin, core.Root):
 
     def _repr_mimebundle_(self, include=None, exclude=None):
         dct = self.to_dict()
-        renderer = renderers.get()
+        renderer = display.renderers.get()
         return renderer(dct) if renderer else {}
 
     def display(self):
@@ -198,8 +198,9 @@ class View(_PropertiesMixin, core.Root):
 
     def save(self, path: Union[pathlib.Path, str]):
         spec = self.to_dict()
+        html_str = display.spec_to_html(spec)
         with open(path, mode="w") as f:
-            f.write(spec_to_html(spec))
+            f.write(html_str)
 
 
 # View utilities
