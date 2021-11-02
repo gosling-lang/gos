@@ -135,17 +135,23 @@ class ValueSchemaGenerator(codegen.SchemaGenerator):
     )
 
 
-SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/schema/{filename}"
+GOSLING_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/schema/{filename}"
+
 
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
 
 
 def schema_url(library: str, version: str):
-    return SCHEMA_URL_TEMPLATE.format(library=library, version=version, filename='gosling.schema.json')
+    return GOSLING_URL_TEMPLATE.format(
+        library=library, version=version, filename="gosling.schema.json"
+    )
+
 
 def theme_url(library: str, version: str):
-    return SCHEMA_URL_TEMPLATE.format(library=library, version=version, filename='theme.schema.json')
+    return GOSLING_URL_TEMPLATE.format(
+        library=library, version=version, filename="theme.schema.json"
+    )
 
 
 def download_schemafile(
@@ -339,9 +345,7 @@ def mark_{mark}({def_arglist}) -> T:
 '''
 
 
-def generate_mark_mixin(
-    schemafile: pathlib.Path, mark_enum: str, style_def: str
-):
+def generate_mark_mixin(schemafile: pathlib.Path, mark_enum: str, style_def: str):
     with open(schemafile, encoding="utf8") as f:
         schema = json.load(f)
 
@@ -415,7 +419,6 @@ def main(skip_download: Optional[bool] = False):
         f.write(f"SCHEMA_VERSION = {repr(version)}\n")
         f.write(f"SCHEMA_URL = {repr(schema_url(library, version))}\n")
         f.write(f"THEMES = {repr(themes)}\n")
-
 
     # Generate the core schema wrappers
     outfile = schemapath / "core.py"
