@@ -135,14 +135,17 @@ class ValueSchemaGenerator(codegen.SchemaGenerator):
     )
 
 
-SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/schema/gosling.schema.json"
+SCHEMA_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/schema/{filename}"
 
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
 
 
 def schema_url(library: str, version: str):
-    return SCHEMA_URL_TEMPLATE.format(library=library, version=version)
+    return SCHEMA_URL_TEMPLATE.format(library=library, version=version, filename='gosling.schema.json')
+
+def theme_url(library: str, version: str):
+    return SCHEMA_URL_TEMPLATE.format(library=library, version=version, filename='theme.schema.json')
 
 
 def download_schemafile(
@@ -396,6 +399,12 @@ def main(skip_download: Optional[bool] = False):
         skip_download=skip_download,
     )
 
+    # extract theme names
+    # TODO(2021-11-01): Use same version as schema, not latest. Should be able to remove for >= v0.9.9
+    with request.urlopen(theme_url(library, version="master")) as f:
+        themes_schema = json.loads(f.read())
+        themes = set(themes_schema["definitions"]["ThemeType"]["enum"])
+
     # Generate __init__.py file
     outfile = schemapath / "__init__.py"
     print(f"Writing {outfile}")
@@ -403,8 +412,10 @@ def main(skip_download: Optional[bool] = False):
         f.write("# flake8: noqa\n")
         f.write("from .core import *\n")
         f.write("from .channels import *\n")
-        f.write(f"SCHEMA_VERSION = {version!r}\n")
-        f.write(f"SCHEMA_URL = {schema_url(library, version)!r}\n")
+        f.write(f"SCHEMA_VERSION = {repr(version)}\n")
+        f.write(f"SCHEMA_URL = {repr(schema_url(library, version))}\n")
+        f.write(f"THEMES = {repr(themes)}\n")
+
 
     # Generate the core schema wrappers
     outfile = schemapath / "core.py"
