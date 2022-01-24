@@ -410,7 +410,7 @@ def generate_mark_mixin(schemafile: pathlib.Path, mark_enum: str, style_def: str
 
 def main(skip_download: Optional[bool] = False):
     library = "gosling.js"
-    version = "v0.9.4"
+    version = "v0.9.14"
 
     schemapath = here.parent / ".." / "gosling" / "schema"
     schemafile = download_schemafile(
@@ -457,7 +457,7 @@ def main(skip_download: Optional[bool] = False):
     print("Generating\n {}\n  ->{}".format(schemafile, outfile))
     mark_imports, mark_mixin = generate_mark_mixin(
         schemafile,
-        mark_enum="MarkType",
+        mark_enum="Mark",
         style_def="Style",
     )
     imports = sorted(set(mark_imports))

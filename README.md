@@ -69,7 +69,7 @@ gos.vertical(heatmap, bars, lines).properties(
     subtitle="Gosling provides diverse visual encoding methods",
     layout="linear",
     centerRadius=0.8,
-    xDomain=gos.Domain(chromosome="1", interval=[1, 3000500]),
+    xDomain=gos.GenomicDomain(chromosome="1", interval=[1, 3000500]),
 )
 ```
 

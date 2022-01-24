@@ -78,29 +78,25 @@ class Color(FieldChannelMixin, core.Color):
 
     shorthand : string
         shorthand for field, aggregate, and type
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     range : :class:`Range`
-
+        Determine the colors that should be bound to data value. Default properties are
+        determined considering the field type.
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "color"
 
-    def __init__(self, shorthand=Undefined, baseline=Undefined, domain=Undefined, field=Undefined,
-                 legend=Undefined, range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Color, self).__init__(shorthand=shorthand, baseline=baseline, domain=domain, field=field,
-                                    legend=legend, range=range, type=type, zeroBaseline=zeroBaseline,
-                                    **kwds)
+    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
+                 range=Undefined, type=Undefined, **kwds):
+        super(Color, self).__init__(shorthand=shorthand, domain=domain, field=field, legend=legend,
+                                    range=range, type=type, **kwds)
 
 
 class ColorValue(ValueChannelMixin, core.ChannelValue):
@@ -112,59 +108,13 @@ class ColorValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "color"
 
     def __init__(self, value, **kwds):
         super(ColorValue, self).__init__(value=value, **kwds)
-
-
-class Column(FieldChannelMixin, core.Column):
-    """Column schema wrapper
-
-    Mapping(required=[shorthand])
-
-    Attributes
-    ----------
-
-    shorthand : string
-        shorthand for field, aggregate, and type
-    domain : :class:`ValueExtent`
-
-    field : string
-
-    range : :class:`ValueExtent`
-
-    type : string
-
-    """
-    _class_is_valid_at_instantiation = False
-    _encoding_name = "column"
-
-    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, range=Undefined,
-                 type=Undefined, **kwds):
-        super(Column, self).__init__(shorthand=shorthand, domain=domain, field=field, range=range,
-                                     type=type, **kwds)
-
-
-class ColumnValue(ValueChannelMixin, core.ChannelValue):
-    """ColumnValue schema wrapper
-
-    Mapping(required=[value])
-
-    Attributes
-    ----------
-
-    value : anyOf(float, string)
-
-    """
-    _class_is_valid_at_instantiation = False
-    _encoding_name = "column"
-
-    def __init__(self, value, **kwds):
-        super(ColumnValue, self).__init__(value=value, **kwds)
 
 
 class Opacity(FieldChannelMixin, core.Opacity):
@@ -177,27 +127,22 @@ class Opacity(FieldChannelMixin, core.Opacity):
 
     shorthand : string
         shorthand for field, aggregate, and type
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : :class:`ValueExtent`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "opacity"
 
-    def __init__(self, shorthand=Undefined, baseline=Undefined, domain=Undefined, field=Undefined,
-                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Opacity, self).__init__(shorthand=shorthand, baseline=baseline, domain=domain,
-                                      field=field, range=range, type=type, zeroBaseline=zeroBaseline,
-                                      **kwds)
+    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, range=Undefined,
+                 type=Undefined, **kwds):
+        super(Opacity, self).__init__(shorthand=shorthand, domain=domain, field=field, range=range,
+                                      type=type, **kwds)
 
 
 class OpacityValue(ValueChannelMixin, core.ChannelValue):
@@ -209,7 +154,7 @@ class OpacityValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "opacity"
@@ -229,19 +174,21 @@ class Row(FieldChannelMixin, core.Row):
     shorthand : string
         shorthand for field, aggregate, and type
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     padding : float
-
+        Determines the size of inner white spaces on the top and bottom of individiual rows.
+        __Default__: `0`
     range : :class:`ValueExtent`
-
+        Determine the start and end position of rendering area of this track along vertical
+        axis. __Default__: `[0, height]`
     type : string
-
+        Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "row"
@@ -261,7 +208,7 @@ class RowValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "row"
@@ -280,29 +227,24 @@ class Size(FieldChannelMixin, core.Size):
 
     shorthand : string
         shorthand for field, aggregate, and type
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     legend : boolean
-
+        not supported: Whether to display legend. __Default__: `false`
     range : :class:`ValueExtent`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "size"
 
-    def __init__(self, shorthand=Undefined, baseline=Undefined, domain=Undefined, field=Undefined,
-                 legend=Undefined, range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Size, self).__init__(shorthand=shorthand, baseline=baseline, domain=domain, field=field,
-                                   legend=legend, range=range, type=type, zeroBaseline=zeroBaseline,
-                                   **kwds)
+    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
+                 range=Undefined, type=Undefined, **kwds):
+        super(Size, self).__init__(shorthand=shorthand, domain=domain, field=field, legend=legend,
+                                   range=range, type=type, **kwds)
 
 
 class SizeValue(ValueChannelMixin, core.ChannelValue):
@@ -314,7 +256,7 @@ class SizeValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "size"
@@ -333,26 +275,22 @@ class Stroke(FieldChannelMixin, core.Stroke):
 
     shorthand : string
         shorthand for field, aggregate, and type
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : :class:`Range`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "stroke"
 
-    def __init__(self, shorthand=Undefined, baseline=Undefined, domain=Undefined, field=Undefined,
-                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Stroke, self).__init__(shorthand=shorthand, baseline=baseline, domain=domain, field=field,
-                                     range=range, type=type, zeroBaseline=zeroBaseline, **kwds)
+    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, range=Undefined,
+                 type=Undefined, **kwds):
+        super(Stroke, self).__init__(shorthand=shorthand, domain=domain, field=field, range=range,
+                                     type=type, **kwds)
 
 
 class StrokeValue(ValueChannelMixin, core.ChannelValue):
@@ -364,7 +302,7 @@ class StrokeValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "stroke"
@@ -383,27 +321,22 @@ class StrokeWidth(FieldChannelMixin, core.StrokeWidth):
 
     shorthand : string
         shorthand for field, aggregate, and type
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : :class:`ValueExtent`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "strokeWidth"
 
-    def __init__(self, shorthand=Undefined, baseline=Undefined, domain=Undefined, field=Undefined,
-                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(StrokeWidth, self).__init__(shorthand=shorthand, baseline=baseline, domain=domain,
-                                          field=field, range=range, type=type,
-                                          zeroBaseline=zeroBaseline, **kwds)
+    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, range=Undefined,
+                 type=Undefined, **kwds):
+        super(StrokeWidth, self).__init__(shorthand=shorthand, domain=domain, field=field, range=range,
+                                          type=type, **kwds)
 
 
 class StrokeWidthValue(ValueChannelMixin, core.ChannelValue):
@@ -415,7 +348,7 @@ class StrokeWidthValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "strokeWidth"
@@ -435,13 +368,13 @@ class Text(FieldChannelMixin, core.Text):
     shorthand : string
         shorthand for field, aggregate, and type
     domain : List(string)
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : List(string)
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
+        Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "text"
@@ -461,7 +394,7 @@ class TextValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "text"
@@ -481,23 +414,25 @@ class X(FieldChannelMixin, core.X):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     domain : :class:`GenomicDomain`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : string
-
+        Specify the data type.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "x"
@@ -519,7 +454,7 @@ class XValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "x"
@@ -539,23 +474,25 @@ class X1(FieldChannelMixin, core.X):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     domain : :class:`GenomicDomain`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : string
-
+        Specify the data type.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "x1"
@@ -577,7 +514,7 @@ class X1Value(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "x1"
@@ -597,23 +534,25 @@ class X1e(FieldChannelMixin, core.X):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     domain : :class:`GenomicDomain`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : string
-
+        Specify the data type.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "x1e"
@@ -635,7 +574,7 @@ class X1eValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "x1e"
@@ -655,23 +594,25 @@ class Xe(FieldChannelMixin, core.X):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     domain : :class:`GenomicDomain`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : string
-
+        Specify the data type.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "xe"
@@ -693,7 +634,7 @@ class XeValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "xe"
@@ -713,45 +654,43 @@ class Y(FieldChannelMixin, core.Y):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     baseline : anyOf(string, float)
-
+        Custom baseline of the y-axis. __Default__: `0`
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     flip : boolean
-
+        Whether to flip the y-axis. This is done by inverting the `range` property.
+        __Default__: `false`
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
-    mirrored : boolean
-
-    padding : float
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : enum('quantitative', 'nominal', 'genomic')
-
+        Specify the data type.
     zeroBaseline : boolean
-
+        Specify whether to use zero baseline. __Default__: `true`
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "y"
 
     def __init__(self, shorthand=Undefined, aggregate=Undefined, axis=Undefined, baseline=Undefined,
                  domain=Undefined, field=Undefined, flip=Undefined, grid=Undefined, legend=Undefined,
-                 linkingId=Undefined, mirrored=Undefined, padding=Undefined, range=Undefined,
-                 type=Undefined, zeroBaseline=Undefined, **kwds):
+                 linkingId=Undefined, range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
         super(Y, self).__init__(shorthand=shorthand, aggregate=aggregate, axis=axis, baseline=baseline,
                                 domain=domain, field=field, flip=flip, grid=grid, legend=legend,
-                                linkingId=linkingId, mirrored=mirrored, padding=padding, range=range,
-                                type=type, zeroBaseline=zeroBaseline, **kwds)
+                                linkingId=linkingId, range=range, type=type, zeroBaseline=zeroBaseline,
+                                **kwds)
 
 
 class YValue(ValueChannelMixin, core.ChannelValue):
@@ -763,7 +702,7 @@ class YValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "y"
@@ -783,45 +722,43 @@ class Y1(FieldChannelMixin, core.Y):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     baseline : anyOf(string, float)
-
+        Custom baseline of the y-axis. __Default__: `0`
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     flip : boolean
-
+        Whether to flip the y-axis. This is done by inverting the `range` property.
+        __Default__: `false`
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
-    mirrored : boolean
-
-    padding : float
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : enum('quantitative', 'nominal', 'genomic')
-
+        Specify the data type.
     zeroBaseline : boolean
-
+        Specify whether to use zero baseline. __Default__: `true`
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "y1"
 
     def __init__(self, shorthand=Undefined, aggregate=Undefined, axis=Undefined, baseline=Undefined,
                  domain=Undefined, field=Undefined, flip=Undefined, grid=Undefined, legend=Undefined,
-                 linkingId=Undefined, mirrored=Undefined, padding=Undefined, range=Undefined,
-                 type=Undefined, zeroBaseline=Undefined, **kwds):
+                 linkingId=Undefined, range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
         super(Y1, self).__init__(shorthand=shorthand, aggregate=aggregate, axis=axis, baseline=baseline,
                                  domain=domain, field=field, flip=flip, grid=grid, legend=legend,
-                                 linkingId=linkingId, mirrored=mirrored, padding=padding, range=range,
-                                 type=type, zeroBaseline=zeroBaseline, **kwds)
+                                 linkingId=linkingId, range=range, type=type, zeroBaseline=zeroBaseline,
+                                 **kwds)
 
 
 class Y1Value(ValueChannelMixin, core.ChannelValue):
@@ -833,7 +770,7 @@ class Y1Value(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "y1"
@@ -853,46 +790,43 @@ class Y1e(FieldChannelMixin, core.Y):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     baseline : anyOf(string, float)
-
+        Custom baseline of the y-axis. __Default__: `0`
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     flip : boolean
-
+        Whether to flip the y-axis. This is done by inverting the `range` property.
+        __Default__: `false`
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
-    mirrored : boolean
-
-    padding : float
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : enum('quantitative', 'nominal', 'genomic')
-
+        Specify the data type.
     zeroBaseline : boolean
-
+        Specify whether to use zero baseline. __Default__: `true`
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "y1e"
 
     def __init__(self, shorthand=Undefined, aggregate=Undefined, axis=Undefined, baseline=Undefined,
                  domain=Undefined, field=Undefined, flip=Undefined, grid=Undefined, legend=Undefined,
-                 linkingId=Undefined, mirrored=Undefined, padding=Undefined, range=Undefined,
-                 type=Undefined, zeroBaseline=Undefined, **kwds):
+                 linkingId=Undefined, range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
         super(Y1e, self).__init__(shorthand=shorthand, aggregate=aggregate, axis=axis,
                                   baseline=baseline, domain=domain, field=field, flip=flip, grid=grid,
-                                  legend=legend, linkingId=linkingId, mirrored=mirrored,
-                                  padding=padding, range=range, type=type, zeroBaseline=zeroBaseline,
-                                  **kwds)
+                                  legend=legend, linkingId=linkingId, range=range, type=type,
+                                  zeroBaseline=zeroBaseline, **kwds)
 
 
 class Y1eValue(ValueChannelMixin, core.ChannelValue):
@@ -904,7 +838,7 @@ class Y1eValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "y1e"
@@ -924,45 +858,43 @@ class Ye(FieldChannelMixin, core.Y):
     shorthand : string
         shorthand for field, aggregate, and type
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     baseline : anyOf(string, float)
-
+        Custom baseline of the y-axis. __Default__: `0`
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     flip : boolean
-
+        Whether to flip the y-axis. This is done by inverting the `range` property.
+        __Default__: `false`
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
-    mirrored : boolean
-
-    padding : float
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : enum('quantitative', 'nominal', 'genomic')
-
+        Specify the data type.
     zeroBaseline : boolean
-
+        Specify whether to use zero baseline. __Default__: `true`
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "ye"
 
     def __init__(self, shorthand=Undefined, aggregate=Undefined, axis=Undefined, baseline=Undefined,
                  domain=Undefined, field=Undefined, flip=Undefined, grid=Undefined, legend=Undefined,
-                 linkingId=Undefined, mirrored=Undefined, padding=Undefined, range=Undefined,
-                 type=Undefined, zeroBaseline=Undefined, **kwds):
+                 linkingId=Undefined, range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
         super(Ye, self).__init__(shorthand=shorthand, aggregate=aggregate, axis=axis, baseline=baseline,
                                  domain=domain, field=field, flip=flip, grid=grid, legend=legend,
-                                 linkingId=linkingId, mirrored=mirrored, padding=padding, range=range,
-                                 type=type, zeroBaseline=zeroBaseline, **kwds)
+                                 linkingId=linkingId, range=range, type=type, zeroBaseline=zeroBaseline,
+                                 **kwds)
 
 
 class YeValue(ValueChannelMixin, core.ChannelValue):
@@ -974,7 +906,7 @@ class YeValue(ValueChannelMixin, core.ChannelValue):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "ye"

@@ -23,8 +23,6 @@ Encoding Channels
 
    Color
    ColorValue
-   Column
-   ColumnValue
    Opacity
    OpacityValue
    Row
@@ -80,16 +78,13 @@ Low-Level Schema Wrappers
    BAMData
    BEDDBData
    BIGWIGData
+   BinAggregate
    CSVData
    Channel
-   ChannelBind
    ChannelDeep
-   ChannelType
    ChannelValue
    Chromosome
    Color
-   Column
-   CombineMatesTransform
    CoverageTransform
    DataDeep
    DataTrack
@@ -108,7 +103,6 @@ Low-Level Schema Wrappers
    FlatTracks
    GenomicDomain
    GenomicLengthTransform
-   GlyphElement
    GoslingSchema
    GoslingSpec
    IncludeFilter
@@ -119,12 +113,6 @@ Low-Level Schema Wrappers
    LogTransform
    LogicalOperation
    Mark
-   MarkBind
-   MarkDeep
-   MarkGlyph
-   MarkGlyphPreset
-   MarkStyleInGlyph
-   MarkType
    MatrixData
    MultipleViews
    MultivecData

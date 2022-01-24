@@ -66,6 +66,18 @@ class AxisPosition(GoslingSchema):
         super(AxisPosition, self).__init__(*args)
 
 
+class BinAggregate(GoslingSchema):
+    """BinAggregate schema wrapper
+
+    enum('mean', 'sum')
+    """
+    _schema = {'$ref': '#/definitions/BinAggregate'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, *args):
+        super(BinAggregate, self).__init__(*args)
+
+
 class Channel(GoslingSchema):
     """Channel schema wrapper
 
@@ -76,26 +88,6 @@ class Channel(GoslingSchema):
 
     def __init__(self, *args, **kwds):
         super(Channel, self).__init__(*args, **kwds)
-
-
-class ChannelBind(GoslingSchema):
-    """ChannelBind schema wrapper
-
-    Mapping(required=[bind])
-
-    Attributes
-    ----------
-
-    bind : :class:`ChannelType`
-
-    aggregate : :class:`Aggregate`
-
-    """
-    _schema = {'$ref': '#/definitions/ChannelBind'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, bind=Undefined, aggregate=Undefined, **kwds):
-        super(ChannelBind, self).__init__(bind=bind, aggregate=aggregate, **kwds)
 
 
 class ChannelDeep(Channel):
@@ -111,18 +103,6 @@ class ChannelDeep(Channel):
         super(ChannelDeep, self).__init__(*args, **kwds)
 
 
-class ChannelType(GoslingSchema):
-    """ChannelType schema wrapper
-
-    string
-    """
-    _schema = {'$ref': '#/definitions/ChannelType'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, *args):
-        super(ChannelType, self).__init__(*args)
-
-
 class ChannelValue(Channel):
     """ChannelValue schema wrapper
 
@@ -132,7 +112,7 @@ class ChannelValue(Channel):
     ----------
 
     value : anyOf(float, string)
-
+        Assign a constant value for a visual channel.
     """
     _schema = {'$ref': '#/definitions/ChannelValue'}
     _rootschema = GoslingSchema._rootschema
@@ -164,52 +144,25 @@ class Color(ChannelDeep):
     Attributes
     ----------
 
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     range : :class:`Range`
-
+        Determine the colors that should be bound to data value. Default properties are
+        determined considering the field type.
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _schema = {'$ref': '#/definitions/Color'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
-                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Color, self).__init__(baseline=baseline, domain=domain, field=field, legend=legend,
-                                    range=range, type=type, zeroBaseline=zeroBaseline, **kwds)
-
-
-class Column(GoslingSchema):
-    """Column schema wrapper
-
-    Mapping(required=[])
-
-    Attributes
-    ----------
-
-    domain : :class:`ValueExtent`
-
-    field : string
-
-    range : :class:`ValueExtent`
-
-    type : string
-
-    """
-    _schema = {'$ref': '#/definitions/Column'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, domain=Undefined, field=Undefined, range=Undefined, type=Undefined, **kwds):
-        super(Column, self).__init__(domain=domain, field=field, range=range, type=type, **kwds)
+    def __init__(self, domain=Undefined, field=Undefined, legend=Undefined, range=Undefined,
+                 type=Undefined, **kwds):
+        super(Color, self).__init__(domain=domain, field=field, legend=legend, range=range, type=type,
+                                    **kwds)
 
 
 class DataDeep(GoslingSchema):
@@ -241,17 +194,25 @@ class BAMData(DataDeep):
 
     url : string
         URL link to the BAM data file
+    extractJunction : boolean
+        Determine whether to extract exon-to-exon junctions. __Default__: `false`
+    junctionMinCoverage : float
+        Determine the threshold of coverage when extracting exon-to-exon junctions.
+        __Default__: `1`
     loadMates : boolean
-
+        Load mates that are located in the same chromosome. __Default__: `false`
     maxInsertSize : float
-
+        Determines the threshold of insert sizes for determining the structural variants.
+        __Default__: `5000`
     """
     _schema = {'$ref': '#/definitions/BAMData'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, loadMates=Undefined,
-                 maxInsertSize=Undefined, **kwds):
-        super(BAMData, self).__init__(indexUrl=indexUrl, type=type, url=url, loadMates=loadMates,
+    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, extractJunction=Undefined,
+                 junctionMinCoverage=Undefined, loadMates=Undefined, maxInsertSize=Undefined, **kwds):
+        super(BAMData, self).__init__(indexUrl=indexUrl, type=type, url=url,
+                                      extractJunction=extractJunction,
+                                      junctionMinCoverage=junctionMinCoverage, loadMates=loadMates,
                                       maxInsertSize=maxInsertSize, **kwds)
 
 
@@ -304,6 +265,8 @@ class BIGWIGData(DataDeep):
         Specify the URL address of the data file.
     value : string
         Assign a field name of quantitative values.
+    aggregation : :class:`BinAggregate`
+        Determine aggregation function to apply within bins. __Default__: `"mean"`
     binSize : float
         Binning the genomic interval in tiles (unit size: 256).
     end : string
@@ -315,9 +278,10 @@ class BIGWIGData(DataDeep):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, column=Undefined, type=Undefined, url=Undefined, value=Undefined,
-                 binSize=Undefined, end=Undefined, start=Undefined, **kwds):
+                 aggregation=Undefined, binSize=Undefined, end=Undefined, start=Undefined, **kwds):
         super(BIGWIGData, self).__init__(column=column, type=type, url=url, value=value,
-                                         binSize=binSize, end=end, start=start, **kwds)
+                                         aggregation=aggregation, binSize=binSize, end=end, start=start,
+                                         **kwds)
 
 
 class CSVData(DataDeep):
@@ -375,45 +339,13 @@ class DataTransform(GoslingSchema):
 
     anyOf(:class:`FilterTransform`, :class:`StrConcatTransform`, :class:`StrReplaceTransform`,
     :class:`LogTransform`, :class:`DisplaceTransform`, :class:`ExonSplitTransform`,
-    :class:`GenomicLengthTransform`, :class:`CoverageTransform`, :class:`CombineMatesTransform`,
-    :class:`JSONParseTransform`)
+    :class:`GenomicLengthTransform`, :class:`CoverageTransform`, :class:`JSONParseTransform`)
     """
     _schema = {'$ref': '#/definitions/DataTransform'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, *args, **kwds):
         super(DataTransform, self).__init__(*args, **kwds)
-
-
-class CombineMatesTransform(DataTransform):
-    """CombineMatesTransform schema wrapper
-
-    Mapping(required=[type, idField])
-    By looking up ids, combine mates (a pair of reads) into a single row, performing
-    long-to-wide operation. Result data have `{field}` and `{field}_2` names.
-
-    Attributes
-    ----------
-
-    idField : string
-
-    type : string
-
-    isLongField : string
-
-    maintainDuplicates : boolean
-
-    maxInsertSize : float
-
-    """
-    _schema = {'$ref': '#/definitions/CombineMatesTransform'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, idField=Undefined, type=Undefined, isLongField=Undefined,
-                 maintainDuplicates=Undefined, maxInsertSize=Undefined, **kwds):
-        super(CombineMatesTransform, self).__init__(idField=idField, type=type, isLongField=isLongField,
-                                                    maintainDuplicates=maintainDuplicates,
-                                                    maxInsertSize=maxInsertSize, **kwds)
 
 
 class CoverageTransform(DataTransform):
@@ -607,7 +539,7 @@ class DomainChrInterval(GenomicDomain):
     ----------
 
     chromosome : :class:`Chromosome`
-
+        If specified, only showing a certain interval in a chromosome.
     interval : List([float, float])
 
     """
@@ -681,72 +613,6 @@ class GenomicLengthTransform(DataTransform):
                                                      startField=startField, type=type, **kwds)
 
 
-class GlyphElement(GoslingSchema):
-    """GlyphElement schema wrapper
-
-    Mapping(required=[mark])
-
-    Attributes
-    ----------
-
-    mark : anyOf(:class:`MarkType`, :class:`MarkBind`)
-
-    background : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    color : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    description : string
-
-    opacity : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    row : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    select : List(Mapping(required=[channel, oneOf]))
-
-    size : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    stroke : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    strokeWidth : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    style : :class:`MarkStyleInGlyph`
-
-    text : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    w : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    x : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    x1 : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    x1e : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    xe : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    y : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    y1 : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    y1e : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    ye : anyOf(:class:`ChannelBind`, :class:`ChannelValue`, string)
-
-    """
-    _schema = {'$ref': '#/definitions/GlyphElement'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, mark=Undefined, background=Undefined, color=Undefined, description=Undefined,
-                 opacity=Undefined, row=Undefined, select=Undefined, size=Undefined, stroke=Undefined,
-                 strokeWidth=Undefined, style=Undefined, text=Undefined, w=Undefined, x=Undefined,
-                 x1=Undefined, x1e=Undefined, xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined,
-                 ye=Undefined, **kwds):
-        super(GlyphElement, self).__init__(mark=mark, background=background, color=color,
-                                           description=description, opacity=opacity, row=row,
-                                           select=select, size=size, stroke=stroke,
-                                           strokeWidth=strokeWidth, style=style, text=text, w=w, x=x,
-                                           x1=x1, x1e=x1e, xe=xe, y=y, y1=y1, y1e=y1e, ye=ye, **kwds)
-
-
 class GoslingSpec(GoslingSchema):
     """GoslingSpec schema wrapper
 
@@ -776,7 +642,7 @@ class IncludeFilter(FilterTransform):
     not : boolean
         when `{"not": true}`, apply a NOT logical operation to the filter.
 
-        __Default:__ false
+        __Default:__ `false`
     """
     _schema = {'$ref': '#/definitions/IncludeFilter'}
     _rootschema = GoslingSchema._rootschema
@@ -810,7 +676,7 @@ class JSONData(DataDeep):
     sampleLength : float
         Specify the number of rows loaded from the URL.
 
-        __Default:__ 1000
+        __Default:__ `1000`
     """
     _schema = {'$ref': '#/definitions/JSONData'}
     _rootschema = GoslingSchema._rootschema
@@ -920,136 +786,14 @@ class LogicalOperation(GoslingSchema):
 class Mark(GoslingSchema):
     """Mark schema wrapper
 
-    anyOf(:class:`MarkType`, :class:`MarkDeep`)
+    enum('point', 'line', 'area', 'bar', 'rect', 'text', 'withinLink', 'betweenLink', 'rule',
+    'triangleLeft', 'triangleRight', 'triangleBottom', 'brush', 'header')
     """
     _schema = {'$ref': '#/definitions/Mark'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, *args, **kwds):
-        super(Mark, self).__init__(*args, **kwds)
-
-
-class MarkBind(GoslingSchema):
-    """MarkBind schema wrapper
-
-    Mapping(required=[bind, domain, range])
-
-    Attributes
-    ----------
-
-    bind : string
-
-    domain : List(string)
-
-    range : List(:class:`MarkType`)
-
-    """
-    _schema = {'$ref': '#/definitions/MarkBind'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, bind=Undefined, domain=Undefined, range=Undefined, **kwds):
-        super(MarkBind, self).__init__(bind=bind, domain=domain, range=range, **kwds)
-
-
-class MarkDeep(Mark):
-    """MarkDeep schema wrapper
-
-    anyOf(:class:`MarkGlyphPreset`, :class:`MarkGlyph`)
-    """
-    _schema = {'$ref': '#/definitions/MarkDeep'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, *args, **kwds):
-        super(MarkDeep, self).__init__(*args, **kwds)
-
-
-class MarkGlyph(MarkDeep):
-    """MarkGlyph schema wrapper
-
-    Mapping(required=[type, name, requiredChannels, elements])
-
-    Attributes
-    ----------
-
-    elements : List(:class:`GlyphElement`)
-
-    name : string
-
-    requiredChannels : List(:class:`ChannelType`)
-
-    type : string
-
-    referenceColumn : string
-
-    """
-    _schema = {'$ref': '#/definitions/MarkGlyph'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, elements=Undefined, name=Undefined, requiredChannels=Undefined, type=Undefined,
-                 referenceColumn=Undefined, **kwds):
-        super(MarkGlyph, self).__init__(elements=elements, name=name, requiredChannels=requiredChannels,
-                                        type=type, referenceColumn=referenceColumn, **kwds)
-
-
-class MarkGlyphPreset(MarkDeep):
-    """MarkGlyphPreset schema wrapper
-
-    Mapping(required=[type, server])
-
-    Attributes
-    ----------
-
-    server : string
-
-    type : string
-
-    """
-    _schema = {'$ref': '#/definitions/MarkGlyphPreset'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, server=Undefined, type=Undefined, **kwds):
-        super(MarkGlyphPreset, self).__init__(server=server, type=type, **kwds)
-
-
-class MarkStyleInGlyph(GoslingSchema):
-    """MarkStyleInGlyph schema wrapper
-
-    Mapping(required=[])
-
-    Attributes
-    ----------
-
-    background : string
-
-    dashed : string
-
-    dy : float
-
-    stroke : string
-
-    strokeWidth : float
-
-    """
-    _schema = {'$ref': '#/definitions/MarkStyleInGlyph'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, background=Undefined, dashed=Undefined, dy=Undefined, stroke=Undefined,
-                 strokeWidth=Undefined, **kwds):
-        super(MarkStyleInGlyph, self).__init__(background=background, dashed=dashed, dy=dy,
-                                               stroke=stroke, strokeWidth=strokeWidth, **kwds)
-
-
-class MarkType(Mark):
-    """MarkType schema wrapper
-
-    enum('point', 'line', 'area', 'bar', 'rect', 'text', 'withinLink', 'betweenLink', 'rule',
-    'triangleLeft', 'triangleRight', 'triangleBottom', 'brush', 'header')
-    """
-    _schema = {'$ref': '#/definitions/MarkType'}
-    _rootschema = GoslingSchema._rootschema
-
     def __init__(self, *args):
-        super(MarkType, self).__init__(*args)
+        super(Mark, self).__init__(*args)
 
 
 class MatrixData(DataDeep):
@@ -1092,7 +836,7 @@ class MultipleViews(GoslingSchema):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     layout : :class:`Layout`
         Specify the layout type of all tracks.
     linkingId : string
@@ -1164,6 +908,8 @@ class MultivecData(DataDeep):
         Specify the URL address of the data file.
     value : string
         Assign a field name of quantitative values.
+    aggregation : :class:`BinAggregate`
+        Determine aggregation function to apply within bins. __Default__: `"mean"`
     binSize : float
         Binning the genomic interval in tiles (unit size: 256).
     categories : List(string)
@@ -1177,10 +923,11 @@ class MultivecData(DataDeep):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, column=Undefined, row=Undefined, type=Undefined, url=Undefined, value=Undefined,
-                 binSize=Undefined, categories=Undefined, end=Undefined, start=Undefined, **kwds):
+                 aggregation=Undefined, binSize=Undefined, categories=Undefined, end=Undefined,
+                 start=Undefined, **kwds):
         super(MultivecData, self).__init__(column=column, row=row, type=type, url=url, value=value,
-                                           binSize=binSize, categories=categories, end=end, start=start,
-                                           **kwds)
+                                           aggregation=aggregation, binSize=binSize,
+                                           categories=categories, end=end, start=start, **kwds)
 
 
 class OneOfFilter(FilterTransform):
@@ -1200,7 +947,7 @@ class OneOfFilter(FilterTransform):
     not : boolean
         when `{"not": true}`, apply a NOT logical operation to the filter.
 
-        __Default:__ false
+        __Default:__ `false`
     """
     _schema = {'$ref': '#/definitions/OneOfFilter'}
     _rootschema = GoslingSchema._rootschema
@@ -1217,26 +964,20 @@ class Opacity(ChannelDeep):
     Attributes
     ----------
 
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : :class:`ValueExtent`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _schema = {'$ref': '#/definitions/Opacity'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, range=Undefined,
-                 type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Opacity, self).__init__(baseline=baseline, domain=domain, field=field, range=range,
-                                      type=type, zeroBaseline=zeroBaseline, **kwds)
+    def __init__(self, domain=Undefined, field=Undefined, range=Undefined, type=Undefined, **kwds):
+        super(Opacity, self).__init__(domain=domain, field=field, range=range, type=type, **kwds)
 
 
 class Orientation(GoslingSchema):
@@ -1271,10 +1012,8 @@ class PartialTrack(GoslingSchema):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
-
-    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -1388,22 +1127,22 @@ class PartialTrack(GoslingSchema):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, _invalidTrack=Undefined, _renderingId=Undefined, assembly=Undefined,
-                 centerRadius=Undefined, color=Undefined, column=Undefined, data=Undefined,
-                 dataTransform=Undefined, displacement=Undefined, encoding=Undefined,
-                 endAngle=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
-                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
-                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined, overlay=Undefined,
-                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
-                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
-                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
-                 style=Undefined, subtitle=Undefined, template=Undefined, text=Undefined,
-                 title=Undefined, tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined,
-                 x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined,
-                 ye=Undefined, zoomLimits=Undefined, **kwds):
+                 centerRadius=Undefined, color=Undefined, data=Undefined, dataTransform=Undefined,
+                 displacement=Undefined, encoding=Undefined, endAngle=Undefined, flipY=Undefined,
+                 height=Undefined, id=Undefined, innerRadius=Undefined, layout=Undefined,
+                 linkingId=Undefined, mark=Undefined, opacity=Undefined, orientation=Undefined,
+                 outerRadius=Undefined, overlay=Undefined, overlayOnPreviousTrack=Undefined,
+                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
+                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
+                 template=Undefined, text=Undefined, title=Undefined, tooltip=Undefined,
+                 visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
+                 xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
+                 y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined, zoomLimits=Undefined,
+                 **kwds):
         super(PartialTrack, self).__init__(_invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                            assembly=assembly, centerRadius=centerRadius, color=color,
-                                           column=column, data=data, dataTransform=dataTransform,
+                                           data=data, dataTransform=dataTransform,
                                            displacement=displacement, encoding=encoding,
                                            endAngle=endAngle, flipY=flipY, height=height, id=id,
                                            innerRadius=innerRadius, layout=layout, linkingId=linkingId,
@@ -1462,7 +1201,7 @@ class RangeFilter(FilterTransform):
     not : boolean
         when `{"not": true}`, apply a NOT logical operation to the filter.
 
-        __Default:__ false
+        __Default:__ `false`
     """
     _schema = {'$ref': '#/definitions/RangeFilter'}
     _rootschema = GoslingSchema._rootschema
@@ -1491,7 +1230,7 @@ class RootSpecWithMultipleViews(GoslingSpec):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     description : string
 
     layout : :class:`Layout`
@@ -1570,19 +1309,21 @@ class Row(ChannelDeep):
     ----------
 
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     padding : float
-
+        Determines the size of inner white spaces on the top and bottom of individiual rows.
+        __Default__: `0`
     range : :class:`ValueExtent`
-
+        Determine the start and end position of rendering area of this track along vertical
+        axis. __Default__: `[0, height]`
     type : string
-
+        Specify the data type
     """
     _schema = {'$ref': '#/definitions/Row'}
     _rootschema = GoslingSchema._rootschema
@@ -1623,7 +1364,7 @@ class FlatTracks(SingleView):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     layout : :class:`Layout`
         Specify the layout type of all tracks.
     linkingId : string
@@ -1698,10 +1439,8 @@ class OverlaidTracks(SingleView):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
-
-    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -1806,10 +1545,10 @@ class OverlaidTracks(SingleView):
 
     def __init__(self, alignment=Undefined, height=Undefined, tracks=Undefined, width=Undefined,
                  _invalidTrack=Undefined, _renderingId=Undefined, assembly=Undefined,
-                 centerRadius=Undefined, color=Undefined, column=Undefined, data=Undefined,
-                 dataTransform=Undefined, displacement=Undefined, endAngle=Undefined, flipY=Undefined,
-                 id=Undefined, innerRadius=Undefined, layout=Undefined, linkingId=Undefined,
-                 mark=Undefined, opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 centerRadius=Undefined, color=Undefined, data=Undefined, dataTransform=Undefined,
+                 displacement=Undefined, endAngle=Undefined, flipY=Undefined, id=Undefined,
+                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
+                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
                  overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
                  row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
                  static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
@@ -1821,10 +1560,10 @@ class OverlaidTracks(SingleView):
         super(OverlaidTracks, self).__init__(alignment=alignment, height=height, tracks=tracks,
                                              width=width, _invalidTrack=_invalidTrack,
                                              _renderingId=_renderingId, assembly=assembly,
-                                             centerRadius=centerRadius, color=color, column=column,
-                                             data=data, dataTransform=dataTransform,
-                                             displacement=displacement, endAngle=endAngle, flipY=flipY,
-                                             id=id, innerRadius=innerRadius, layout=layout,
+                                             centerRadius=centerRadius, color=color, data=data,
+                                             dataTransform=dataTransform, displacement=displacement,
+                                             endAngle=endAngle, flipY=flipY, id=id,
+                                             innerRadius=innerRadius, layout=layout,
                                              linkingId=linkingId, mark=mark, opacity=opacity,
                                              orientation=orientation, outerRadius=outerRadius,
                                              overlayOnPreviousTrack=overlayOnPreviousTrack,
@@ -1847,28 +1586,24 @@ class Size(ChannelDeep):
     Attributes
     ----------
 
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     legend : boolean
-
+        not supported: Whether to display legend. __Default__: `false`
     range : :class:`ValueExtent`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _schema = {'$ref': '#/definitions/Size'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
-                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Size, self).__init__(baseline=baseline, domain=domain, field=field, legend=legend,
-                                   range=range, type=type, zeroBaseline=zeroBaseline, **kwds)
+    def __init__(self, domain=Undefined, field=Undefined, legend=Undefined, range=Undefined,
+                 type=Undefined, **kwds):
+        super(Size, self).__init__(domain=domain, field=field, legend=legend, range=range, type=type,
+                                   **kwds)
 
 
 class StackedTracks(SingleView):
@@ -1895,10 +1630,8 @@ class StackedTracks(SingleView):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
-
-    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -2007,22 +1740,21 @@ class StackedTracks(SingleView):
 
     def __init__(self, tracks=Undefined, _invalidTrack=Undefined, _renderingId=Undefined,
                  alignment=Undefined, assembly=Undefined, centerRadius=Undefined, color=Undefined,
-                 column=Undefined, data=Undefined, dataTransform=Undefined, displacement=Undefined,
-                 endAngle=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
-                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
-                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
-                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
-                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
-                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
-                 style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
-                 tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined,
-                 x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
-                 y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined,
-                 zoomLimits=Undefined, **kwds):
+                 data=Undefined, dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
+                 flipY=Undefined, height=Undefined, id=Undefined, innerRadius=Undefined,
+                 layout=Undefined, linkingId=Undefined, mark=Undefined, opacity=Undefined,
+                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
+                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
+                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
+                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined,
+                 width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined, xAxis=Undefined,
+                 xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined, y1=Undefined,
+                 y1e=Undefined, yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
         super(StackedTracks, self).__init__(tracks=tracks, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, alignment=alignment,
                                             assembly=assembly, centerRadius=centerRadius, color=color,
-                                            column=column, data=data, dataTransform=dataTransform,
+                                            data=data, dataTransform=dataTransform,
                                             displacement=displacement, endAngle=endAngle, flipY=flipY,
                                             height=height, id=id, innerRadius=innerRadius,
                                             layout=layout, linkingId=linkingId, mark=mark,
@@ -2098,26 +1830,20 @@ class Stroke(ChannelDeep):
     Attributes
     ----------
 
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : :class:`Range`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _schema = {'$ref': '#/definitions/Stroke'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, range=Undefined,
-                 type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(Stroke, self).__init__(baseline=baseline, domain=domain, field=field, range=range,
-                                     type=type, zeroBaseline=zeroBaseline, **kwds)
+    def __init__(self, domain=Undefined, field=Undefined, range=Undefined, type=Undefined, **kwds):
+        super(Stroke, self).__init__(domain=domain, field=field, range=range, type=type, **kwds)
 
 
 class StrokeWidth(ChannelDeep):
@@ -2128,26 +1854,20 @@ class StrokeWidth(ChannelDeep):
     Attributes
     ----------
 
-    baseline : anyOf(string, float)
-
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : :class:`ValueExtent`
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
-    zeroBaseline : boolean
-
+        Specify the data type
     """
     _schema = {'$ref': '#/definitions/StrokeWidth'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, baseline=Undefined, domain=Undefined, field=Undefined, range=Undefined,
-                 type=Undefined, zeroBaseline=Undefined, **kwds):
-        super(StrokeWidth, self).__init__(baseline=baseline, domain=domain, field=field, range=range,
-                                          type=type, zeroBaseline=zeroBaseline, **kwds)
+    def __init__(self, domain=Undefined, field=Undefined, range=Undefined, type=Undefined, **kwds):
+        super(StrokeWidth, self).__init__(domain=domain, field=field, range=range, type=type, **kwds)
 
 
 class Style(GoslingSchema):
@@ -2165,10 +1885,8 @@ class Style(GoslingSchema):
 
     backgroundOpacity : float
 
-    bazierLink : boolean
-        Specify whether to use bazier curves for the `link` marks.
-    circularLink : boolean
-        Deprecated: draw arc instead of bazier curve?
+    bezierLink : boolean
+        Specify whether to use bezier curves for the `link` marks.
     curve : enum('top', 'bottom', 'left', 'right')
         Specify the curve of `rule` marks.
     dashed : List([float, float])
@@ -2182,7 +1900,10 @@ class Style(GoslingSchema):
     enableSmoothPath : boolean
         Whether to enable smooth paths when drawing curves.
 
-        __Default__: false
+        __Default__: `false`
+    flatWithinLink : boolean
+        Specify whether to use a flat within-links, such as the one in Sashimi plots.
+        __Default__: `false`
     inlineLegend : boolean
         Specify whether to show legend in a single horizontal line?
     legendTitle : string
@@ -2192,7 +1913,7 @@ class Style(GoslingSchema):
     linkConnectionType : enum('straight', 'curve', 'corner')
         Specify the connetion type of `betweenLink` marks.
 
-        __Default__: "corner"
+        __Default__: `"corner"`
     outline : string
 
     outlineWidth : float
@@ -2215,19 +1936,19 @@ class Style(GoslingSchema):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                 bazierLink=Undefined, circularLink=Undefined, curve=Undefined, dashed=Undefined,
-                 dx=Undefined, dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                 bezierLink=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                 enableSmoothPath=Undefined, flatWithinLink=Undefined, inlineLegend=Undefined,
                  legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
                  outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
                  textStrokeWidth=Undefined, **kwds):
         super(Style, self).__init__(align=align, background=background,
-                                    backgroundOpacity=backgroundOpacity, bazierLink=bazierLink,
-                                    circularLink=circularLink, curve=curve, dashed=dashed, dx=dx, dy=dy,
-                                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
-                                    legendTitle=legendTitle, linePattern=linePattern,
-                                    linkConnectionType=linkConnectionType, outline=outline,
-                                    outlineWidth=outlineWidth, textAnchor=textAnchor,
+                                    backgroundOpacity=backgroundOpacity, bezierLink=bezierLink,
+                                    curve=curve, dashed=dashed, dx=dx, dy=dy,
+                                    enableSmoothPath=enableSmoothPath, flatWithinLink=flatWithinLink,
+                                    inlineLegend=inlineLegend, legendTitle=legendTitle,
+                                    linePattern=linePattern, linkConnectionType=linkConnectionType,
+                                    outline=outline, outlineWidth=outlineWidth, textAnchor=textAnchor,
                                     textFontSize=textFontSize, textFontWeight=textFontWeight,
                                     textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
 
@@ -2241,13 +1962,13 @@ class Text(ChannelDeep):
     ----------
 
     domain : List(string)
-
+        Values of the data
     field : string
-
+        Name of the data field
     range : List(string)
-
+        Ranges of visual channel values
     type : enum('quantitative', 'nominal')
-
+        Specify the data type
     """
     _schema = {'$ref': '#/definitions/Text'}
     _rootschema = GoslingSchema._rootschema
@@ -2321,7 +2042,7 @@ class DataTrack(Track):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     endAngle : float
         Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
@@ -2424,10 +2145,8 @@ class OverlaidTrack(Track):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
-
-    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     data : :class:`DataDeep`
 
@@ -2532,21 +2251,21 @@ class OverlaidTrack(Track):
 
     def __init__(self, height=Undefined, overlay=Undefined, width=Undefined, _invalidTrack=Undefined,
                  _renderingId=Undefined, assembly=Undefined, centerRadius=Undefined, color=Undefined,
-                 column=Undefined, data=Undefined, dataTransform=Undefined, displacement=Undefined,
-                 endAngle=Undefined, flipY=Undefined, id=Undefined, innerRadius=Undefined,
-                 layout=Undefined, linkingId=Undefined, mark=Undefined, opacity=Undefined,
-                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
-                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
-                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
-                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
-                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined,
-                 x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined,
-                 ye=Undefined, zoomLimits=Undefined, **kwds):
+                 data=Undefined, dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
+                 flipY=Undefined, id=Undefined, innerRadius=Undefined, layout=Undefined,
+                 linkingId=Undefined, mark=Undefined, opacity=Undefined, orientation=Undefined,
+                 outerRadius=Undefined, overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined,
+                 prerelease=Undefined, row=Undefined, size=Undefined, spacing=Undefined,
+                 startAngle=Undefined, static=Undefined, stretch=Undefined, stroke=Undefined,
+                 strokeWidth=Undefined, style=Undefined, subtitle=Undefined, text=Undefined,
+                 title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined,
+                 x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
+                 y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(OverlaidTrack, self).__init__(height=height, overlay=overlay, width=width,
                                             _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                             assembly=assembly, centerRadius=centerRadius, color=color,
-                                            column=column, data=data, dataTransform=dataTransform,
+                                            data=data, dataTransform=dataTransform,
                                             displacement=displacement, endAngle=endAngle, flipY=flipY,
                                             id=id, innerRadius=innerRadius, layout=layout,
                                             linkingId=linkingId, mark=mark, opacity=opacity,
@@ -2591,10 +2310,8 @@ class SingleTrack(Track):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     color : anyOf(:class:`Color`, :class:`ChannelValue`)
-
-    column : anyOf(:class:`Column`, :class:`ChannelValue`)
 
     dataTransform : List(:class:`DataTransform`)
 
@@ -2695,7 +2412,7 @@ class SingleTrack(Track):
 
     def __init__(self, data=Undefined, height=Undefined, mark=Undefined, width=Undefined,
                  _invalidTrack=Undefined, _renderingId=Undefined, assembly=Undefined,
-                 centerRadius=Undefined, color=Undefined, column=Undefined, dataTransform=Undefined,
+                 centerRadius=Undefined, color=Undefined, dataTransform=Undefined,
                  displacement=Undefined, endAngle=Undefined, flipY=Undefined, id=Undefined,
                  innerRadius=Undefined, layout=Undefined, linkingId=Undefined, opacity=Undefined,
                  orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
@@ -2709,10 +2426,10 @@ class SingleTrack(Track):
         super(SingleTrack, self).__init__(data=data, height=height, mark=mark, width=width,
                                           _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                           assembly=assembly, centerRadius=centerRadius, color=color,
-                                          column=column, dataTransform=dataTransform,
-                                          displacement=displacement, endAngle=endAngle, flipY=flipY,
-                                          id=id, innerRadius=innerRadius, layout=layout,
-                                          linkingId=linkingId, opacity=opacity, orientation=orientation,
+                                          dataTransform=dataTransform, displacement=displacement,
+                                          endAngle=endAngle, flipY=flipY, id=id,
+                                          innerRadius=innerRadius, layout=layout, linkingId=linkingId,
+                                          opacity=opacity, orientation=orientation,
                                           outerRadius=outerRadius,
                                           overlayOnPreviousTrack=overlayOnPreviousTrack,
                                           overrideTemplate=overrideTemplate, prerelease=prerelease,
@@ -2754,7 +2471,7 @@ class TemplateTrack(Track):
     centerRadius : float
         Proportion of the radius of the center white space.
 
-        __Default:__ 0.3
+        __Default:__ `0.3`
     encoding : Mapping(required=[])
 
     endAngle : float
@@ -2865,6 +2582,8 @@ class VectorData(DataDeep):
         Specify the URL address of the data file.
     value : string
         Assign a field name of quantitative values.
+    aggregation : :class:`BinAggregate`
+        Determine aggregation function to apply within bins. __Default__: `"mean"`
     binSize : float
         Binning the genomic interval in tiles (unit size: 256).
     end : string
@@ -2876,9 +2595,10 @@ class VectorData(DataDeep):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, column=Undefined, type=Undefined, url=Undefined, value=Undefined,
-                 binSize=Undefined, end=Undefined, start=Undefined, **kwds):
+                 aggregation=Undefined, binSize=Undefined, end=Undefined, start=Undefined, **kwds):
         super(VectorData, self).__init__(column=column, type=type, url=url, value=value,
-                                         binSize=binSize, end=end, start=start, **kwds)
+                                         aggregation=aggregation, binSize=binSize, end=end, start=start,
+                                         **kwds)
 
 
 class VisibilityCondition(GoslingSchema):
@@ -2926,11 +2646,11 @@ class SizeVisibilityCondition(VisibilityCondition):
         Specify the buffer size (in pixel) of width or height when calculating the
         visibility.
 
-        __Default__: 0
+        __Default__: `0`
     transitionPadding : float
         Specify the buffer size (in pixel) of width or height for smooth transition.
 
-        __Default__: 0
+        __Default__: `0`
     """
     _schema = {'$ref': '#/definitions/SizeVisibilityCondition'}
     _rootschema = GoslingSchema._rootschema
@@ -2952,23 +2672,25 @@ class X(ChannelDeep):
     ----------
 
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     domain : :class:`GenomicDomain`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : string
-
+        Specify the data type.
     """
     _schema = {'$ref': '#/definitions/X'}
     _rootschema = GoslingSchema._rootschema
@@ -2989,45 +2711,42 @@ class Y(ChannelDeep):
     ----------
 
     aggregate : :class:`Aggregate`
-
+        Specify how to aggregate data. __Default__: `undefined`
     axis : :class:`AxisPosition`
-
+        Specify where should the axis be put
     baseline : anyOf(string, float)
-
+        Custom baseline of the y-axis. __Default__: `0`
     domain : :class:`ValueExtent`
-
+        Values of the data
     field : string
-
+        Name of the data field.
     flip : boolean
-
+        Whether to flip the y-axis. This is done by inverting the `range` property.
+        __Default__: `false`
     grid : boolean
-
+        Whether to display grid. __Default__: `false`
     legend : boolean
-
+        Whether to display legend. __Default__: `false`
     linkingId : string
-
-    mirrored : boolean
-
-    padding : float
-
+        Users need to assign a unique linkingId for [linking
+        views](/docs/user-interaction#linking-views) and [Brushing and
+        Linking](/docs/user-interaction#brushing-and-linking)
     range : :class:`ValueExtent`
-
+        Values of the visual channel.
     type : enum('quantitative', 'nominal', 'genomic')
-
+        Specify the data type.
     zeroBaseline : boolean
-
+        Specify whether to use zero baseline. __Default__: `true`
     """
     _schema = {'$ref': '#/definitions/Y'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, aggregate=Undefined, axis=Undefined, baseline=Undefined, domain=Undefined,
                  field=Undefined, flip=Undefined, grid=Undefined, legend=Undefined, linkingId=Undefined,
-                 mirrored=Undefined, padding=Undefined, range=Undefined, type=Undefined,
-                 zeroBaseline=Undefined, **kwds):
+                 range=Undefined, type=Undefined, zeroBaseline=Undefined, **kwds):
         super(Y, self).__init__(aggregate=aggregate, axis=axis, baseline=baseline, domain=domain,
                                 field=field, flip=flip, grid=grid, legend=legend, linkingId=linkingId,
-                                mirrored=mirrored, padding=padding, range=range, type=type,
-                                zeroBaseline=zeroBaseline, **kwds)
+                                range=range, type=type, zeroBaseline=zeroBaseline, **kwds)
 
 
 class ZoomLevelVisibilityCondition(VisibilityCondition):
@@ -3059,11 +2778,11 @@ class ZoomLevelVisibilityCondition(VisibilityCondition):
         Specify the buffer size (in pixel) of width or height when calculating the
         visibility.
 
-        __Default__: 0
+        __Default__: `0`
     transitionPadding : float
         Specify the buffer size (in pixel) of width or height for smooth transition.
 
-        __Default__: 0
+        __Default__: `0`
     """
     _schema = {'$ref': '#/definitions/ZoomLevelVisibilityCondition'}
     _rootschema = GoslingSchema._rootschema

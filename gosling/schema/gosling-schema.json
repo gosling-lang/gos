@@ -39,14 +39,24 @@
       "additionalProperties": false,
       "description": "Binary Alignment Map (BAM) is the comprehensive raw data of genome sequencing; it consists of the lossless, compressed binary representation of the Sequence Alignment Map-files.",
       "properties": {
+        "extractJunction": {
+          "description": "Determine whether to extract exon-to-exon junctions. __Default__: `false`",
+          "type": "boolean"
+        },
         "indexUrl": {
           "description": "URL link to the index file of the BAM file",
           "type": "string"
         },
+        "junctionMinCoverage": {
+          "description": "Determine the threshold of coverage when extracting exon-to-exon junctions. __Default__: `1`",
+          "type": "number"
+        },
         "loadMates": {
+          "description": "Load mates that are located in the same chromosome. __Default__: `false`",
           "type": "boolean"
         },
         "maxInsertSize": {
+          "description": "Determines the threshold of insert sizes for determining the structural variants. __Default__: `5000`",
           "type": "number"
         },
         "type": {
@@ -176,6 +186,10 @@
     "BIGWIGData": {
       "additionalProperties": false,
       "properties": {
+        "aggregation": {
+          "$ref": "#/definitions/BinAggregate",
+          "description": "Determine aggregation function to apply within bins. __Default__: `\"mean\"`"
+        },
         "binSize": {
           "description": "Binning the genomic interval in tiles (unit size: 256).",
           "type": "number"
@@ -212,6 +226,13 @@
         "value"
       ],
       "type": "object"
+    },
+    "BinAggregate": {
+      "enum": [
+        "mean",
+        "sum"
+      ],
+      "type": "string"
     },
     "CSVData": {
       "additionalProperties": false,
@@ -306,21 +327,6 @@
         }
       ]
     },
-    "ChannelBind": {
-      "additionalProperties": false,
-      "properties": {
-        "aggregate": {
-          "$ref": "#/definitions/Aggregate"
-        },
-        "bind": {
-          "$ref": "#/definitions/ChannelType"
-        }
-      },
-      "required": [
-        "bind"
-      ],
-      "type": "object"
-    },
     "ChannelDeep": {
       "anyOf": [
         {
@@ -352,13 +358,11 @@
         }
       ]
     },
-    "ChannelType": {
-      "type": "string"
-    },
     "ChannelValue": {
       "additionalProperties": false,
       "properties": {
         "value": {
+          "description": "Assign a constant value for a visual channel.",
           "type": [
             "number",
             "string"
@@ -428,81 +432,31 @@
     "Color": {
       "additionalProperties": false,
       "properties": {
-        "baseline": {
-          "type": [
-            "string",
-            "number"
-          ]
-        },
         "domain": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field",
           "type": "string"
         },
         "legend": {
+          "description": "Whether to display legend. __Default__: `false`",
           "type": "boolean"
         },
         "range": {
-          "$ref": "#/definitions/Range"
+          "$ref": "#/definitions/Range",
+          "description": "Determine the colors that should be bound to data value. Default properties are determined considering the field type."
         },
         "type": {
+          "description": "Specify the data type",
           "enum": [
             "quantitative",
             "nominal"
           ],
           "type": "string"
-        },
-        "zeroBaseline": {
-          "type": "boolean"
         }
       },
-      "type": "object"
-    },
-    "Column": {
-      "additionalProperties": false,
-      "properties": {
-        "domain": {
-          "$ref": "#/definitions/ValueExtent"
-        },
-        "field": {
-          "type": "string"
-        },
-        "range": {
-          "$ref": "#/definitions/ValueExtent"
-        },
-        "type": {
-          "const": "nominal",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "CombineMatesTransform": {
-      "additionalProperties": false,
-      "description": "By looking up ids, combine mates (a pair of reads) into a single row, performing long-to-wide operation. Result data have `{field}` and `{field}_2` names.",
-      "properties": {
-        "idField": {
-          "type": "string"
-        },
-        "isLongField": {
-          "type": "string"
-        },
-        "maintainDuplicates": {
-          "type": "boolean"
-        },
-        "maxInsertSize": {
-          "type": "number"
-        },
-        "type": {
-          "const": "combineMates",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "idField"
-      ],
       "type": "object"
     },
     "CoverageTransform": {
@@ -579,7 +533,7 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "data": {
@@ -714,9 +668,6 @@
           "$ref": "#/definitions/CoverageTransform"
         },
         {
-          "$ref": "#/definitions/CombineMatesTransform"
-        },
-        {
           "$ref": "#/definitions/JSONParseTransform"
         }
       ]
@@ -826,7 +777,8 @@
       "additionalProperties": false,
       "properties": {
         "chromosome": {
-          "$ref": "#/definitions/Chromosome"
+          "$ref": "#/definitions/Chromosome",
+          "description": "If specified, only showing a certain interval in a chromosome."
         },
         "interval": {
           "items": [
@@ -993,7 +945,7 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "layout": {
@@ -1102,291 +1054,6 @@
       ],
       "type": "object"
     },
-    "GlyphElement": {
-      "additionalProperties": false,
-      "properties": {
-        "background": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "color": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "description": {
-          "type": "string"
-        },
-        "mark": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/MarkType"
-            },
-            {
-              "$ref": "#/definitions/MarkBind"
-            }
-          ]
-        },
-        "opacity": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "row": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "select": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "channel": {
-                "$ref": "#/definitions/ChannelType"
-              },
-              "oneOf": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "required": [
-              "channel",
-              "oneOf"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "size": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "stroke": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "strokeWidth": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "style": {
-          "$ref": "#/definitions/MarkStyleInGlyph"
-        },
-        "text": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "w": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "x": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "x1": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "x1e": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "xe": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "y": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "y1": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "y1e": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        },
-        "ye": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ChannelBind"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            },
-            {
-              "const": "none",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      "required": [
-        "mark"
-      ],
-      "type": "object"
-    },
     "GoslingSpec": {
       "anyOf": [
         {
@@ -1409,7 +1076,7 @@
           "type": "string"
         },
         "not": {
-          "description": "when `{\"not\": true}`, apply a NOT logical operation to the filter.\n\n__Default:__ false",
+          "description": "when `{\"not\": true}`, apply a NOT logical operation to the filter.\n\n__Default:__ `false`",
           "type": "boolean"
         },
         "type": {
@@ -1470,7 +1137,7 @@
           "type": "array"
         },
         "sampleLength": {
-          "description": "Specify the number of rows loaded from the URL.\n\n__Default:__ 1000",
+          "description": "Specify the number of rows loaded from the URL.\n\n__Default:__ `1000`",
           "type": "number"
         },
         "type": {
@@ -1587,123 +1254,6 @@
       "type": "string"
     },
     "Mark": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/MarkType"
-        },
-        {
-          "$ref": "#/definitions/MarkDeep"
-        }
-      ]
-    },
-    "MarkBind": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "type": "string"
-        },
-        "domain": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "range": {
-          "items": {
-            "$ref": "#/definitions/MarkType"
-          },
-          "type": "array"
-        }
-      },
-      "required": [
-        "bind",
-        "domain",
-        "range"
-      ],
-      "type": "object"
-    },
-    "MarkDeep": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/MarkGlyphPreset"
-        },
-        {
-          "$ref": "#/definitions/MarkGlyph"
-        }
-      ]
-    },
-    "MarkGlyph": {
-      "additionalProperties": false,
-      "properties": {
-        "elements": {
-          "items": {
-            "$ref": "#/definitions/GlyphElement"
-          },
-          "type": "array"
-        },
-        "name": {
-          "type": "string"
-        },
-        "referenceColumn": {
-          "type": "string"
-        },
-        "requiredChannels": {
-          "items": {
-            "$ref": "#/definitions/ChannelType"
-          },
-          "type": "array"
-        },
-        "type": {
-          "const": "compositeMark",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "name",
-        "requiredChannels",
-        "elements"
-      ],
-      "type": "object"
-    },
-    "MarkGlyphPreset": {
-      "additionalProperties": false,
-      "properties": {
-        "server": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "server"
-      ],
-      "type": "object"
-    },
-    "MarkStyleInGlyph": {
-      "additionalProperties": false,
-      "properties": {
-        "background": {
-          "type": "string"
-        },
-        "dashed": {
-          "type": "string"
-        },
-        "dy": {
-          "type": "number"
-        },
-        "stroke": {
-          "type": "string"
-        },
-        "strokeWidth": {
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "MarkType": {
       "enum": [
         "point",
         "line",
@@ -1757,7 +1307,7 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "layout": {
@@ -1836,6 +1386,10 @@
       "additionalProperties": false,
       "description": "Two-dimensional quantitative values, one axis for genomic coordinate and the other for different samples, can be converted into HiGlass' `\"multivec\"` data. For example, multiple BigWig files can be converted into a single multivec file. You can also convert sequence data (FASTA) into this format where rows will be different nucleotide bases (e.g., A, T, G, C) and quantitative values represent the frequency. Find out more about this format at [HiGlass Docs](https://docs.higlass.io/data_preparation.html#multivec-files).",
       "properties": {
+        "aggregation": {
+          "$ref": "#/definitions/BinAggregate",
+          "description": "Determine aggregation function to apply within bins. __Default__: `\"mean\"`"
+        },
         "binSize": {
           "description": "Binning the genomic interval in tiles (unit size: 256).",
           "type": "number"
@@ -1893,7 +1447,7 @@
           "type": "string"
         },
         "not": {
-          "description": "when `{\"not\": true}`, apply a NOT logical operation to the filter.\n\n__Default:__ false",
+          "description": "when `{\"not\": true}`, apply a NOT logical operation to the filter.\n\n__Default:__ `false`",
           "type": "boolean"
         },
         "oneOf": {
@@ -1928,30 +1482,25 @@
     "Opacity": {
       "additionalProperties": false,
       "properties": {
-        "baseline": {
-          "type": [
-            "string",
-            "number"
-          ]
-        },
         "domain": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field",
           "type": "string"
         },
         "range": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Ranges of visual channel values"
         },
         "type": {
+          "description": "Specify the data type",
           "enum": [
             "quantitative",
             "nominal"
           ],
           "type": "string"
-        },
-        "zeroBaseline": {
-          "type": "boolean"
         }
       },
       "type": "object"
@@ -1980,23 +1529,13 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "color": {
           "anyOf": [
             {
               "$ref": "#/definitions/Color"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "column": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Column"
             },
             {
               "$ref": "#/definitions/ChannelValue"
@@ -2079,23 +1618,13 @@
                 "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
               },
               "centerRadius": {
-                "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+                "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
                 "type": "number"
               },
               "color": {
                 "anyOf": [
                   {
                     "$ref": "#/definitions/Color"
-                  },
-                  {
-                    "$ref": "#/definitions/ChannelValue"
-                  }
-                ]
-              },
-              "column": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Column"
                   },
                   {
                     "$ref": "#/definitions/ChannelValue"
@@ -2597,23 +2126,13 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "color": {
           "anyOf": [
             {
               "$ref": "#/definitions/Color"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "column": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Column"
             },
             {
               "$ref": "#/definitions/ChannelValue"
@@ -2933,23 +2452,13 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "color": {
           "anyOf": [
             {
               "$ref": "#/definitions/Color"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "column": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Column"
             },
             {
               "$ref": "#/definitions/ChannelValue"
@@ -3038,23 +2547,13 @@
                 "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
               },
               "centerRadius": {
-                "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+                "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
                 "type": "number"
               },
               "color": {
                 "anyOf": [
                   {
                     "$ref": "#/definitions/Color"
-                  },
-                  {
-                    "$ref": "#/definitions/ChannelValue"
-                  }
-                ]
-              },
-              "column": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Column"
                   },
                   {
                     "$ref": "#/definitions/ChannelValue"
@@ -3559,7 +3058,7 @@
           "type": "array"
         },
         "not": {
-          "description": "when `{\"not\": true}`, apply a NOT logical operation to the filter.\n\n__Default:__ false",
+          "description": "when `{\"not\": true}`, apply a NOT logical operation to the filter.\n\n__Default:__ `false`",
           "type": "boolean"
         },
         "type": {
@@ -3592,7 +3091,7 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "description": {
@@ -3698,23 +3197,13 @@
               "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
             },
             "centerRadius": {
-              "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+              "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
               "type": "number"
             },
             "color": {
               "anyOf": [
                 {
                   "$ref": "#/definitions/Color"
-                },
-                {
-                  "$ref": "#/definitions/ChannelValue"
-                }
-              ]
-            },
-            "column": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Column"
                 },
                 {
                   "$ref": "#/definitions/ChannelValue"
@@ -4029,23 +3518,13 @@
               "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
             },
             "centerRadius": {
-              "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+              "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
               "type": "number"
             },
             "color": {
               "anyOf": [
                 {
                   "$ref": "#/definitions/Color"
-                },
-                {
-                  "$ref": "#/definitions/ChannelValue"
-                }
-              ]
-            },
-            "column": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Column"
                 },
                 {
                   "$ref": "#/definitions/ChannelValue"
@@ -4352,7 +3831,7 @@
               "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
             },
             "centerRadius": {
-              "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+              "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
               "type": "number"
             },
             "description": {
@@ -4434,25 +3913,32 @@
       "additionalProperties": false,
       "properties": {
         "domain": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field",
           "type": "string"
         },
         "grid": {
+          "description": "Whether to display grid. __Default__: `false`",
           "type": "boolean"
         },
         "legend": {
+          "description": "Whether to display legend. __Default__: `false`",
           "type": "boolean"
         },
         "padding": {
+          "description": "Determines the size of inner white spaces on the top and bottom of individiual rows. __Default__: `0`",
           "type": "number"
         },
         "range": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Determine the start and end position of rendering area of this track along vertical axis. __Default__: `[0, height]`"
         },
         "type": {
           "const": "nominal",
+          "description": "Specify the data type",
           "type": "string"
         }
       },
@@ -4474,23 +3960,13 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "color": {
           "anyOf": [
             {
               "$ref": "#/definitions/Color"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "column": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Column"
             },
             {
               "$ref": "#/definitions/ChannelValue"
@@ -4792,33 +4268,29 @@
     "Size": {
       "additionalProperties": false,
       "properties": {
-        "baseline": {
-          "type": [
-            "string",
-            "number"
-          ]
-        },
         "domain": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field",
           "type": "string"
         },
         "legend": {
+          "description": "not supported: Whether to display legend. __Default__: `false`",
           "type": "boolean"
         },
         "range": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Ranges of visual channel values"
         },
         "type": {
+          "description": "Specify the data type",
           "enum": [
             "quantitative",
             "nominal"
           ],
           "type": "string"
-        },
-        "zeroBaseline": {
-          "type": "boolean"
         }
       },
       "type": "object"
@@ -4827,7 +4299,7 @@
       "additionalProperties": false,
       "properties": {
         "conditionPadding": {
-          "description": "Specify the buffer size (in pixel) of width or height when calculating the visibility.\n\n__Default__: 0",
+          "description": "Specify the buffer size (in pixel) of width or height when calculating the visibility.\n\n__Default__: `0`",
           "type": "number"
         },
         "measure": {
@@ -4863,7 +4335,7 @@
           "description": "Specify the threshold as one of:\n\n- A number representing a fixed threshold in the unit of pixels;\n\n- `\"|xe-x|\"`, using the distance between `xe` and `x` as threshold"
         },
         "transitionPadding": {
-          "description": "Specify the buffer size (in pixel) of width or height for smooth transition.\n\n__Default__: 0",
+          "description": "Specify the buffer size (in pixel) of width or height for smooth transition.\n\n__Default__: `0`",
           "type": "number"
         }
       },
@@ -4895,23 +4367,13 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "color": {
           "anyOf": [
             {
               "$ref": "#/definitions/Color"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "column": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Column"
             },
             {
               "$ref": "#/definitions/ChannelValue"
@@ -5279,30 +4741,25 @@
     "Stroke": {
       "additionalProperties": false,
       "properties": {
-        "baseline": {
-          "type": [
-            "string",
-            "number"
-          ]
-        },
         "domain": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field",
           "type": "string"
         },
         "range": {
-          "$ref": "#/definitions/Range"
+          "$ref": "#/definitions/Range",
+          "description": "Ranges of visual channel values"
         },
         "type": {
+          "description": "Specify the data type",
           "enum": [
             "quantitative",
             "nominal"
           ],
           "type": "string"
-        },
-        "zeroBaseline": {
-          "type": "boolean"
         }
       },
       "type": "object"
@@ -5310,30 +4767,25 @@
     "StrokeWidth": {
       "additionalProperties": false,
       "properties": {
-        "baseline": {
-          "type": [
-            "string",
-            "number"
-          ]
-        },
         "domain": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field",
           "type": "string"
         },
         "range": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Ranges of visual channel values"
         },
         "type": {
+          "description": "Specify the data type",
           "enum": [
             "quantitative",
             "nominal"
           ],
           "type": "string"
-        },
-        "zeroBaseline": {
-          "type": "boolean"
         }
       },
       "type": "object"
@@ -5355,12 +4807,8 @@
         "backgroundOpacity": {
           "type": "number"
         },
-        "bazierLink": {
-          "description": "Specify whether to use bazier curves for the `link` marks.",
-          "type": "boolean"
-        },
-        "circularLink": {
-          "description": "Deprecated: draw arc instead of bazier curve?",
+        "bezierLink": {
+          "description": "Specify whether to use bezier curves for the `link` marks.",
           "type": "boolean"
         },
         "curve": {
@@ -5396,7 +4844,11 @@
           "type": "number"
         },
         "enableSmoothPath": {
-          "description": "Whether to enable smooth paths when drawing curves.\n\n__Default__: false",
+          "description": "Whether to enable smooth paths when drawing curves.\n\n__Default__: `false`",
+          "type": "boolean"
+        },
+        "flatWithinLink": {
+          "description": "Specify whether to use a flat within-links, such as the one in Sashimi plots. __Default__: `false`",
           "type": "boolean"
         },
         "inlineLegend": {
@@ -5429,7 +4881,7 @@
           "type": "object"
         },
         "linkConnectionType": {
-          "description": "Specify the connetion type of `betweenLink` marks.\n\n__Default__: \"corner\"",
+          "description": "Specify the connetion type of `betweenLink` marks.\n\n__Default__: `\"corner\"`",
           "enum": [
             "straight",
             "curve",
@@ -5492,7 +4944,7 @@
           "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
         },
         "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ 0.3",
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
         "data": {
@@ -5614,21 +5066,25 @@
       "additionalProperties": false,
       "properties": {
         "domain": {
+          "description": "Values of the data",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "field": {
+          "description": "Name of the data field",
           "type": "string"
         },
         "range": {
+          "description": "Ranges of visual channel values",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "type": {
+          "description": "Specify the data type",
           "enum": [
             "quantitative",
             "nominal"
@@ -5696,6 +5152,10 @@
       "additionalProperties": false,
       "description": "One-dimensional quantitative values along genomic position (e.g., bigwig) can be converted into HiGlass' `\"vector\"` format data. Find out more about this format at [HiGlass Docs](https://docs.higlass.io/data_preparation.html#bigwig-files).",
       "properties": {
+        "aggregation": {
+          "$ref": "#/definitions/BinAggregate",
+          "description": "Determine aggregation function to apply within bins. __Default__: `\"mean\"`"
+        },
         "binSize": {
           "description": "Binning the genomic interval in tiles (unit size: 256).",
           "type": "number"
@@ -5747,31 +5207,40 @@
       "additionalProperties": false,
       "properties": {
         "aggregate": {
-          "$ref": "#/definitions/Aggregate"
+          "$ref": "#/definitions/Aggregate",
+          "description": "Specify how to aggregate data. __Default__: `undefined`"
         },
         "axis": {
-          "$ref": "#/definitions/AxisPosition"
+          "$ref": "#/definitions/AxisPosition",
+          "description": "Specify where should the axis be put"
         },
         "domain": {
-          "$ref": "#/definitions/GenomicDomain"
+          "$ref": "#/definitions/GenomicDomain",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field.",
           "type": "string"
         },
         "grid": {
+          "description": "Whether to display grid. __Default__: `false`",
           "type": "boolean"
         },
         "legend": {
+          "description": "Whether to display legend. __Default__: `false`",
           "type": "boolean"
         },
         "linkingId": {
+          "description": "Users need to assign a unique linkingId for [linking views](/docs/user-interaction#linking-views) and [Brushing and Linking](/docs/user-interaction#brushing-and-linking)",
           "type": "string"
         },
         "range": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the visual channel."
         },
         "type": {
           "const": "genomic",
+          "description": "Specify the data type.",
           "type": "string"
         }
       },
@@ -5781,45 +5250,50 @@
       "additionalProperties": false,
       "properties": {
         "aggregate": {
-          "$ref": "#/definitions/Aggregate"
+          "$ref": "#/definitions/Aggregate",
+          "description": "Specify how to aggregate data. __Default__: `undefined`"
         },
         "axis": {
-          "$ref": "#/definitions/AxisPosition"
+          "$ref": "#/definitions/AxisPosition",
+          "description": "Specify where should the axis be put"
         },
         "baseline": {
+          "description": "Custom baseline of the y-axis. __Default__: `0`",
           "type": [
             "string",
             "number"
           ]
         },
         "domain": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the data"
         },
         "field": {
+          "description": "Name of the data field.",
           "type": "string"
         },
         "flip": {
+          "description": "Whether to flip the y-axis. This is done by inverting the `range` property. __Default__: `false`",
           "type": "boolean"
         },
         "grid": {
+          "description": "Whether to display grid. __Default__: `false`",
           "type": "boolean"
         },
         "legend": {
+          "description": "Whether to display legend. __Default__: `false`",
           "type": "boolean"
         },
         "linkingId": {
+          "description": "Users need to assign a unique linkingId for [linking views](/docs/user-interaction#linking-views) and [Brushing and Linking](/docs/user-interaction#brushing-and-linking)",
           "type": "string"
         },
-        "mirrored": {
-          "type": "boolean"
-        },
-        "padding": {
-          "type": "number"
-        },
         "range": {
-          "$ref": "#/definitions/ValueExtent"
+          "$ref": "#/definitions/ValueExtent",
+          "description": "Values of the visual channel."
         },
         "type": {
+          "description": "Specify the data type.",
           "enum": [
             "quantitative",
             "nominal",
@@ -5828,6 +5302,7 @@
           "type": "string"
         },
         "zeroBaseline": {
+          "description": "Specify whether to use zero baseline. __Default__: `true`",
           "type": "boolean"
         }
       },
@@ -5837,7 +5312,7 @@
       "additionalProperties": false,
       "properties": {
         "conditionPadding": {
-          "description": "Specify the buffer size (in pixel) of width or height when calculating the visibility.\n\n__Default__: 0",
+          "description": "Specify the buffer size (in pixel) of width or height when calculating the visibility.\n\n__Default__: `0`",
           "type": "number"
         },
         "measure": {
@@ -5862,7 +5337,7 @@
           "type": "number"
         },
         "transitionPadding": {
-          "description": "Specify the buffer size (in pixel) of width or height for smooth transition.\n\n__Default__: 0",
+          "description": "Specify the buffer size (in pixel) of width or height for smooth transition.\n\n__Default__: `0`",
           "type": "number"
         }
       },
