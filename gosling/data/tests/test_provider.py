@@ -8,8 +8,8 @@ import starlette.requests
 import starlette.responses
 import starlette.routing
 
-from gosling.data._tilesets import Tileset
 from gosling.data import Provider, Resource, TilesetResource
+from gosling.data._tilesets import Tileset
 
 content = b"root content"
 

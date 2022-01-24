@@ -1,20 +1,14 @@
 import pathlib
 import warnings
-import jinja2
 
+import jinja2
 from docutils import nodes
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives import flag
 
-from gosling.schema import SCHEMA_VERSION
+from gosling.display import get_display_dependencies
 from gosling.schemapi import SchemaValidationError
 from gosling.utils.execeval import eval_block
-
-HIGLASS_CSS_URL = "https://unpkg.com/higlass@1.11.3/dist/hglib.css"
-REACT_URL = "https://unpkg.com/react@17/umd/react.production.min.js"
-REACTDOM_URL = "https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
-PIXI_URL = "https://unpkg.com/pixi.js@5/dist/pixi.js"
-GOSLING_URL = f"https://unpkg.com/gosling.js@{SCHEMA_VERSION[1:]}/dist/gosling.js"
 
 TEMPLATE = jinja2.Template(
     """
@@ -68,7 +62,7 @@ class GoslingPlotDirective(Directive):
         target_node = nodes.target("", "", ids=[target_id])
 
         # create the node in which the plot will appear;
-        # this will be processed by html_visit_altair_plot
+        # this will be processed by html_visit_gosling_plot
         plot_node = gosling_plot()
         plot_node["target_id"] = target_id
         plot_node["div_id"] = div_id
@@ -123,15 +117,18 @@ def builder_inited(app):
     app.add_js_file(app.config.react_url)
     app.add_js_file(app.config.reactdom_url)
     app.add_js_file(app.config.pixi_url)
+    app.add_js_file(app.config.higlass_js_url)
     app.add_js_file(app.config.gosling_url)
 
 
 def setup(app):
-    app.add_config_value("react_url", REACT_URL, "html")
-    app.add_config_value("reactdom_url", REACTDOM_URL, "html")
-    app.add_config_value("pixi_url", PIXI_URL, "html")
-    app.add_config_value("gosling_url", GOSLING_URL, "html")
-    app.add_config_value("higlass_css_url", HIGLASS_CSS_URL, "html")
+    deps = get_display_dependencies()
+    app.add_config_value("react_url", deps.react, "html")
+    app.add_config_value("reactdom_url", deps.react_dom, "html")
+    app.add_config_value("pixi_url", deps.pixijs, "html")
+    app.add_config_value("higlass_js_url", deps.higlass_js, "html")
+    app.add_config_value("higlass_css_url", deps.higlass_css, "html")
+    app.add_config_value("gosling_url", deps.gosling, "html")
 
     app.add_directive("gosling-plot", GoslingPlotDirective)
     app.add_node(gosling_plot, html=(html_visit_gosling_plot, depart_gosling_plot))

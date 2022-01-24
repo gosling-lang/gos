@@ -2,19 +2,19 @@ import pandas as pd
 
 from gosling.schema import *
 from gosling.api import *
-from gosling.display import renderers, themes
 from gosling.data import (
     GoslingDataServer,
+    bam,
+    beddb,
+    bigwig,
+    csv,
     data_server,
     json,
-    csv,
-    bigwig,
-    beddb,
-    bam,
-    vector,
     matrix,
     multivec,
+    vector,
 )
+from gosling.display import renderers, themes
 
 
 @pd.api.extensions.register_dataframe_accessor("gos")  # type: ignore

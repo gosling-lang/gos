@@ -1,12 +1,11 @@
 import pathlib
 from typing import Any
 
+import pandas as pd
 import pytest
 
 from gosling.api import Data
 from gosling.data import csv, data_server
-
-import pandas as pd
 
 
 @pytest.fixture(scope="function")

@@ -1,9 +1,9 @@
-from typing import Iterable, TypeVar, Union
 import pathlib
+from typing import Iterable, TypeVar, Union
 
-from gosling.schema import Undefined, channels, core, mixins
-import gosling.utils as utils
 import gosling.display as display
+import gosling.utils as utils
+from gosling.schema import Undefined, channels, core, mixins
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 180
@@ -201,6 +201,7 @@ class View(_PropertiesMixin, core.Root):
         html_str = display.spec_to_html(spec)
         with open(path, mode="w") as f:
             f.write(html_str)
+
 
 # View utilities
 
