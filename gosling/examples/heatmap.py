@@ -12,7 +12,7 @@ data = gos.matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-
 track = gos.Track(data).mark_rect().encode(
   x="position1:G",
   y="position2:G",
-  color=gos.Channel("value:Q", range="warm"),
+  color=gos.Color("value:Q", range="warm"),
 ).properties(width=size, height=size)
 
 track.view()
