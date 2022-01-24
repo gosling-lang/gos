@@ -287,13 +287,6 @@
           "description": "experimental",
           "type": "string"
         },
-        "quantitativeFields": {
-          "description": "Specify the name of quantitative data fields.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
         "sampleLength": {
           "description": "Specify the number of rows loaded from the URL.\n\n__Default:__ `1000`",
           "type": "number"
@@ -447,6 +440,13 @@
         "range": {
           "$ref": "#/definitions/Range",
           "description": "Determine the colors that should be bound to data value. Default properties are determined considering the field type."
+        },
+        "scale": {
+          "enum": [
+            "linear",
+            "log"
+          ],
+          "type": "string"
         },
         "type": {
           "description": "Specify the data type",
@@ -1129,13 +1129,6 @@
           },
           "type": "array"
         },
-        "quantitativeFields": {
-          "description": "Specify the name of quantitative data fields.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
         "sampleLength": {
           "description": "Specify the number of rows loaded from the URL.\n\n__Default:__ `1000`",
           "type": "number"
@@ -1275,11 +1268,28 @@
     "MatrixData": {
       "additionalProperties": false,
       "properties": {
+        "binSize": {
+          "description": "Determine the number of nearby cells to aggregate. __Default__: `1`",
+          "type": "number"
+        },
+        "column": {
+          "description": "The name of the first genomic field. __Default__: `x`",
+          "type": "string"
+        },
+        "row": {
+          "description": "The name of the first genomic field. __Default__: `y`",
+          "type": "string"
+        },
         "type": {
           "const": "matrix",
           "type": "string"
         },
         "url": {
+          "description": "URL link to the matrix data file",
+          "type": "string"
+        },
+        "value": {
+          "description": "The name of the value field. __Default__: `value`",
           "type": "string"
         }
       },
@@ -3073,6 +3083,25 @@
       ],
       "type": "object"
     },
+    "ResponsiveSize": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "height": {
+              "type": "boolean"
+            },
+            "width": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
     "RootSpecWithMultipleViews": {
       "additionalProperties": false,
       "properties": {
@@ -3108,6 +3137,10 @@
         "orientation": {
           "$ref": "#/definitions/Orientation",
           "description": "Specify the orientation."
+        },
+        "responsiveSize": {
+          "$ref": "#/definitions/ResponsiveSize",
+          "description": "Determine whether to make the size of `GoslingComponent` bound to its parent element. __Default__: `false`"
         },
         "spacing": {
           "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
@@ -3282,6 +3315,10 @@
               "additionalProperties": false,
               "description": "internal",
               "type": "object"
+            },
+            "responsiveSize": {
+              "$ref": "#/definitions/ResponsiveSize",
+              "description": "Determine whether to make the size of `GoslingComponent` bound to its parent element. __Default__: `false`"
             },
             "row": {
               "anyOf": [
@@ -3604,6 +3641,10 @@
               "description": "internal",
               "type": "object"
             },
+            "responsiveSize": {
+              "$ref": "#/definitions/ResponsiveSize",
+              "description": "Determine whether to make the size of `GoslingComponent` bound to its parent element. __Default__: `false`"
+            },
             "row": {
               "anyOf": [
                 {
@@ -3848,6 +3889,10 @@
             "orientation": {
               "$ref": "#/definitions/Orientation",
               "description": "Specify the orientation."
+            },
+            "responsiveSize": {
+              "$ref": "#/definitions/ResponsiveSize",
+              "description": "Determine whether to make the size of `GoslingComponent` bound to its parent element. __Default__: `false`"
             },
             "spacing": {
               "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
