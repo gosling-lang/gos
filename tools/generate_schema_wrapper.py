@@ -137,7 +137,6 @@ class ValueSchemaGenerator(codegen.SchemaGenerator):
 
 GOSLING_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/schema/{filename}"
 
-
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
 
@@ -293,40 +292,58 @@ def generate_channel_wrappers(schemafile, imports=None):
 
     contents.append(CHANNEL_MIXINS)
 
-    encoding_def = "Channel"
+    encoding_def = "SingleTrack"
     encoding = SchemaInfo(schema["definitions"][encoding_def], rootschema=schema)
-    definitions = [s.ref for s in encoding.anyOf if s.is_reference()]
-    for definition in definitions:
-        defschema = {"$ref": definition}
-        basename = definition.split("/")[-1]
-        classname = encoding_def[0].upper() + encoding_def[1:]
 
-        if "Value" in basename:
-            Generator = ValueSchemaGenerator
-            classname += "Value"
-            nodefault = ["value"]
+    # Iterate over all properties defined on `SingleTrack` since encoding fields
+    # are defined at the same level as non-encoding fields. We filter for visual
+    # channel properties since they are distinguished by `ChannelValue` option.
+    # TODO: https://github.com/gosling-lang/gosling.js/pull/533#discussion_r726263624
+    for prop, propschema in encoding.properties.items():
+        if propschema.is_reference():
+            # all our visual encodings are anyOf(<Type>, ChannelValue),
+            # so a reference here is for a non encoding field
+            # definitions = [propschema.ref]
+            definitions = []
+        elif propschema.is_anyOf():
+            definitions = [s.ref for s in propschema.anyOf if s.is_reference()]
+            if not any("ChannelValue" in d for d in definitions):
+                definitions = []
         else:
-            Generator = FieldSchemaGenerator
-            nodefault = []
-            defschema = copy.deepcopy(resolve_references(defschema, schema))
+            # raise ValueError("either $ref or anyOf expected")
+            definitions = []
 
-            # For Encoding field definitions, we patch the schema by adding the
-            # shorthand property.
-            defschema["properties"]["shorthand"] = {
-                "type": "string",
-                "description": "shorthand for field, aggregate, and type",
-            }
-            defschema["required"] = ["shorthand"]
+        for definition in definitions:
+            defschema = {"$ref": definition}
+            basename = definition.split("/")[-1]
+            classname = prop[0].upper() + prop[1:]
 
-        gen = Generator(
-            classname=classname,
-            basename=basename,
-            schema=defschema,
-            rootschema=schema,
-            encodingname=encoding_def,
-            nodefault=nodefault,
-        )
-        contents.append(gen.schema_class())
+            if "Value" in basename:
+                Generator = ValueSchemaGenerator
+                classname += "Value"
+                nodefault = ["value"]
+            else:
+                Generator = FieldSchemaGenerator
+                nodefault = []
+                defschema = copy.deepcopy(resolve_references(defschema, schema))
+
+                # For Encoding field definitions, we patch the schema by adding the
+                # shorthand property.
+                defschema["properties"]["shorthand"] = {
+                    "type": "string",
+                    "description": "shorthand for field, aggregate, and type",
+                }
+                defschema["required"] = ["shorthand"]
+
+            gen = Generator(
+                classname=classname,
+                basename=basename,
+                schema=defschema,
+                rootschema=schema,
+                encodingname=prop,
+                nodefault=nodefault,
+            )
+            contents.append(gen.schema_class())
     return "\n".join(contents)
 
 
@@ -393,7 +410,7 @@ def generate_mark_mixin(schemafile: pathlib.Path, mark_enum: str, style_def: str
 
 def main(skip_download: Optional[bool] = False):
     library = "gosling.js"
-    version = "v0.9.4"
+    version = "v0.9.14"
 
     schemapath = here.parent / ".." / "gosling" / "schema"
     schemafile = download_schemafile(
@@ -440,7 +457,7 @@ def main(skip_download: Optional[bool] = False):
     print("Generating\n {}\n  ->{}".format(schemafile, outfile))
     mark_imports, mark_mixin = generate_mark_mixin(
         schemafile,
-        mark_enum="MarkType",
+        mark_enum="Mark",
         style_def="Style",
     )
     imports = sorted(set(mark_imports))

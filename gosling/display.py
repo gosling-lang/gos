@@ -1,10 +1,11 @@
-from dataclasses import dataclass, field
-from typing import Dict, Optional, Any, Set, Union
-from gosling.schema import SCHEMA_VERSION, THEMES
 import json
 import uuid
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, Set, Union
 
 import jinja2
+
+from gosling.schema import SCHEMA_VERSION, THEMES
 
 HTML_TEMPLATE = jinja2.Template(
     """
@@ -12,7 +13,7 @@ HTML_TEMPLATE = jinja2.Template(
 <html>
 <head>
   <style>.error { color: red; }</style>
-  <link rel="stylesheet" href="{{ base_url }}/higlass@{{ higlass_version }}/dist/hglib.css">
+  <link rel="stylesheet" href="{{ higlass_css_url }}">
 </head>
 <body>
   <div id="{{ output_div }}"></div>
@@ -44,10 +45,11 @@ HTML_TEMPLATE = jinja2.Template(
 
             // load dependencies sequentially
             const sources = [
-                "{{ base_url }}/react@{{ react_version }}/umd/react.production.min.js",
-                "{{ base_url }}/react-dom@{{ react_version }}/umd/react-dom.production.min.js",
-                "{{ base_url }}/pixi.js@{{ pixijs_version }}/dist/browser/pixi.min.js",
-                "{{ base_url }}/gosling.js@{{ gosling_version }}/dist/gosling.js",
+                "{{ react_url }}",
+                "{{ react_dom_url }}",
+                "{{ pixijs_url }}",
+                "{{ higlass_js_url }}",
+                "{{ gosling_url }}",
             ];
 
             for (const src of sources) await loadScript(src);
@@ -82,27 +84,52 @@ HTML_TEMPLATE = jinja2.Template(
 GoslingSpec = Dict[str, Any]
 
 
-def spec_to_html(
-    spec: GoslingSpec,
+@dataclass
+class GoslingBundle:
+    react: str
+    react_dom: str
+    pixijs: str
+    higlass_js: str
+    higlass_css: str
+    gosling: str
+
+
+def get_display_dependencies(
     gosling_version: str = SCHEMA_VERSION.lstrip("v"),
     higlass_version: str = "1.11",
     react_version: str = "17",
     pixijs_version: str = "6",
     base_url: str = "https://unpkg.com",
+) -> GoslingBundle:
+    return GoslingBundle(
+        react=f"{ base_url }/react@{ react_version }/umd/react.production.min.js",
+        react_dom=f"{ base_url }/react-dom@{ react_version }/umd/react-dom.production.min.js",
+        pixijs=f"{ base_url }/pixi.js@{ pixijs_version }/dist/browser/pixi.min.js",
+        higlass_js=f"{ base_url }/higlass@{ higlass_version }/dist/hglib.js",
+        higlass_css=f"{ base_url }/higlass@{ higlass_version }/dist/hglib.css",
+        gosling=f"{ base_url }/gosling.js@{ gosling_version }/dist/gosling.js",
+    )
+
+
+def spec_to_html(
+    spec: GoslingSpec,
     output_div: str = "vis",
     embed_options: Dict[str, Any] = None,
+    **kwargs,
 ):
     embed_options = embed_options or dict(padding=0, theme=themes.get())
+    deps = get_display_dependencies(**kwargs)
 
     return HTML_TEMPLATE.render(
         spec=json.dumps(spec),
         embed_options=json.dumps(embed_options),
-        gosling_version=gosling_version,
-        higlass_version=higlass_version,
-        react_version=react_version,
-        pixijs_version=pixijs_version,
-        base_url=base_url,
         output_div=output_div,
+        react_url=deps.react,
+        react_dom_url=deps.react_dom,
+        pixijs_url=deps.pixijs,
+        higlass_js_url=deps.higlass_js,
+        higlass_css_url=deps.higlass_css,
+        gosling_url=deps.gosling,
     )
 
 
@@ -177,7 +204,7 @@ class ThemesRegistry:
     def get(self) -> Union[None, str, CustomTheme]:
         if self.active is None:
             return None
-        if self.active in self.themes: 
+        if self.active in self.themes:
             return self.active
         return self.custom_themes[self.active]
 

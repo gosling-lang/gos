@@ -16,11 +16,11 @@ def ideogram_with_bars(chromosome: str, width: int):
     )
 
     arms = gos.Track(data).mark_rect().encode(
-        color=gos.Channel("Stain:N",
+        color=gos.Color("Stain:N",
             domain=["gneg", "gpos25", "gpos50", "gpos75", "gpos100", "gvar"],
             range=["white", "#D9D9D9", "#979797", "#636363", "black", "#A0A0F2"],
         ),
-        x=gos.Channel("chromStart:G", axis="none"),
+        x=gos.X("chromStart:G", axis="none"),
         xe="chromEnd:G",
         stroke=gos.value("black"),
         strokeWidth=gos.value(0.5),
@@ -28,7 +28,7 @@ def ideogram_with_bars(chromosome: str, width: int):
 
     arm_labels = arms.mark_text().encode(
         text="Name:N",
-        color=gos.Channel("Stain:N",
+        color=gos.Color("Stain:N",
             domain=["gneg", "gpos25", "gpos50", "gpos75", "gpos100", "gvar"],
             range=["black", "#636363", "black", "#D9D9D9", "white", "black"],
         ),
@@ -41,7 +41,7 @@ def ideogram_with_bars(chromosome: str, width: int):
     )
 
     centromere_base = gos.Track(data).encode(
-        x=gos.Channel("chromStart:G"),
+        x=gos.X("chromStart:G"),
         xe="chromEnd:G",
         color=gos.value('red'),
     ).transform_filter(
@@ -74,11 +74,11 @@ def ideogram_with_bars(chromosome: str, width: int):
         x="start:G",
         xe="end:G",
         y="peak:Q",
-        color=gos.Channel("sample:N"),
+        color=gos.Color("sample:N"),
     ).properties(width=width, height=20)
 
     return gos.stack(bar, ideogram).properties(
-        xDomain=gos.Domain(chromosome=chromosome),
+        xDomain=gos.GenomicDomain(chromosome=chromosome),
         spacing=0
     )
 

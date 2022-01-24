@@ -21,8 +21,36 @@ Encoding Channels
    :toctree: generated/channels/
    :nosignatures:
 
-   Channel
-   ChannelValue
+   Color
+   ColorValue
+   Opacity
+   OpacityValue
+   Row
+   RowValue
+   Size
+   SizeValue
+   Stroke
+   StrokeValue
+   StrokeWidth
+   StrokeWidthValue
+   Text
+   TextValue
+   X
+   X1
+   X1Value
+   X1e
+   X1eValue
+   XValue
+   Xe
+   XeValue
+   Y
+   Y1
+   Y1Value
+   Y1e
+   Y1eValue
+   YValue
+   Ye
+   YeValue
 API Functions
 -------------
 .. currentmodule:: gosling
@@ -50,13 +78,13 @@ Low-Level Schema Wrappers
    BAMData
    BEDDBData
    BIGWIGData
+   BinAggregate
    CSVData
    Channel
-   ChannelBind
    ChannelDeep
-   ChannelType
    ChannelValue
    Chromosome
+   Color
    CoverageTransform
    DataDeep
    DataTrack
@@ -65,7 +93,6 @@ Low-Level Schema Wrappers
    DisplaceTransform
    Displacement
    DisplacementType
-   Domain
    DomainChr
    DomainChrInterval
    DomainGene
@@ -74,7 +101,8 @@ Low-Level Schema Wrappers
    FieldType
    FilterTransform
    FlatTracks
-   GlyphElement
+   GenomicDomain
+   GenomicLengthTransform
    GoslingSchema
    GoslingSpec
    IncludeFilter
@@ -85,16 +113,11 @@ Low-Level Schema Wrappers
    LogTransform
    LogicalOperation
    Mark
-   MarkBind
-   MarkDeep
-   MarkGlyph
-   MarkGlyphPreset
-   MarkStyleInGlyph
-   MarkType
    MatrixData
    MultipleViews
    MultivecData
    OneOfFilter
+   Opacity
    Orientation
    OverlaidTrack
    OverlaidTracks
@@ -105,17 +128,26 @@ Low-Level Schema Wrappers
    Root
    RootSpecWithMultipleViews
    RootSpecWithSingleView
+   Row
    SchemaBase
    SingleTrack
    SingleView
+   Size
    SizeVisibilityCondition
    StackedTracks
    StrConcatTransform
    StrReplaceTransform
+   Stroke
+   StrokeWidth
    Style
    TemplateTrack
+   Text
    Tooltip
    Track
+   ValueExtent
    VectorData
    VisibilityCondition
+   X
+   Y
    ZoomLevelVisibilityCondition
+   ZoomLimits

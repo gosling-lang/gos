@@ -18,9 +18,9 @@ data = gos.multivec(
 
 track = gos.Track(data).mark_text(textStrokeWidth=0).encode(
     y="count:Q",
-    x=gos.Channel("start:G", axis="top"),
+    x=gos.X("start:G", axis="top"),
     xe="end:G",
-    color=gos.Channel("base:N", domain=["A", "T", "G", "C"]),
+    color=gos.Color("base:N", domain=["A", "T", "G", "C"]),
     text="base:N",
 ).properties(width=725, height=180, stretch=True)
 

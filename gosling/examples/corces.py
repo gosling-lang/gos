@@ -33,7 +33,7 @@ gene_anno = gos.beddb(
 # TRACKS
 
 ideo_base = gos.Track(cytogenetic_band).mark_rect(outlineWidth=1).encode(
-    x=gos.Channel("Basepair_start:G", axis="none"),
+    x=gos.X("Basepair_start:G", axis="none"),
     xe="Basepair_stop:G",
     stroke=gos.value("black"),
     strokeWidth=gos.value(1),
@@ -41,7 +41,7 @@ ideo_base = gos.Track(cytogenetic_band).mark_rect(outlineWidth=1).encode(
 
 ideogram = gos.overlay(
     ideo_base.encode(
-        color=gos.Channel("Density:N",
+        color=gos.Color("Density:N",
             domain=["", "25", "50", "75", "100"],
             range=["white", "#D9D9D9", "#979797", "#636363", "black"]
         ),
@@ -69,8 +69,8 @@ ideogram = gos.overlay(
 ).properties(title="chr3", width=WIDTH, height=25)
 
 gene_base = gos.Track(gene_anno).encode(
-    color=gos.Channel("strand:N", domain=["+", "-"], range=["#012DB8", "#BE1E2C"]),
-    row=gos.Channel("strand:N", domain=["+", "-"]),
+    color=gos.Color("strand:N", domain=["+", "-"], range=["#012DB8", "#BE1E2C"]),
+    row=gos.Row("strand:N", domain=["+", "-"]),
 ).visibility_lt(
     measure="width",
     threshold="|xe-x|",
@@ -113,7 +113,7 @@ def bar(title: str, color: str, file: str) -> gos.Track:
     data = gos.bigwig(url, column="position", value="peak")
     return gos.Track(data).mark_bar(outline="#20102F").encode(
         x="position:G",
-        y=gos.Channel("peak:Q", axis="right"),
+        y=gos.Y("peak:Q", axis="right"),
         color=gos.value(color),
     ).properties(title=title, width=WIDTH, height=40)
 
@@ -149,6 +149,6 @@ tracks = [
 # COMPOSE
 
 gos.vertical(
-    gos.View(layout="linear", tracks=[ideogram], centerRadius=0.8, xDomain=gos.Domain(chromosome="3")),
-    gos.View(tracks=tracks, linkingId="detail", xDomain=gos.Domain(chromosome="3", interval=[52168000, 52890000])),
+    gos.View(layout="linear", tracks=[ideogram], centerRadius=0.8, xDomain=gos.GenomicDomain(chromosome="3")),
+    gos.View(tracks=tracks, linkingId="detail", xDomain=gos.GenomicDomain(chromosome="3", interval=[52168000, 52890000])),
 )

@@ -2,7 +2,6 @@
 import ast
 import sys
 
-
 if sys.version_info > (3, 8):
     Module = ast.Module
 else:

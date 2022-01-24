@@ -33,7 +33,7 @@ lolipop = gos.overlay(
     (
         gos.Track(clin_var_beddb).mark_bar().encode(
             x="start:G",
-            y=gos.Channel("significance:N", domain=categories, range=[150, 20], baseline="Uncertain_significance"),
+            y=gos.Y("significance:N", domain=categories, range=[150, 20], baseline="Uncertain_significance"),
             size=gos.value(1),
             color=gos.value("lightgray"),
             stroke=gos.value("lightgray"),
@@ -49,8 +49,8 @@ lolipop = gos.overlay(
     (
         gos.Track(clin_var_beddb).mark_point().encode(
             x="start:G",
-            color=gos.Channel("significance:N", domain=categories, range=colors),
-            row=gos.Channel("significance:N", domain=categories),
+            color=gos.Color("significance:N", domain=categories, range=colors),
+            row=gos.Row("significance:N", domain=categories),
             size=gos.value(7),
             opacity=gos.value(0.8),
         ).visibility_lt(
@@ -64,8 +64,8 @@ lolipop = gos.overlay(
         gos.Track(clin_var_multivec).mark_bar().encode(
             x="start:G",
             xe="end:G",
-            y=gos.Channel("count:Q", axis="none"),
-            color=gos.Channel("significance:N", domain=categories, range=colors, legend=True)
+            y=gos.Y("count:Q", axis="none"),
+            color=gos.Color("significance:N", domain=categories, range=colors, legend=True)
         ).visibility_gt(
             measure="zoomLevel",
             target="mark",
@@ -75,7 +75,7 @@ lolipop = gos.overlay(
     ),
     width=725,
     height=150,
-    xDomain=gos.Domain(chromosome="13", interval=[31500000, 33150000]),
+    xDomain=gos.GenomicDomain(chromosome="13", interval=[31500000, 33150000]),
 )
 
 lolipop

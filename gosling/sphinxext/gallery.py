@@ -1,15 +1,15 @@
 import ast
 import dataclasses
+import io
 import itertools
 import pathlib
 import re
-from typing import Iterable, Optional, TypeVar, Tuple
-import jinja2
 import tokenize
-import io
+from typing import Iterable, Optional, Tuple, TypeVar
+
+import jinja2
 
 from gosling.examples import iter_examples
-
 
 GALLERY_TEMPLATE = jinja2.Template(
     """

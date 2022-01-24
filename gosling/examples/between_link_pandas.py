@@ -49,14 +49,14 @@ Encoding
 """
 def set_encoding(track):
     return track.mark_withinLink().encode(
-        x=gos.Channel("first_start:G"), 
-        xe=gos.Channel("second_end:G"),
+        x=gos.X("first_start:G"),
+        xe=gos.Xe("second_end:G"),
         opacity=gos.value(0.2)
     )
 
 gos.overlay(
     set_encoding(gos.Track(data_bg)).encode(stroke=gos.value("lightgray")),
-    set_encoding(gos.Track(data_hl)).encode(stroke=gos.Channel("second_chr:N"))
+    set_encoding(gos.Track(data_hl)).encode(stroke=gos.Stroke("second_chr:N"))
 ).properties(
     width=600,
     height=200

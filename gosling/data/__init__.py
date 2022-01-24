@@ -1,5 +1,5 @@
 import pathlib
-from typing import Callable, Dict, Optional, Union, Any, List
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import gosling.data._tilesets as tilesets
 from gosling.data._provider import Provider, Resource, TilesetResource

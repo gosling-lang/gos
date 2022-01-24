@@ -1,9 +1,9 @@
-from typing import Iterable, TypeVar, Union
 import pathlib
+from typing import Iterable, TypeVar, Union
 
-from gosling.schema import Undefined, channels, core, mixins
-import gosling.utils as utils
 import gosling.display as display
+import gosling.utils as utils
+from gosling.schema import Undefined, channels, core, mixins
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 180
@@ -27,35 +27,35 @@ class _EncodingMixin:
 
         Parameters
         ----------
-        column : :class:`Channel`
+        column : :class:`Column`
 
-        opacity : :class:`Channel`
+        opacity : :class:`Opacity`
 
-        row : :class:`Channel`
+        row : :class:`Row`
 
-        size : :class:`Channel`
+        size : :class:`Size`
 
-        stroke : :class:`Channel`
+        stroke : :class:`Stroke`
 
-        strokeWidth : :class:`Channel`
+        strokeWidth : :class:`StrokeWidth`
 
-        text : :class:`Channel`
+        text : :class:`Text`
 
-        x : :class:`Channel`
+        x : :class:`X`
 
-        x1 : :class:`Channel`
+        x1 : :class:`X1`
 
-        x1e : :class:`Channel`
+        x1e : :class:`X1e`
 
-        xe : :class:`Channel`
+        xe : :class:`Xe`
 
-        y : :class:`Channel`
+        y : :class:`Y`
 
-        y1 : :class:`Channel`
+        y1 : :class:`Y1`
 
-        y1e : :class:`Channel`
+        y1e : :class:`Y1e`
 
-        ye : :class:`Channel`
+        ye : :class:`Ye`
         """
         # Convert args to kwargs based on their types.
         copy = self.copy()

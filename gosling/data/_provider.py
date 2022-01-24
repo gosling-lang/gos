@@ -6,9 +6,9 @@ import uuid
 import weakref
 from dataclasses import dataclass, field
 from typing import (
-    Dict,
     IO,
     Awaitable,
+    Dict,
     Generator,
     List,
     MutableMapping,

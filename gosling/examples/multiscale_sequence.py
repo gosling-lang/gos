@@ -27,13 +27,13 @@ text = gos.Track(data).mark_text().encode(
 
 bar = gos.Track(data).mark_bar().encode(
     x="position:G",
-    y=gos.Channel("count:Q", axis="none"),
-    color=gos.Channel("base:N", domain=["A", "T", "G", "C"], legend=True)
+    y=gos.Y("count:Q", axis="none"),
+    color=gos.Color("base:N", domain=["A", "T", "G", "C"], legend=True)
 )
 
 gos.overlay(bar, text).properties(
     title="Multi-Scale Sequence Plot",
-    xDomain=gos.Domain(interval=[1000000, 1000010]),
+    xDomain=gos.GenomicDomain(interval=[1000000, 1000010]),
     width=725,
     height=100
 )
