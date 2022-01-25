@@ -53,10 +53,10 @@ The **gos** example below incudes a `multivec data source`_; the url points to a
     )
 
     track = gos.Track(data).mark_rect().encode(
-        x=gos.Channel("start:G", axis="top"),
+        x=gos.X("start:G", axis="top"),
         xe="end:G",
-        row=gos.Channel("sample:N", legend=True),
-        color=gos.Channel("peak:Q", legend=True),
+        row=gos.Row("sample:N", legend=True),
+        color=gos.Color("peak:Q", legend=True),
     ).properties(width=725, height=100)
 
     track.view()
