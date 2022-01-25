@@ -17,7 +17,6 @@ cytogenetic_band = gos.csv(
     url="https://raw.githubusercontent.com/sehilyi/gemini-datasets/master/data/cytogenetic_band.csv",
     chromosomeField="Chr.",
     genomicFields=["ISCN_start", "ISCN_stop", "Basepair_start", "Basepair_stop"],
-    quantitativeFields=["Band", "Density"],
 )
 
 gene_anno = gos.beddb(

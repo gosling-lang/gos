@@ -87,6 +87,8 @@ class Color(FieldChannelMixin, core.Color):
     range : :class:`Range`
         Determine the colors that should be bound to data value. Default properties are
         determined considering the field type.
+    scale : enum('linear', 'log')
+
     type : enum('quantitative', 'nominal')
         Specify the data type
     """
@@ -94,9 +96,9 @@ class Color(FieldChannelMixin, core.Color):
     _encoding_name = "color"
 
     def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
-                 range=Undefined, type=Undefined, **kwds):
+                 range=Undefined, scale=Undefined, type=Undefined, **kwds):
         super(Color, self).__init__(shorthand=shorthand, domain=domain, field=field, legend=legend,
-                                    range=range, type=type, **kwds)
+                                    range=range, scale=scale, type=type, **kwds)
 
 
 class ColorValue(ValueChannelMixin, core.ChannelValue):

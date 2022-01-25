@@ -105,7 +105,7 @@ gene_overlay = gos.overlay(
 
 left = gos.stack(track1, track2, gene_overlay).properties(
     orientation="vertical",
-    yOffset=size / 3.65,
+    yOffset=size / 2.78,
 )
 
 top = gos.stack(
@@ -115,8 +115,10 @@ top = gos.stack(
 )
 
 matrix = gos.Track(micro_c).mark_rect().encode(
-    x=gos.X("position1:G", axis="none"),
-    y=gos.Y("position2:G", axis="none"),
+    x="xs:G",
+    xe="xe:G",
+    y="ys:G",
+    ye="ye:G",
     color=gos.Color("value:Q", range="warm"),
 ).properties(title="HFFc6_Micro-C", width=size, height=size)
 

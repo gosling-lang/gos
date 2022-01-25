@@ -153,6 +153,8 @@ class Color(ChannelDeep):
     range : :class:`Range`
         Determine the colors that should be bound to data value. Default properties are
         determined considering the field type.
+    scale : enum('linear', 'log')
+
     type : enum('quantitative', 'nominal')
         Specify the data type
     """
@@ -160,9 +162,9 @@ class Color(ChannelDeep):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, domain=Undefined, field=Undefined, legend=Undefined, range=Undefined,
-                 type=Undefined, **kwds):
-        super(Color, self).__init__(domain=domain, field=field, legend=legend, range=range, type=type,
-                                    **kwds)
+                 scale=Undefined, type=Undefined, **kwds):
+        super(Color, self).__init__(domain=domain, field=field, legend=legend, range=range, scale=scale,
+                                    type=type, **kwds)
 
 
 class DataDeep(GoslingSchema):
@@ -310,8 +312,6 @@ class CSVData(DataDeep):
         Specify the names of data fields if a CSV file is headerless.
     longToWideId : string
         experimental
-    quantitativeFields : List(string)
-        Specify the name of quantitative data fields.
     sampleLength : float
         Specify the number of rows loaded from the URL.
 
@@ -324,14 +324,13 @@ class CSVData(DataDeep):
 
     def __init__(self, type=Undefined, url=Undefined, chromosomeField=Undefined,
                  chromosomePrefix=Undefined, genomicFields=Undefined, genomicFieldsToConvert=Undefined,
-                 headerNames=Undefined, longToWideId=Undefined, quantitativeFields=Undefined,
-                 sampleLength=Undefined, separator=Undefined, **kwds):
+                 headerNames=Undefined, longToWideId=Undefined, sampleLength=Undefined,
+                 separator=Undefined, **kwds):
         super(CSVData, self).__init__(type=type, url=url, chromosomeField=chromosomeField,
                                       chromosomePrefix=chromosomePrefix, genomicFields=genomicFields,
                                       genomicFieldsToConvert=genomicFieldsToConvert,
                                       headerNames=headerNames, longToWideId=longToWideId,
-                                      quantitativeFields=quantitativeFields, sampleLength=sampleLength,
-                                      separator=separator, **kwds)
+                                      sampleLength=sampleLength, separator=separator, **kwds)
 
 
 class DataTransform(GoslingSchema):
@@ -671,8 +670,6 @@ class JSONData(DataDeep):
         Specify the name of genomic data fields.
     genomicFieldsToConvert : List(Mapping(required=[chromosomeField, genomicFields]))
         experimental
-    quantitativeFields : List(string)
-        Specify the name of quantitative data fields.
     sampleLength : float
         Specify the number of rows loaded from the URL.
 
@@ -682,13 +679,12 @@ class JSONData(DataDeep):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, type=Undefined, values=Undefined, chromosomeField=Undefined,
-                 genomicFields=Undefined, genomicFieldsToConvert=Undefined,
-                 quantitativeFields=Undefined, sampleLength=Undefined, **kwds):
+                 genomicFields=Undefined, genomicFieldsToConvert=Undefined, sampleLength=Undefined,
+                 **kwds):
         super(JSONData, self).__init__(type=type, values=values, chromosomeField=chromosomeField,
                                        genomicFields=genomicFields,
                                        genomicFieldsToConvert=genomicFieldsToConvert,
-                                       quantitativeFields=quantitativeFields, sampleLength=sampleLength,
-                                       **kwds)
+                                       sampleLength=sampleLength, **kwds)
 
 
 class JSONParseTransform(DataTransform):
@@ -807,13 +803,23 @@ class MatrixData(DataDeep):
     type : string
 
     url : string
-
+        URL link to the matrix data file
+    binSize : float
+        Determine the number of nearby cells to aggregate. __Default__: `1`
+    column : string
+        The name of the first genomic field. __Default__: `x`
+    row : string
+        The name of the first genomic field. __Default__: `y`
+    value : string
+        The name of the value field. __Default__: `value`
     """
     _schema = {'$ref': '#/definitions/MatrixData'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, type=Undefined, url=Undefined, **kwds):
-        super(MatrixData, self).__init__(type=type, url=url, **kwds)
+    def __init__(self, type=Undefined, url=Undefined, binSize=Undefined, column=Undefined,
+                 row=Undefined, value=Undefined, **kwds):
+        super(MatrixData, self).__init__(type=type, url=url, binSize=binSize, column=column, row=row,
+                                         value=value, **kwds)
 
 
 class MultipleViews(GoslingSchema):
@@ -1210,6 +1216,18 @@ class RangeFilter(FilterTransform):
         super(RangeFilter, self).__init__(field=field, inRange=inRange, type=type, **kwds)
 
 
+class ResponsiveSize(GoslingSchema):
+    """ResponsiveSize schema wrapper
+
+    anyOf(boolean, Mapping(required=[]))
+    """
+    _schema = {'$ref': '#/definitions/ResponsiveSize'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, *args, **kwds):
+        super(ResponsiveSize, self).__init__(*args, **kwds)
+
+
 class RootSpecWithMultipleViews(GoslingSpec):
     """RootSpecWithMultipleViews schema wrapper
 
@@ -1240,6 +1258,9 @@ class RootSpecWithMultipleViews(GoslingSpec):
         views](http://gosling-lang.org/docs/user-interaction#linking-views)
     orientation : :class:`Orientation`
         Specify the orientation.
+    responsiveSize : :class:`ResponsiveSize`
+        Determine whether to make the size of `GoslingComponent` bound to its parent
+        element. __Default__: `false`
     spacing : float
         - If `{"layout": "linear"}`, specify the space between tracks in pixels;
 
@@ -1274,17 +1295,18 @@ class RootSpecWithMultipleViews(GoslingSpec):
 
     def __init__(self, views=Undefined, arrangement=Undefined, assembly=Undefined,
                  centerRadius=Undefined, description=Undefined, layout=Undefined, linkingId=Undefined,
-                 orientation=Undefined, spacing=Undefined, static=Undefined, style=Undefined,
-                 subtitle=Undefined, title=Undefined, xAxis=Undefined, xDomain=Undefined,
-                 xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
+                 orientation=Undefined, responsiveSize=Undefined, spacing=Undefined, static=Undefined,
+                 style=Undefined, subtitle=Undefined, title=Undefined, xAxis=Undefined,
+                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(RootSpecWithMultipleViews, self).__init__(views=views, arrangement=arrangement,
                                                         assembly=assembly, centerRadius=centerRadius,
                                                         description=description, layout=layout,
                                                         linkingId=linkingId, orientation=orientation,
-                                                        spacing=spacing, static=static, style=style,
-                                                        subtitle=subtitle, title=title, xAxis=xAxis,
-                                                        xDomain=xDomain, xOffset=xOffset,
-                                                        yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
+                                                        responsiveSize=responsiveSize, spacing=spacing,
+                                                        static=static, style=style, subtitle=subtitle,
+                                                        title=title, xAxis=xAxis, xDomain=xDomain,
+                                                        xOffset=xOffset, yOffset=yOffset,
+                                                        zoomLimits=zoomLimits, **kwds)
 
 
 class RootSpecWithSingleView(GoslingSpec):
