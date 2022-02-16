@@ -867,9 +867,11 @@ class MultipleViews(GoslingSchema):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
@@ -881,13 +883,14 @@ class MultipleViews(GoslingSchema):
     def __init__(self, views=Undefined, arrangement=Undefined, assembly=Undefined,
                  centerRadius=Undefined, layout=Undefined, linkingId=Undefined, orientation=Undefined,
                  spacing=Undefined, static=Undefined, style=Undefined, xAxis=Undefined,
-                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
+                 xDomain=Undefined, xOffset=Undefined, yDomain=Undefined, yOffset=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(MultipleViews, self).__init__(views=views, arrangement=arrangement, assembly=assembly,
                                             centerRadius=centerRadius, layout=layout,
                                             linkingId=linkingId, orientation=orientation,
                                             spacing=spacing, static=static, style=style, xAxis=xAxis,
-                                            xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
-                                            zoomLimits=zoomLimits, **kwds)
+                                            xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
+                                            yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class MultivecData(DataDeep):
@@ -1111,7 +1114,7 @@ class PartialTrack(GoslingSchema):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -1122,6 +1125,8 @@ class PartialTrack(GoslingSchema):
 
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -1144,8 +1149,8 @@ class PartialTrack(GoslingSchema):
                  template=Undefined, text=Undefined, title=Undefined, tooltip=Undefined,
                  visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
                  xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
-                 y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined, zoomLimits=Undefined,
-                 **kwds):
+                 y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(PartialTrack, self).__init__(_invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                            assembly=assembly, centerRadius=centerRadius, color=color,
                                            data=data, dataTransform=dataTransform,
@@ -1162,7 +1167,7 @@ class PartialTrack(GoslingSchema):
                                            template=template, text=text, title=title, tooltip=tooltip,
                                            visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
                                            xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
-                                           y1=y1, y1e=y1e, yOffset=yOffset, ye=ye,
+                                           y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
                                            zoomLimits=zoomLimits, **kwds)
 
 
@@ -1181,7 +1186,7 @@ class Range(GoslingSchema):
 class PREDEFINED_COLORS(Range):
     """PREDEFINED_COLORS schema wrapper
 
-    enum('viridis', 'grey', 'spectral', 'warm', 'cividis', 'bupu', 'rdbu')
+    enum('viridis', 'grey', 'spectral', 'warm', 'cividis', 'bupu', 'rdbu', 'hot', 'pink')
     """
     _schema = {'$ref': '#/definitions/PREDEFINED_COLORS'}
     _rootschema = GoslingSchema._rootschema
@@ -1282,9 +1287,11 @@ class RootSpecWithMultipleViews(GoslingSpec):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
@@ -1297,7 +1304,8 @@ class RootSpecWithMultipleViews(GoslingSpec):
                  centerRadius=Undefined, description=Undefined, layout=Undefined, linkingId=Undefined,
                  orientation=Undefined, responsiveSize=Undefined, spacing=Undefined, static=Undefined,
                  style=Undefined, subtitle=Undefined, title=Undefined, xAxis=Undefined,
-                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
+                 xDomain=Undefined, xOffset=Undefined, yDomain=Undefined, yOffset=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(RootSpecWithMultipleViews, self).__init__(views=views, arrangement=arrangement,
                                                         assembly=assembly, centerRadius=centerRadius,
                                                         description=description, layout=layout,
@@ -1305,8 +1313,8 @@ class RootSpecWithMultipleViews(GoslingSpec):
                                                         responsiveSize=responsiveSize, spacing=spacing,
                                                         static=static, style=style, subtitle=subtitle,
                                                         title=title, xAxis=xAxis, xDomain=xDomain,
-                                                        xOffset=xOffset, yOffset=yOffset,
-                                                        zoomLimits=zoomLimits, **kwds)
+                                                        xOffset=xOffset, yDomain=yDomain,
+                                                        yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class RootSpecWithSingleView(GoslingSpec):
@@ -1411,9 +1419,11 @@ class FlatTracks(SingleView):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
@@ -1425,12 +1435,12 @@ class FlatTracks(SingleView):
     def __init__(self, tracks=Undefined, assembly=Undefined, centerRadius=Undefined, layout=Undefined,
                  linkingId=Undefined, orientation=Undefined, spacing=Undefined, static=Undefined,
                  style=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 yOffset=Undefined, zoomLimits=Undefined, **kwds):
+                 yDomain=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(FlatTracks, self).__init__(tracks=tracks, assembly=assembly, centerRadius=centerRadius,
                                          layout=layout, linkingId=linkingId, orientation=orientation,
                                          spacing=spacing, static=static, style=style, xAxis=xAxis,
-                                         xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
-                                         zoomLimits=zoomLimits, **kwds)
+                                         xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
+                                         yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class OverlaidTracks(SingleView):
@@ -1544,7 +1554,7 @@ class OverlaidTracks(SingleView):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -1555,6 +1565,8 @@ class OverlaidTracks(SingleView):
 
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -1577,8 +1589,8 @@ class OverlaidTracks(SingleView):
                  style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
                  tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
                  xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
-                 y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined, zoomLimits=Undefined,
-                 **kwds):
+                 y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(OverlaidTracks, self).__init__(alignment=alignment, height=height, tracks=tracks,
                                              width=width, _invalidTrack=_invalidTrack,
                                              _renderingId=_renderingId, assembly=assembly,
@@ -1596,8 +1608,8 @@ class OverlaidTracks(SingleView):
                                              text=text, title=title, tooltip=tooltip,
                                              visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
                                              xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1,
-                                             y1e=y1e, yOffset=yOffset, ye=ye, zoomLimits=zoomLimits,
-                                             **kwds)
+                                             y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
+                                             zoomLimits=zoomLimits, **kwds)
 
 
 class Size(ChannelDeep):
@@ -1739,7 +1751,7 @@ class StackedTracks(SingleView):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -1750,6 +1762,8 @@ class StackedTracks(SingleView):
 
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -1772,7 +1786,8 @@ class StackedTracks(SingleView):
                  text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined,
                  width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined, xAxis=Undefined,
                  xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined, y1=Undefined,
-                 y1e=Undefined, yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
+                 y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(StackedTracks, self).__init__(tracks=tracks, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, alignment=alignment,
                                             assembly=assembly, centerRadius=centerRadius, color=color,
@@ -1790,7 +1805,7 @@ class StackedTracks(SingleView):
                                             text=text, title=title, tooltip=tooltip,
                                             visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
                                             xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
-                                            y1=y1, y1e=y1e, yOffset=yOffset, ye=ye,
+                                            y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
                                             zoomLimits=zoomLimits, **kwds)
 
 
@@ -2109,9 +2124,11 @@ class DataTrack(Track):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
@@ -2126,7 +2143,8 @@ class DataTrack(Track):
                  orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
                  prerelease=Undefined, spacing=Undefined, startAngle=Undefined, static=Undefined,
                  style=Undefined, subtitle=Undefined, title=Undefined, xAxis=Undefined,
-                 xDomain=Undefined, xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
+                 xDomain=Undefined, xOffset=Undefined, yDomain=Undefined, yOffset=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(DataTrack, self).__init__(data=data, height=height, width=width,
                                         _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                         assembly=assembly, centerRadius=centerRadius, endAngle=endAngle,
@@ -2136,8 +2154,8 @@ class DataTrack(Track):
                                         overlayOnPreviousTrack=overlayOnPreviousTrack,
                                         prerelease=prerelease, spacing=spacing, startAngle=startAngle,
                                         static=static, style=style, subtitle=subtitle, title=title,
-                                        xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
-                                        zoomLimits=zoomLimits, **kwds)
+                                        xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
+                                        yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class OverlaidTrack(Track):
@@ -2250,7 +2268,7 @@ class OverlaidTrack(Track):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -2261,6 +2279,8 @@ class OverlaidTrack(Track):
 
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -2282,8 +2302,8 @@ class OverlaidTrack(Track):
                  strokeWidth=Undefined, style=Undefined, subtitle=Undefined, text=Undefined,
                  title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined,
                  x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
-                 y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined, ye=Undefined,
-                 zoomLimits=Undefined, **kwds):
+                 y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined,
+                 ye=Undefined, zoomLimits=Undefined, **kwds):
         super(OverlaidTrack, self).__init__(height=height, overlay=overlay, width=width,
                                             _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                             assembly=assembly, centerRadius=centerRadius, color=color,
@@ -2300,8 +2320,8 @@ class OverlaidTrack(Track):
                                             text=text, title=title, tooltip=tooltip,
                                             visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
                                             xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1,
-                                            y1e=y1e, yOffset=yOffset, ye=ye, zoomLimits=zoomLimits,
-                                            **kwds)
+                                            y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
+                                            zoomLimits=zoomLimits, **kwds)
 
 
 class SingleTrack(Track):
@@ -2411,7 +2431,7 @@ class SingleTrack(Track):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
     xe : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -2422,6 +2442,8 @@ class SingleTrack(Track):
 
     y1e : anyOf(:class:`Y`, :class:`ChannelValue`)
 
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
@@ -2443,8 +2465,8 @@ class SingleTrack(Track):
                  stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
                  text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined,
                  x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yOffset=Undefined,
-                 ye=Undefined, zoomLimits=Undefined, **kwds):
+                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined,
+                 yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
         super(SingleTrack, self).__init__(data=data, height=height, mark=mark, width=width,
                                           _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                           assembly=assembly, centerRadius=centerRadius, color=color,
@@ -2461,7 +2483,8 @@ class SingleTrack(Track):
                                           text=text, title=title, tooltip=tooltip,
                                           visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
                                           xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1, y1e=y1e,
-                                          yOffset=yOffset, ye=ye, zoomLimits=zoomLimits, **kwds)
+                                          yDomain=yDomain, yOffset=yOffset, ye=ye,
+                                          zoomLimits=zoomLimits, **kwds)
 
 
 class TemplateTrack(Track):
@@ -2540,9 +2563,11 @@ class TemplateTrack(Track):
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-
+        Specify the visible region of genomic x-axis
     xOffset : float
         Specify the x offset of views in the unit of pixels
+    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
+        Specify the visible region of genomic y-axis
     yOffset : float
         Specify the y offset of views in the unit of pixels
     zoomLimits : :class:`ZoomLimits`
@@ -2558,7 +2583,7 @@ class TemplateTrack(Track):
                  outerRadius=Undefined, overlayOnPreviousTrack=Undefined, prerelease=Undefined,
                  spacing=Undefined, startAngle=Undefined, static=Undefined, style=Undefined,
                  subtitle=Undefined, title=Undefined, xAxis=Undefined, xDomain=Undefined,
-                 xOffset=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
+                 xOffset=Undefined, yDomain=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(TemplateTrack, self).__init__(data=data, height=height, template=template, width=width,
                                             _invalidTrack=_invalidTrack, _renderingId=_renderingId,
                                             assembly=assembly, centerRadius=centerRadius,
@@ -2569,8 +2594,8 @@ class TemplateTrack(Track):
                                             prerelease=prerelease, spacing=spacing,
                                             startAngle=startAngle, static=static, style=style,
                                             subtitle=subtitle, title=title, xAxis=xAxis,
-                                            xDomain=xDomain, xOffset=xOffset, yOffset=yOffset,
-                                            zoomLimits=zoomLimits, **kwds)
+                                            xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
+                                            yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class ValueExtent(Range):
@@ -2738,7 +2763,7 @@ class Y(ChannelDeep):
         Specify where should the axis be put
     baseline : anyOf(string, float)
         Custom baseline of the y-axis. __Default__: `0`
-    domain : :class:`ValueExtent`
+    domain : anyOf(:class:`ValueExtent`, :class:`GenomicDomain`)
         Values of the data
     field : string
         Name of the data field.

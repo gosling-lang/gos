@@ -620,11 +620,26 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
           "type": "number"
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -993,11 +1008,26 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
           "type": "number"
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -1373,11 +1403,26 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
           "type": "number"
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -1829,7 +1874,8 @@
                   {
                     "$ref": "#/definitions/DomainChr"
                   }
-                ]
+                ],
+                "description": "Specify the visible region of genomic x-axis"
               },
               "xOffset": {
                 "description": "Specify the x offset of views in the unit of pixels",
@@ -1874,6 +1920,20 @@
                     "$ref": "#/definitions/ChannelValue"
                   }
                 ]
+              },
+              "yDomain": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/DomainInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChrInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChr"
+                  }
+                ],
+                "description": "Specify the visible region of genomic y-axis"
               },
               "yOffset": {
                 "description": "Specify the y offset of views in the unit of pixels",
@@ -2045,7 +2105,8 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
@@ -2090,6 +2151,20 @@
               "$ref": "#/definitions/ChannelValue"
             }
           ]
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -2362,7 +2437,8 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
@@ -2408,6 +2484,20 @@
             }
           ]
         },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
+        },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
           "type": "number"
@@ -2442,7 +2532,9 @@
         "warm",
         "cividis",
         "bupu",
-        "rdbu"
+        "rdbu",
+        "hot",
+        "pink"
       ],
       "type": "string"
     },
@@ -2758,7 +2850,8 @@
                   {
                     "$ref": "#/definitions/DomainChr"
                   }
-                ]
+                ],
+                "description": "Specify the visible region of genomic x-axis"
               },
               "xOffset": {
                 "description": "Specify the x offset of views in the unit of pixels",
@@ -2803,6 +2896,20 @@
                     "$ref": "#/definitions/ChannelValue"
                   }
                 ]
+              },
+              "yDomain": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/DomainInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChrInterval"
+                  },
+                  {
+                    "$ref": "#/definitions/DomainChr"
+                  }
+                ],
+                "description": "Specify the visible region of genomic y-axis"
               },
               "yOffset": {
                 "description": "Specify the y offset of views in the unit of pixels",
@@ -2977,7 +3084,8 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
@@ -3022,6 +3130,20 @@
               "$ref": "#/definitions/ChannelValue"
             }
           ]
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -3189,11 +3311,26 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
           "type": "number"
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -3463,7 +3600,8 @@
                 {
                   "$ref": "#/definitions/DomainChr"
                 }
-              ]
+              ],
+              "description": "Specify the visible region of genomic x-axis"
             },
             "xOffset": {
               "description": "Specify the x offset of views in the unit of pixels",
@@ -3508,6 +3646,20 @@
                   "$ref": "#/definitions/ChannelValue"
                 }
               ]
+            },
+            "yDomain": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/DomainInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChrInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChr"
+                }
+              ],
+              "description": "Specify the visible region of genomic y-axis"
             },
             "yOffset": {
               "description": "Specify the y offset of views in the unit of pixels",
@@ -3795,7 +3947,8 @@
                 {
                   "$ref": "#/definitions/DomainChr"
                 }
-              ]
+              ],
+              "description": "Specify the visible region of genomic x-axis"
             },
             "xOffset": {
               "description": "Specify the x offset of views in the unit of pixels",
@@ -3840,6 +3993,20 @@
                   "$ref": "#/definitions/ChannelValue"
                 }
               ]
+            },
+            "yDomain": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/DomainInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChrInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChr"
+                }
+              ],
+              "description": "Specify the visible region of genomic y-axis"
             },
             "yOffset": {
               "description": "Specify the y offset of views in the unit of pixels",
@@ -3933,11 +4100,26 @@
                 {
                   "$ref": "#/definitions/DomainChr"
                 }
-              ]
+              ],
+              "description": "Specify the visible region of genomic x-axis"
             },
             "xOffset": {
               "description": "Specify the x offset of views in the unit of pixels",
               "type": "number"
+            },
+            "yDomain": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/DomainInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChrInterval"
+                },
+                {
+                  "$ref": "#/definitions/DomainChr"
+                }
+              ],
+              "description": "Specify the visible region of genomic y-axis"
             },
             "yOffset": {
               "description": "Specify the y offset of views in the unit of pixels",
@@ -4225,7 +4407,8 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
@@ -4270,6 +4453,20 @@
               "$ref": "#/definitions/ChannelValue"
             }
           ]
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -4645,7 +4842,8 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
@@ -4690,6 +4888,20 @@
               "$ref": "#/definitions/ChannelValue"
             }
           ]
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -5085,11 +5297,26 @@
             {
               "$ref": "#/definitions/DomainChr"
             }
-          ]
+          ],
+          "description": "Specify the visible region of genomic x-axis"
         },
         "xOffset": {
           "description": "Specify the x offset of views in the unit of pixels",
           "type": "number"
+        },
+        "yDomain": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DomainInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChrInterval"
+            },
+            {
+              "$ref": "#/definitions/DomainChr"
+            }
+          ],
+          "description": "Specify the visible region of genomic y-axis"
         },
         "yOffset": {
           "description": "Specify the y offset of views in the unit of pixels",
@@ -5310,7 +5537,14 @@
           ]
         },
         "domain": {
-          "$ref": "#/definitions/ValueExtent",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ValueExtent"
+            },
+            {
+              "$ref": "#/definitions/GenomicDomain"
+            }
+          ],
           "description": "Values of the data"
         },
         "field": {

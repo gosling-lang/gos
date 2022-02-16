@@ -125,6 +125,7 @@ Low-Level Schema Wrappers
    PartialTrack
    Range
    RangeFilter
+   ResponsiveSize
    Root
    RootSpecWithMultipleViews
    RootSpecWithSingleView
