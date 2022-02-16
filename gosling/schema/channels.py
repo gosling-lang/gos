@@ -661,7 +661,7 @@ class Y(FieldChannelMixin, core.Y):
         Specify where should the axis be put
     baseline : anyOf(string, float)
         Custom baseline of the y-axis. __Default__: `0`
-    domain : :class:`ValueExtent`
+    domain : anyOf(:class:`ValueExtent`, :class:`GenomicDomain`)
         Values of the data
     field : string
         Name of the data field.
@@ -729,7 +729,7 @@ class Y1(FieldChannelMixin, core.Y):
         Specify where should the axis be put
     baseline : anyOf(string, float)
         Custom baseline of the y-axis. __Default__: `0`
-    domain : :class:`ValueExtent`
+    domain : anyOf(:class:`ValueExtent`, :class:`GenomicDomain`)
         Values of the data
     field : string
         Name of the data field.
@@ -797,7 +797,7 @@ class Y1e(FieldChannelMixin, core.Y):
         Specify where should the axis be put
     baseline : anyOf(string, float)
         Custom baseline of the y-axis. __Default__: `0`
-    domain : :class:`ValueExtent`
+    domain : anyOf(:class:`ValueExtent`, :class:`GenomicDomain`)
         Values of the data
     field : string
         Name of the data field.
@@ -865,7 +865,7 @@ class Ye(FieldChannelMixin, core.Y):
         Specify where should the axis be put
     baseline : anyOf(string, float)
         Custom baseline of the y-axis. __Default__: `0`
-    domain : :class:`ValueExtent`
+    domain : anyOf(:class:`ValueExtent`, :class:`GenomicDomain`)
         Values of the data
     field : string
         Name of the data field.
