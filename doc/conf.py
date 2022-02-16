@@ -34,7 +34,7 @@ project = "gos"
 copyright = "2021, Trevor Manz"
 author = "Trevor Manz"
 
-version = "0.0.6"
+version = "0.0.7"
 release = version
 
 todo_include_todos = False
