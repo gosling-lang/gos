@@ -6,7 +6,7 @@ Hi-C Heatmap
 import gosling as gos
  
 size = 500
-data = gos.matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=hffc6-microc-hg38")
+data = gos.matrix("https://server.gosling-lang.org/api/v1/tileset_info/?d=leung2015-hg38")
 # data = gos.matrix('/path/to/dataset.cool') # local dataset
     
 track = gos.Track(data).mark_bar().encode(
@@ -14,7 +14,7 @@ track = gos.Track(data).mark_bar().encode(
   xe="xe:G",
   y=gos.Y("ys:G", axis="left"),
   ye="ye:G",
-  color=gos.Color("value:Q", range="warm", legend=True),
+  color=gos.Color("value:Q", range="hot", legend=True),
 ).properties(width=size, height=size)
 
 track.view()
