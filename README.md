@@ -102,10 +102,10 @@ python tools/generate_schema_wrapper.py
 git checkout main && git pull
 ```
 
-Update version in `setup.py` and `doc/conf.py`:
+Update version in `setup.cfg` and `doc/conf.py`:
 
 ```bash
-git add setup.py doc/conf.py
+git add setup.cfg doc/conf.py
 git commit -m "v0.[minor].[patch]"
 git tag -a v0.[minor].[patch] -m "v0.[minor].[patch]"
 git push --follow-tags
