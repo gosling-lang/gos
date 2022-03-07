@@ -187,8 +187,7 @@ class View(_PropertiesMixin, core.Root):
 
     def _repr_mimebundle_(self, include=None, exclude=None):
         dct = self.to_dict()
-        renderer = display.renderers.get()
-        return renderer(dct) if renderer else {}
+        return display.html_renderer(dct)
 
     def display(self):
         """Render top-level chart using IPython.display."""
