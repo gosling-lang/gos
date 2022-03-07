@@ -32,13 +32,17 @@ HTML_TEMPLATE = jinja2.Template(
     async function loadGosling() {
         // Manually load scripts from window namespace since requirejs might not be
         // available in all browser environments.
+
         // https://github.com/DanielHreben/requirejs-toggle
         if (!window.gosling) {
+
+            // https://github.com/DanielHreben/requirejs-toggle
             window.__requirejsToggleBackup = {
                 define: window.define,
                 require: window.require,
                 requirejs: window.requirejs,
             };
+
             for (const field of Object.keys(window.__requirejsToggleBackup)) {
                 window[field] = undefined;
             }
@@ -57,7 +61,9 @@ HTML_TEMPLATE = jinja2.Template(
             // restore requirejs after scripts have loaded
             Object.assign(window, window.__requirejsToggleBackup);
             delete window.__requirejsToggleBackup;
+
         }
+
         return window.gosling;
     };
 
@@ -114,7 +120,7 @@ def get_display_dependencies(
 def spec_to_html(
     spec: GoslingSpec,
     output_div: str = "vis",
-    embed_options: Dict[str, Any] = None,
+    embed_options: Optional[Dict[str, Any]] = None,
     **kwargs,
 ):
     embed_options = embed_options or dict(padding=0, theme=themes.get())
@@ -154,31 +160,7 @@ class HTMLRenderer(Renderer):
         return {"text/html": html}
 
 
-@dataclass
-class RendererRegistry:
-    renderers: Dict[str, Renderer] = field(default_factory=dict)
-    active: Optional[str] = None
-
-    def register(self, name: str, renderer: Renderer) -> None:
-        self.renderers[name] = renderer
-
-    def enable(self, name: str) -> None:
-        assert name in self.renderers
-        self.active = name
-
-    def get(self) -> Renderer:
-        assert isinstance(self.active, str) and self.active in self.renderers
-        return self.renderers[self.active]
-
-
 html_renderer = HTMLRenderer()
-renderers = RendererRegistry()
-renderers.register("default", html_renderer)
-renderers.register("html", html_renderer)
-renderers.register("colab", html_renderer)
-renderers.register("kaggle", html_renderer)
-renderers.register("zeppelin", html_renderer)
-renderers.enable("default")
 
 CustomTheme = Dict[str, Any]
 
