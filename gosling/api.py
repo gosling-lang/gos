@@ -201,6 +201,15 @@ class View(_PropertiesMixin, core.Root):
         with open(path, mode="w") as f:
             f.write(html_str)
 
+    def widget(self):
+        try:
+            from gosling_widget import GoslingWidget
+        except ImportError:
+            raise ImportError(
+                "The 'gosling-widget' package is required to use the widget() method."
+            )
+
+        return GoslingWidget(self.to_dict())
 
 # View utilities
 
