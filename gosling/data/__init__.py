@@ -1,10 +1,11 @@
 import pathlib
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Union
 
 import gosling.data._tilesets as tilesets
-from gosling.data._provider import Provider, Resource, TilesetResource
 from gosling.utils.core import _compute_data_hash
 
+if TYPE_CHECKING:
+    from gosling.data._provider import Provider, Resource, TilesetResource
 
 def _hash_path(path: pathlib.Path):
     return _compute_data_hash(str(path))
@@ -37,6 +38,8 @@ class GoslingDataServer:
         **kwargs,
     ):
         if self._provider is None:
+            # only try to import server dependencies when using server
+            from gosling.data._provider import Provider
             self._provider = Provider(allowed_origins=["*"]).start(port=port)
 
         if port is not None and port != self._provider.port:
