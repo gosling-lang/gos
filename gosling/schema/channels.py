@@ -89,6 +89,11 @@ class Color(FieldChannelMixin, core.Color):
         determined considering the field type.
     scale : enum('linear', 'log')
 
+    scaleOffset : List([float, float])
+        Whether to use offset of the domain proportionally. This is bound to brushes on the
+        color legend. __Default__: `[0, 1]`
+    title : string
+        Title of the legend. __Default__: `undefined`
     type : enum('quantitative', 'nominal')
         Specify the data type
     """
@@ -96,9 +101,11 @@ class Color(FieldChannelMixin, core.Color):
     _encoding_name = "color"
 
     def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
-                 range=Undefined, scale=Undefined, type=Undefined, **kwds):
+                 range=Undefined, scale=Undefined, scaleOffset=Undefined, title=Undefined,
+                 type=Undefined, **kwds):
         super(Color, self).__init__(shorthand=shorthand, domain=domain, field=field, legend=legend,
-                                    range=range, scale=scale, type=type, **kwds)
+                                    range=range, scale=scale, scaleOffset=scaleOffset, title=title,
+                                    type=type, **kwds)
 
 
 class ColorValue(ValueChannelMixin, core.ChannelValue):
@@ -175,6 +182,9 @@ class Row(FieldChannelMixin, core.Row):
 
     shorthand : string
         shorthand for field, aggregate, and type
+    clip : boolean
+        Clip row when the actual y value exceeds the max value of the y scale. Used only for
+        bar marks at the moment. __Default__: `true`
     domain : :class:`ValueExtent`
         Values of the data
     field : string
@@ -195,9 +205,10 @@ class Row(FieldChannelMixin, core.Row):
     _class_is_valid_at_instantiation = False
     _encoding_name = "row"
 
-    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, grid=Undefined,
-                 legend=Undefined, padding=Undefined, range=Undefined, type=Undefined, **kwds):
-        super(Row, self).__init__(shorthand=shorthand, domain=domain, field=field, grid=grid,
+    def __init__(self, shorthand=Undefined, clip=Undefined, domain=Undefined, field=Undefined,
+                 grid=Undefined, legend=Undefined, padding=Undefined, range=Undefined, type=Undefined,
+                 **kwds):
+        super(Row, self).__init__(shorthand=shorthand, clip=clip, domain=domain, field=field, grid=grid,
                                   legend=legend, padding=padding, range=range, type=type, **kwds)
 
 
@@ -281,18 +292,26 @@ class Stroke(FieldChannelMixin, core.Stroke):
         Values of the data
     field : string
         Name of the data field
+    legend : boolean
+        Whether to display legend. __Default__: `false`
     range : :class:`Range`
         Ranges of visual channel values
+    scaleOffset : List([float, float])
+        Whether to use offset of the domain proportionally. This is bound to brushes on the
+        color legend. __Default__: `[0, 1]`
+    title : string
+        Title of the legend. __Default__: `undefined`
     type : enum('quantitative', 'nominal')
         Specify the data type
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "stroke"
 
-    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, range=Undefined,
-                 type=Undefined, **kwds):
-        super(Stroke, self).__init__(shorthand=shorthand, domain=domain, field=field, range=range,
-                                     type=type, **kwds)
+    def __init__(self, shorthand=Undefined, domain=Undefined, field=Undefined, legend=Undefined,
+                 range=Undefined, scaleOffset=Undefined, title=Undefined, type=Undefined, **kwds):
+        super(Stroke, self).__init__(shorthand=shorthand, domain=domain, field=field, legend=legend,
+                                     range=range, scaleOffset=scaleOffset, title=title, type=type,
+                                     **kwds)
 
 
 class StrokeValue(ValueChannelMixin, core.ChannelValue):

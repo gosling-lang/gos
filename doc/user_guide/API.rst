@@ -100,7 +100,6 @@ Low-Level Schema Wrappers
    ExonSplitTransform
    FieldType
    FilterTransform
-   FlatTracks
    GenomicDomain
    GenomicLengthTransform
    GoslingSchema
@@ -127,20 +126,19 @@ Low-Level Schema Wrappers
    RangeFilter
    ResponsiveSize
    Root
-   RootSpecWithMultipleViews
-   RootSpecWithSingleView
    Row
    SchemaBase
+   SelectivityCondition
    SingleTrack
    SingleView
    Size
    SizeVisibilityCondition
-   StackedTracks
    StrConcatTransform
    StrReplaceTransform
    Stroke
    StrokeWidth
    Style
+   SvTypeTransform
    TemplateTrack
    Text
    Tooltip
