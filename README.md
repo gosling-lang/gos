@@ -7,7 +7,7 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gosling-lang/gos/main?filepath=notebooks%2Fmultiple-coordinated-views.ipynb)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gosling-lang/gos/blob/main/notebooks/multiple-coordinated-views.ipynb)
 
-**gos** is a declarative (epi)genomics visualization library for Python.
+**gos** is a declarative genomics visualization library for Python.
 It is built on top of the [Gosling] JSON specification, providing a
 simplified interface for authoring interactive genomic visualizations.
 
