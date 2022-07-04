@@ -10,23 +10,25 @@ class MarkMethodMixin(object):
     """A mixin class that defines mark methods"""
 
     def mark_point(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                   curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                   brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                    enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                    linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                   linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                   outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                   textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                   linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                   outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                   textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'point'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "point"
@@ -35,23 +37,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_line(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                  curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                  brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                   enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                   linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                  linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                  outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                  textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                  linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                  outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'line'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "line"
@@ -60,23 +64,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_area(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                  curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                  brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                   enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                   linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                  linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                  outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                  textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                  linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                  outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'area'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "area"
@@ -85,23 +91,24 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_bar(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                 curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                 brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                  enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                  linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                 linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined, outlineWidth=Undefined,
-                 textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
-                 textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                 linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                 outlineWidth=Undefined, select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
+                 textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'bar'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "bar"
@@ -110,23 +117,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_rect(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                  curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                  brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                   enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                   linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                  linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                  outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                  textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                  linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                  outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'rect'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "rect"
@@ -135,23 +144,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_text(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                  curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                  brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                   enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                   linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                  linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                  outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                  textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                  linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                  outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'text'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "text"
@@ -160,24 +171,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_withinLink(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                        curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                        brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                         enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                         linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                        linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                        outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                        textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
-                        **kwds) -> T:
+                        linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined,
+                        outline=Undefined, outlineWidth=Undefined, select=Undefined,
+                        textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
+                        textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'withinLink'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "withinLink"
@@ -186,24 +198,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_betweenLink(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                         curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                         brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                          enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                          linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                         linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                         outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                         textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
-                         **kwds) -> T:
+                         linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined,
+                         outline=Undefined, outlineWidth=Undefined, select=Undefined,
+                         textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
+                         textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'betweenLink'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "betweenLink"
@@ -212,23 +225,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_rule(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                  curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                  brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                   enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                   linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                  linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                  outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                  textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                  linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                  outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                  textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'rule'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "rule"
@@ -237,11 +252,12 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_triangleLeft(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                          curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
-                          enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
-                          linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                          linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                          outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
+                          brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined,
+                          dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                          legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                          linkMinHeight=Undefined, linkStyle=Undefined, matrixExtent=Undefined,
+                          mouseOver=Undefined, outline=Undefined, outlineWidth=Undefined,
+                          select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
                           textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
                           **kwds) -> T:
         """Set the track's mark to 'triangleLeft'
@@ -249,12 +265,13 @@ class MarkMethodMixin(object):
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "triangleLeft"
@@ -263,11 +280,12 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_triangleRight(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                           curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
-                           enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
-                           linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                           linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                           outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
+                           brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined,
+                           dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                           legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
+                           linkMinHeight=Undefined, linkStyle=Undefined, matrixExtent=Undefined,
+                           mouseOver=Undefined, outline=Undefined, outlineWidth=Undefined,
+                           select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
                            textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
                            **kwds) -> T:
         """Set the track's mark to 'triangleRight'
@@ -275,12 +293,13 @@ class MarkMethodMixin(object):
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "triangleRight"
@@ -289,24 +308,26 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_triangleBottom(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                            curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
-                            enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
-                            linePattern=Undefined, linkConnectionType=Undefined,
+                            brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined,
+                            dy=Undefined, enableSmoothPath=Undefined, inlineLegend=Undefined,
+                            legendTitle=Undefined, linePattern=Undefined, linkConnectionType=Undefined,
                             linkMinHeight=Undefined, linkStyle=Undefined, matrixExtent=Undefined,
-                            outline=Undefined, outlineWidth=Undefined, textAnchor=Undefined,
-                            textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                            textStrokeWidth=Undefined, **kwds) -> T:
+                            mouseOver=Undefined, outline=Undefined, outlineWidth=Undefined,
+                            select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
+                            textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
+                            **kwds) -> T:
         """Set the track's mark to 'triangleBottom'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "triangleBottom"
@@ -315,23 +336,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_brush(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                   curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                   brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                    enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                    linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                   linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                   outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                   textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                   linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                   outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                   textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'brush'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "brush"
@@ -340,23 +363,25 @@ class MarkMethodMixin(object):
         return copy
 
     def mark_header(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                    curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                    brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                     enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                     linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                    linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined,
-                    outlineWidth=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                    textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
+                    linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                    outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                    textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                    textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'header'
     
         For information on additional arguments, see :class:`Style`
         """
         kwds = dict(align=align, background=background, backgroundOpacity=backgroundOpacity,
-                    curve=curve, dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
-                    inlineLegend=inlineLegend, legendTitle=legendTitle, linePattern=linePattern,
+                    brush=brush, curve=curve, dashed=dashed, dx=dx, dy=dy,
+                    enableSmoothPath=enableSmoothPath, inlineLegend=inlineLegend,
+                    legendTitle=legendTitle, linePattern=linePattern,
                     linkConnectionType=linkConnectionType, linkMinHeight=linkMinHeight,
-                    linkStyle=linkStyle, matrixExtent=matrixExtent, outline=outline,
-                    outlineWidth=outlineWidth, textAnchor=textAnchor, textFontSize=textFontSize,
-                    textFontWeight=textFontWeight, textStroke=textStroke,
+                    linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
+                    outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
+                    textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
                     textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "header"

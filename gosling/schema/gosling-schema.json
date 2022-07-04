@@ -531,6 +531,9 @@
         },
         {
           "$ref": "#/definitions/BAMData"
+        },
+        {
+          "$ref": "#/definitions/VCFData"
         }
       ]
     },
@@ -894,6 +897,35 @@
       ],
       "type": "object"
     },
+    "EventStyle": {
+      "additionalProperties": false,
+      "properties": {
+        "arrange": {
+          "description": "Show event effects behind or in front of marks.",
+          "enum": [
+            "behind",
+            "front"
+          ],
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "opacity": {
+          "type": "number"
+        },
+        "stroke": {
+          "type": "string"
+        },
+        "strokeOpacity": {
+          "type": "number"
+        },
+        "strokeWidth": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "ExonSplitTransform": {
       "additionalProperties": false,
       "properties": {
@@ -1086,6 +1118,22 @@
               "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
               "type": "number"
             },
+            "experimental": {
+              "additionalProperties": false,
+              "properties": {
+                "mouseEvents": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "$ref": "#/definitions/MouseEventsDeep"
+                    }
+                  ]
+                }
+              },
+              "type": "object"
+            },
             "flipY": {
               "type": "boolean"
             },
@@ -1215,6 +1263,22 @@
                       "endAngle": {
                         "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                         "type": "number"
+                      },
+                      "experimental": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "mouseEvents": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "$ref": "#/definitions/MouseEventsDeep"
+                              }
+                            ]
+                          }
+                        },
+                        "type": "object"
                       },
                       "flipY": {
                         "type": "boolean"
@@ -1812,6 +1876,22 @@
               "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
               "type": "number"
             },
+            "experimental": {
+              "additionalProperties": false,
+              "properties": {
+                "mouseEvents": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "$ref": "#/definitions/MouseEventsDeep"
+                    }
+                  ]
+                }
+              },
+              "type": "object"
+            },
             "flipY": {
               "type": "boolean"
             },
@@ -1941,6 +2021,22 @@
                       "endAngle": {
                         "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                         "type": "number"
+                      },
+                      "experimental": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "mouseEvents": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "$ref": "#/definitions/MouseEventsDeep"
+                              }
+                            ]
+                          }
+                        },
+                        "type": "object"
                       },
                       "flipY": {
                         "type": "boolean"
@@ -2588,6 +2684,22 @@
                       "endAngle": {
                         "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                         "type": "number"
+                      },
+                      "experimental": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "mouseEvents": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "$ref": "#/definitions/MouseEventsDeep"
+                              }
+                            ]
+                          }
+                        },
+                        "type": "object"
                       },
                       "flipY": {
                         "type": "boolean"
@@ -3462,6 +3574,27 @@
       ],
       "type": "object"
     },
+    "MouseEventsDeep": {
+      "additionalProperties": false,
+      "properties": {
+        "click": {
+          "type": "boolean"
+        },
+        "enableMouseOverOnMultipleMarks": {
+          "type": "boolean"
+        },
+        "groupMarksByField": {
+          "type": "string"
+        },
+        "mouseOver": {
+          "type": "boolean"
+        },
+        "rangeSelect": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "MultipleViews": {
       "additionalProperties": false,
       "properties": {
@@ -3763,6 +3896,22 @@
           "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
           "type": "number"
         },
+        "experimental": {
+          "additionalProperties": false,
+          "properties": {
+            "mouseEvents": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/definitions/MouseEventsDeep"
+                }
+              ]
+            }
+          },
+          "type": "object"
+        },
         "flipY": {
           "type": "boolean"
         },
@@ -3861,6 +4010,22 @@
               "endAngle": {
                 "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                 "type": "number"
+              },
+              "experimental": {
+                "additionalProperties": false,
+                "properties": {
+                  "mouseEvents": {
+                    "anyOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "$ref": "#/definitions/MouseEventsDeep"
+                      }
+                    ]
+                  }
+                },
+                "type": "object"
               },
               "flipY": {
                 "type": "boolean"
@@ -4410,6 +4575,22 @@
           "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
           "type": "number"
         },
+        "experimental": {
+          "additionalProperties": false,
+          "properties": {
+            "mouseEvents": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/definitions/MouseEventsDeep"
+                }
+              ]
+            }
+          },
+          "type": "object"
+        },
         "flipY": {
           "type": "boolean"
         },
@@ -4694,20 +4875,6 @@
       ],
       "type": "object"
     },
-    "PREDEFINED_COLORS": {
-      "enum": [
-        "viridis",
-        "grey",
-        "spectral",
-        "warm",
-        "cividis",
-        "bupu",
-        "rdbu",
-        "hot",
-        "pink"
-      ],
-      "type": "string"
-    },
     "PartialTrack": {
       "additionalProperties": false,
       "properties": {
@@ -4768,6 +4935,22 @@
         "endAngle": {
           "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
           "type": "number"
+        },
+        "experimental": {
+          "additionalProperties": false,
+          "properties": {
+            "mouseEvents": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/definitions/MouseEventsDeep"
+                }
+              ]
+            }
+          },
+          "type": "object"
         },
         "flipY": {
           "type": "boolean"
@@ -4867,6 +5050,22 @@
               "endAngle": {
                 "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                 "type": "number"
+              },
+              "experimental": {
+                "additionalProperties": false,
+                "properties": {
+                  "mouseEvents": {
+                    "anyOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "$ref": "#/definitions/MouseEventsDeep"
+                      }
+                    ]
+                  }
+                },
+                "type": "object"
               },
               "flipY": {
                 "type": "boolean"
@@ -5355,13 +5554,27 @@
       },
       "type": "object"
     },
+    "PredefinedColors": {
+      "enum": [
+        "viridis",
+        "grey",
+        "spectral",
+        "warm",
+        "cividis",
+        "bupu",
+        "rdbu",
+        "hot",
+        "pink"
+      ],
+      "type": "string"
+    },
     "Range": {
       "anyOf": [
         {
           "$ref": "#/definitions/ValueExtent"
         },
         {
-          "$ref": "#/definitions/PREDEFINED_COLORS"
+          "$ref": "#/definitions/PredefinedColors"
         }
       ]
     },
@@ -5540,6 +5753,22 @@
         "endAngle": {
           "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
           "type": "number"
+        },
+        "experimental": {
+          "additionalProperties": false,
+          "properties": {
+            "mouseEvents": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/definitions/MouseEventsDeep"
+                }
+              ]
+            }
+          },
+          "type": "object"
         },
         "flipY": {
           "type": "boolean"
@@ -5880,6 +6109,22 @@
               "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
               "type": "number"
             },
+            "experimental": {
+              "additionalProperties": false,
+              "properties": {
+                "mouseEvents": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "$ref": "#/definitions/MouseEventsDeep"
+                    }
+                  ]
+                }
+              },
+              "type": "object"
+            },
             "flipY": {
               "type": "boolean"
             },
@@ -6005,6 +6250,22 @@
                       "endAngle": {
                         "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                         "type": "number"
+                      },
+                      "experimental": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "mouseEvents": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "$ref": "#/definitions/MouseEventsDeep"
+                              }
+                            ]
+                          }
+                        },
+                        "type": "object"
                       },
                       "flipY": {
                         "type": "boolean"
@@ -6599,6 +6860,22 @@
               "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
               "type": "number"
             },
+            "experimental": {
+              "additionalProperties": false,
+              "properties": {
+                "mouseEvents": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "$ref": "#/definitions/MouseEventsDeep"
+                    }
+                  ]
+                }
+              },
+              "type": "object"
+            },
             "flipY": {
               "type": "boolean"
             },
@@ -6724,6 +7001,22 @@
                       "endAngle": {
                         "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                         "type": "number"
+                      },
+                      "experimental": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "mouseEvents": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "$ref": "#/definitions/MouseEventsDeep"
+                              }
+                            ]
+                          }
+                        },
+                        "type": "object"
                       },
                       "flipY": {
                         "type": "boolean"
@@ -7365,6 +7658,22 @@
                         "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
                         "type": "number"
                       },
+                      "experimental": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "mouseEvents": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "$ref": "#/definitions/MouseEventsDeep"
+                              }
+                            ]
+                          }
+                        },
+                        "type": "object"
+                      },
                       "flipY": {
                         "type": "boolean"
                       },
@@ -7980,6 +8289,28 @@
         "backgroundOpacity": {
           "type": "number"
         },
+        "brush": {
+          "additionalProperties": false,
+          "description": "Customize the style of range brushes.",
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "opacity": {
+              "type": "number"
+            },
+            "stroke": {
+              "type": "string"
+            },
+            "strokeOpacity": {
+              "type": "number"
+            },
+            "strokeWidth": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
         "curve": {
           "description": "Specify the curve of `rule` marks.",
           "enum": [
@@ -8064,7 +8395,7 @@
             "elliptical",
             "circular",
             "straight",
-            "_bezier_deprecated_"
+            "experimentalEdgeBundling"
           ],
           "type": "string"
         },
@@ -8077,11 +8408,19 @@
           ],
           "type": "string"
         },
+        "mouseOver": {
+          "$ref": "#/definitions/EventStyle",
+          "description": "Customize visual effects of mouse over events on marks."
+        },
         "outline": {
           "type": "string"
         },
         "outlineWidth": {
           "type": "number"
+        },
+        "select": {
+          "$ref": "#/definitions/EventStyle",
+          "description": "Customize visual effects selection events on marks with range brushes."
         },
         "textAnchor": {
           "description": "Specify the alignment of `text` marks to a given point.",
@@ -8402,6 +8741,34 @@
           "$ref": "#/definitions/TemplateTrack"
         }
       ]
+    },
+    "VCFData": {
+      "additionalProperties": false,
+      "description": "The Variant Call Format (VCF).",
+      "properties": {
+        "indexUrl": {
+          "description": "URL link to the tabix index file",
+          "type": "string"
+        },
+        "sampleLength": {
+          "description": "The maximum number of rows to be loaded from the URL. __Default:__ `1000`",
+          "type": "number"
+        },
+        "type": {
+          "const": "vcf",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL link to the VCF file",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "indexUrl"
+      ],
+      "type": "object"
     },
     "ValueExtent": {
       "anyOf": [
