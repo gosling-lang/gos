@@ -1,5 +1,5 @@
 **gos**: declarative genomics visualization in python
-=============================================
+=====================================================
 .. role:: raw-html(raw)
    :format: html
 

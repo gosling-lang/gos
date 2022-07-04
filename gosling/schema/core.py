@@ -177,7 +177,8 @@ class DataDeep(GoslingSchema):
     """DataDeep schema wrapper
 
     anyOf(:class:`JSONData`, :class:`CSVData`, :class:`BIGWIGData`, :class:`MultivecData`,
-    :class:`BEDDBData`, :class:`VectorData`, :class:`MatrixData`, :class:`BAMData`)
+    :class:`BEDDBData`, :class:`VectorData`, :class:`MatrixData`, :class:`BAMData`,
+    :class:`VCFData`)
     """
     _schema = {'$ref': '#/definitions/DataDeep'}
     _rootschema = GoslingSchema._rootschema
@@ -454,6 +455,36 @@ class DisplacementType(GoslingSchema):
 
     def __init__(self, *args):
         super(DisplacementType, self).__init__(*args)
+
+
+class EventStyle(GoslingSchema):
+    """EventStyle schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    arrange : enum('behind', 'front')
+        Show event effects behind or in front of marks.
+    color : string
+
+    opacity : float
+
+    stroke : string
+
+    strokeOpacity : float
+
+    strokeWidth : float
+
+    """
+    _schema = {'$ref': '#/definitions/EventStyle'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, arrange=Undefined, color=Undefined, opacity=Undefined, stroke=Undefined,
+                 strokeOpacity=Undefined, strokeWidth=Undefined, **kwds):
+        super(EventStyle, self).__init__(arrange=arrange, color=color, opacity=opacity, stroke=stroke,
+                                         strokeOpacity=strokeOpacity, strokeWidth=strokeWidth, **kwds)
 
 
 class ExonSplitTransform(DataTransform):
@@ -830,6 +861,36 @@ class MatrixData(DataDeep):
                                          value=value, **kwds)
 
 
+class MouseEventsDeep(GoslingSchema):
+    """MouseEventsDeep schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    click : boolean
+
+    enableMouseOverOnMultipleMarks : boolean
+
+    groupMarksByField : string
+
+    mouseOver : boolean
+
+    rangeSelect : boolean
+
+    """
+    _schema = {'$ref': '#/definitions/MouseEventsDeep'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, click=Undefined, enableMouseOverOnMultipleMarks=Undefined,
+                 groupMarksByField=Undefined, mouseOver=Undefined, rangeSelect=Undefined, **kwds):
+        super(MouseEventsDeep, self).__init__(click=click,
+                                              enableMouseOverOnMultipleMarks=enableMouseOverOnMultipleMarks,
+                                              groupMarksByField=groupMarksByField, mouseOver=mouseOver,
+                                              rangeSelect=rangeSelect, **kwds)
+
+
 class MultipleViews(GoslingSchema):
     """MultipleViews schema wrapper
 
@@ -1060,6 +1121,8 @@ class OverlaidTracks(GoslingSchema):
     endAngle : float
         Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
+    experimental : Mapping(required=[])
+
     flipY : boolean
 
     id : string
@@ -1158,9 +1221,9 @@ class OverlaidTracks(GoslingSchema):
                  _assignedHeight=Undefined, _assignedWidth=Undefined, _invalidTrack=Undefined,
                  _renderingId=Undefined, assembly=Undefined, baselineY=Undefined,
                  centerRadius=Undefined, color=Undefined, data=Undefined, dataTransform=Undefined,
-                 displacement=Undefined, endAngle=Undefined, flipY=Undefined, id=Undefined,
-                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
-                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 displacement=Undefined, endAngle=Undefined, experimental=Undefined, flipY=Undefined,
+                 id=Undefined, innerRadius=Undefined, layout=Undefined, linkingId=Undefined,
+                 mark=Undefined, opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
                  overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
                  row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
                  static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
@@ -1175,8 +1238,9 @@ class OverlaidTracks(GoslingSchema):
                                              _renderingId=_renderingId, assembly=assembly,
                                              baselineY=baselineY, centerRadius=centerRadius,
                                              color=color, data=data, dataTransform=dataTransform,
-                                             displacement=displacement, endAngle=endAngle, flipY=flipY,
-                                             id=id, innerRadius=innerRadius, layout=layout,
+                                             displacement=displacement, endAngle=endAngle,
+                                             experimental=experimental, flipY=flipY, id=id,
+                                             innerRadius=innerRadius, layout=layout,
                                              linkingId=linkingId, mark=mark, opacity=opacity,
                                              orientation=orientation, outerRadius=outerRadius,
                                              overlayOnPreviousTrack=overlayOnPreviousTrack,
@@ -1231,6 +1295,8 @@ class PartialTrack(GoslingSchema):
     endAngle : float
         Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
+    experimental : Mapping(required=[])
+
     flipY : boolean
 
     height : float
@@ -1336,28 +1402,29 @@ class PartialTrack(GoslingSchema):
     def __init__(self, _assignedHeight=Undefined, _assignedWidth=Undefined, _invalidTrack=Undefined,
                  _renderingId=Undefined, assembly=Undefined, baselineY=Undefined,
                  centerRadius=Undefined, color=Undefined, data=Undefined, dataTransform=Undefined,
-                 displacement=Undefined, encoding=Undefined, endAngle=Undefined, flipY=Undefined,
-                 height=Undefined, id=Undefined, innerRadius=Undefined, layout=Undefined,
-                 linkingId=Undefined, mark=Undefined, opacity=Undefined, orientation=Undefined,
-                 outerRadius=Undefined, overlay=Undefined, overlayOnPreviousTrack=Undefined,
-                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
-                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
-                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
-                 template=Undefined, text=Undefined, title=Undefined, tooltip=Undefined,
-                 visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
-                 xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
-                 y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
-                 zoomLimits=Undefined, **kwds):
+                 displacement=Undefined, encoding=Undefined, endAngle=Undefined, experimental=Undefined,
+                 flipY=Undefined, height=Undefined, id=Undefined, innerRadius=Undefined,
+                 layout=Undefined, linkingId=Undefined, mark=Undefined, opacity=Undefined,
+                 orientation=Undefined, outerRadius=Undefined, overlay=Undefined,
+                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
+                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
+                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
+                 style=Undefined, subtitle=Undefined, template=Undefined, text=Undefined,
+                 title=Undefined, tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined,
+                 x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
+                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined,
+                 yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
         super(PartialTrack, self).__init__(_assignedHeight=_assignedHeight,
                                            _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                            _renderingId=_renderingId, assembly=assembly,
                                            baselineY=baselineY, centerRadius=centerRadius, color=color,
                                            data=data, dataTransform=dataTransform,
                                            displacement=displacement, encoding=encoding,
-                                           endAngle=endAngle, flipY=flipY, height=height, id=id,
-                                           innerRadius=innerRadius, layout=layout, linkingId=linkingId,
-                                           mark=mark, opacity=opacity, orientation=orientation,
-                                           outerRadius=outerRadius, overlay=overlay,
+                                           endAngle=endAngle, experimental=experimental, flipY=flipY,
+                                           height=height, id=id, innerRadius=innerRadius, layout=layout,
+                                           linkingId=linkingId, mark=mark, opacity=opacity,
+                                           orientation=orientation, outerRadius=outerRadius,
+                                           overlay=overlay,
                                            overlayOnPreviousTrack=overlayOnPreviousTrack,
                                            overrideTemplate=overrideTemplate, prerelease=prerelease,
                                            row=row, size=size, spacing=spacing, startAngle=startAngle,
@@ -1373,7 +1440,7 @@ class PartialTrack(GoslingSchema):
 class Range(GoslingSchema):
     """Range schema wrapper
 
-    anyOf(:class:`ValueExtent`, :class:`PREDEFINED_COLORS`)
+    anyOf(:class:`ValueExtent`, :class:`PredefinedColors`)
     """
     _schema = {'$ref': '#/definitions/Range'}
     _rootschema = GoslingSchema._rootschema
@@ -1382,16 +1449,16 @@ class Range(GoslingSchema):
         super(Range, self).__init__(*args, **kwds)
 
 
-class PREDEFINED_COLORS(Range):
-    """PREDEFINED_COLORS schema wrapper
+class PredefinedColors(Range):
+    """PredefinedColors schema wrapper
 
     enum('viridis', 'grey', 'spectral', 'warm', 'cividis', 'bupu', 'rdbu', 'hot', 'pink')
     """
-    _schema = {'$ref': '#/definitions/PREDEFINED_COLORS'}
+    _schema = {'$ref': '#/definitions/PredefinedColors'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, *args):
-        super(PREDEFINED_COLORS, self).__init__(*args)
+        super(PredefinedColors, self).__init__(*args)
 
 
 class RangeFilter(FilterTransform):
@@ -1659,6 +1726,8 @@ class Style(GoslingSchema):
 
     backgroundOpacity : float
 
+    brush : Mapping(required=[])
+        Customize the style of range brushes.
     curve : enum('top', 'bottom', 'left', 'right')
         Specify the curve of `rule` marks.
     dashed : List([float, float])
@@ -1686,16 +1755,20 @@ class Style(GoslingSchema):
     linkMinHeight : float
         The minimum height of `withinLink` and `betweenLink` marks. Unit is a percentagle.
         __Default__: `0.5`
-    linkStyle : enum('elliptical', 'circular', 'straight', '_bezier_deprecated_')
+    linkStyle : enum('elliptical', 'circular', 'straight', 'experimentalEdgeBundling')
         The style of `withinLink` and `betweenLink` marks. __Default__: `'circular'`
         `'elliptical'` will be used as a default option.
     matrixExtent : enum('full', 'upper-right', 'lower-left')
         Determine to show only one side of the diagonal in a HiGlass matrix. __Default__:
         `"full"`
+    mouseOver : :class:`EventStyle`
+        Customize visual effects of mouse over events on marks.
     outline : string
 
     outlineWidth : float
 
+    select : :class:`EventStyle`
+        Customize visual effects selection events on marks with range brushes.
     textAnchor : enum('start', 'middle', 'end')
         Specify the alignment of `text` marks to a given point.
     textFontSize : float
@@ -1714,20 +1787,20 @@ class Style(GoslingSchema):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                 curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                 brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
                  enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
                  linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                 linkStyle=Undefined, matrixExtent=Undefined, outline=Undefined, outlineWidth=Undefined,
-                 textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
-                 textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
+                 linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
+                 outlineWidth=Undefined, select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
+                 textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
         super(Style, self).__init__(align=align, background=background,
-                                    backgroundOpacity=backgroundOpacity, curve=curve, dashed=dashed,
-                                    dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
+                                    backgroundOpacity=backgroundOpacity, brush=brush, curve=curve,
+                                    dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
                                     inlineLegend=inlineLegend, legendTitle=legendTitle,
                                     linePattern=linePattern, linkConnectionType=linkConnectionType,
                                     linkMinHeight=linkMinHeight, linkStyle=linkStyle,
-                                    matrixExtent=matrixExtent, outline=outline,
-                                    outlineWidth=outlineWidth, textAnchor=textAnchor,
+                                    matrixExtent=matrixExtent, mouseOver=mouseOver, outline=outline,
+                                    outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                                     textFontSize=textFontSize, textFontWeight=textFontWeight,
                                     textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
 
@@ -1977,6 +2050,8 @@ class OverlaidTrack(Track):
     endAngle : float
         Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
+    experimental : Mapping(required=[])
+
     flipY : boolean
 
     id : string
@@ -2075,26 +2150,27 @@ class OverlaidTrack(Track):
                  _assignedWidth=Undefined, _invalidTrack=Undefined, _renderingId=Undefined,
                  assembly=Undefined, baselineY=Undefined, centerRadius=Undefined, color=Undefined,
                  data=Undefined, dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
-                 flipY=Undefined, id=Undefined, innerRadius=Undefined, layout=Undefined,
-                 linkingId=Undefined, mark=Undefined, opacity=Undefined, orientation=Undefined,
-                 outerRadius=Undefined, overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined,
-                 prerelease=Undefined, row=Undefined, size=Undefined, spacing=Undefined,
-                 startAngle=Undefined, static=Undefined, stretch=Undefined, stroke=Undefined,
-                 strokeWidth=Undefined, style=Undefined, subtitle=Undefined, text=Undefined,
-                 title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined,
-                 x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
-                 y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined,
-                 ye=Undefined, zoomLimits=Undefined, **kwds):
+                 experimental=Undefined, flipY=Undefined, id=Undefined, innerRadius=Undefined,
+                 layout=Undefined, linkingId=Undefined, mark=Undefined, opacity=Undefined,
+                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
+                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
+                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
+                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined,
+                 x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
+                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined,
+                 yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
         super(OverlaidTrack, self).__init__(height=height, overlay=overlay, width=width,
                                             _assignedHeight=_assignedHeight,
                                             _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, assembly=assembly,
                                             baselineY=baselineY, centerRadius=centerRadius, color=color,
                                             data=data, dataTransform=dataTransform,
-                                            displacement=displacement, endAngle=endAngle, flipY=flipY,
-                                            id=id, innerRadius=innerRadius, layout=layout,
-                                            linkingId=linkingId, mark=mark, opacity=opacity,
-                                            orientation=orientation, outerRadius=outerRadius,
+                                            displacement=displacement, endAngle=endAngle,
+                                            experimental=experimental, flipY=flipY, id=id,
+                                            innerRadius=innerRadius, layout=layout, linkingId=linkingId,
+                                            mark=mark, opacity=opacity, orientation=orientation,
+                                            outerRadius=outerRadius,
                                             overlayOnPreviousTrack=overlayOnPreviousTrack,
                                             overrideTemplate=overrideTemplate, prerelease=prerelease,
                                             row=row, size=size, spacing=spacing, startAngle=startAngle,
@@ -2151,6 +2227,8 @@ class SingleTrack(Track):
     endAngle : float
         Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
+    experimental : Mapping(required=[])
+
     flipY : boolean
 
     id : string
@@ -2247,25 +2325,26 @@ class SingleTrack(Track):
                  _assignedHeight=Undefined, _assignedWidth=Undefined, _invalidTrack=Undefined,
                  _renderingId=Undefined, assembly=Undefined, baselineY=Undefined,
                  centerRadius=Undefined, color=Undefined, dataTransform=Undefined,
-                 displacement=Undefined, endAngle=Undefined, flipY=Undefined, id=Undefined,
-                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, opacity=Undefined,
-                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
-                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
-                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
-                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
-                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined,
-                 x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined,
-                 yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
+                 displacement=Undefined, endAngle=Undefined, experimental=Undefined, flipY=Undefined,
+                 id=Undefined, innerRadius=Undefined, layout=Undefined, linkingId=Undefined,
+                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
+                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
+                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
+                 style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
+                 tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
+                 xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
+                 y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(SingleTrack, self).__init__(data=data, height=height, mark=mark, width=width,
                                           _assignedHeight=_assignedHeight,
                                           _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                           _renderingId=_renderingId, assembly=assembly,
                                           baselineY=baselineY, centerRadius=centerRadius, color=color,
                                           dataTransform=dataTransform, displacement=displacement,
-                                          endAngle=endAngle, flipY=flipY, id=id,
-                                          innerRadius=innerRadius, layout=layout, linkingId=linkingId,
-                                          opacity=opacity, orientation=orientation,
+                                          endAngle=endAngle, experimental=experimental, flipY=flipY,
+                                          id=id, innerRadius=innerRadius, layout=layout,
+                                          linkingId=linkingId, opacity=opacity, orientation=orientation,
                                           outerRadius=outerRadius,
                                           overlayOnPreviousTrack=overlayOnPreviousTrack,
                                           overrideTemplate=overrideTemplate, prerelease=prerelease,
@@ -2395,6 +2474,32 @@ class TemplateTrack(Track):
                                             subtitle=subtitle, title=title, xAxis=xAxis,
                                             xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
                                             yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
+
+
+class VCFData(DataDeep):
+    """VCFData schema wrapper
+
+    Mapping(required=[type, url, indexUrl])
+    The Variant Call Format (VCF).
+
+    Attributes
+    ----------
+
+    indexUrl : string
+        URL link to the tabix index file
+    type : string
+
+    url : string
+        URL link to the VCF file
+    sampleLength : float
+        The maximum number of rows to be loaded from the URL. __Default:__ `1000`
+    """
+    _schema = {'$ref': '#/definitions/VCFData'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, sampleLength=Undefined, **kwds):
+        super(VCFData, self).__init__(indexUrl=indexUrl, type=type, url=url, sampleLength=sampleLength,
+                                      **kwds)
 
 
 class ValueExtent(Range):

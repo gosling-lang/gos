@@ -97,6 +97,7 @@ Low-Level Schema Wrappers
    DomainChrInterval
    DomainGene
    DomainInterval
+   EventStyle
    ExonSplitTransform
    FieldType
    FilterTransform
@@ -113,6 +114,7 @@ Low-Level Schema Wrappers
    LogicalOperation
    Mark
    MatrixData
+   MouseEventsDeep
    MultipleViews
    MultivecData
    OneOfFilter
@@ -120,8 +122,8 @@ Low-Level Schema Wrappers
    Orientation
    OverlaidTrack
    OverlaidTracks
-   PREDEFINED_COLORS
    PartialTrack
+   PredefinedColors
    Range
    RangeFilter
    ResponsiveSize
@@ -143,6 +145,7 @@ Low-Level Schema Wrappers
    Text
    Tooltip
    Track
+   VCFData
    ValueExtent
    VectorData
    VisibilityCondition
