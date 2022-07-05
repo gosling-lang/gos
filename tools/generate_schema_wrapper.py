@@ -292,10 +292,8 @@ def generate_channel_wrappers(schemafile, imports=None):
 
     contents.append(CHANNEL_MIXINS)
 
-    encoding_def = "SingleTrack"
+    encoding_def = "SingleTrack" # ideally we should be able to use "Encoding" type here...
     encoding = SchemaInfo(schema["definitions"][encoding_def], rootschema=schema)
-
-    from rich import print
 
     # Iterate over all properties defined on `SingleTrack` since encoding fields
     # are defined at the same level as non-encoding fields. We filter for visual
