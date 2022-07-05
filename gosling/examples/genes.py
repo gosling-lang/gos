@@ -28,12 +28,7 @@ genes = gos.beddb(
 base = gos.Track(genes).encode(
     row=gos.Row("strand:N", domain=["+", "-"]),
     color=gos.Color("strand:N", domain=["+", "-"], range=["#7585FF", "#FF8A85"]),
-    tooltip=[
-        gos.Tooltip(field="start", type="genomic", alt="Start Position"),
-        gos.Tooltip(field="end", type="genomic", alt="End Position"),
-        gos.Tooltip(field="strand", type="nominal", alt="Strand"),
-        gos.Tooltip(field="name", type="nominal", alt="Name")
-    ]
+    tooltip=["start:G", "end:G", "strand:N", "name:N"],
 ).properties(
     title="Genes | hg38",
 )
