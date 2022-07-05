@@ -295,6 +295,8 @@ def generate_channel_wrappers(schemafile, imports=None):
     encoding_def = "SingleTrack"
     encoding = SchemaInfo(schema["definitions"][encoding_def], rootschema=schema)
 
+    from rich import print
+
     # Iterate over all properties defined on `SingleTrack` since encoding fields
     # are defined at the same level as non-encoding fields. We filter for visual
     # channel properties since they are distinguished by `ChannelValue` option.
@@ -309,8 +311,9 @@ def generate_channel_wrappers(schemafile, imports=None):
             definitions = [s.ref for s in propschema.anyOf if s.is_reference()]
             if not any("ChannelValue" in d for d in definitions):
                 definitions = []
+        elif prop == 'tooltip':
+            definitions = [propschema.items['$ref']]
         else:
-            # raise ValueError("either $ref or anyOf expected")
             definitions = []
 
         for definition in definitions:
