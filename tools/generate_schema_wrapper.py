@@ -292,7 +292,7 @@ def generate_channel_wrappers(schemafile, imports=None):
 
     contents.append(CHANNEL_MIXINS)
 
-    encoding_def = "SingleTrack"
+    encoding_def = "SingleTrack" # ideally we should be able to use "Encoding" type here...
     encoding = SchemaInfo(schema["definitions"][encoding_def], rootschema=schema)
 
     # Iterate over all properties defined on `SingleTrack` since encoding fields
@@ -309,8 +309,9 @@ def generate_channel_wrappers(schemafile, imports=None):
             definitions = [s.ref for s in propschema.anyOf if s.is_reference()]
             if not any("ChannelValue" in d for d in definitions):
                 definitions = []
+        elif prop == 'tooltip':
+            definitions = [propschema.items['$ref']]
         else:
-            # raise ValueError("either $ref or anyOf expected")
             definitions = []
 
         for definition in definitions:

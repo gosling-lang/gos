@@ -424,6 +424,34 @@ class TextValue(ValueChannelMixin, core.ChannelValue):
         super(TextValue, self).__init__(value=value, **kwds)
 
 
+class Tooltip(FieldChannelMixin, core.Tooltip):
+    """Tooltip schema wrapper
+
+    Mapping(required=[shorthand])
+
+    Attributes
+    ----------
+
+    shorthand : string
+        shorthand for field, aggregate, and type
+    alt : string
+
+    field : string
+
+    format : string
+
+    type : :class:`FieldType`
+
+    """
+    _class_is_valid_at_instantiation = False
+    _encoding_name = "tooltip"
+
+    def __init__(self, shorthand=Undefined, alt=Undefined, field=Undefined, format=Undefined,
+                 type=Undefined, **kwds):
+        super(Tooltip, self).__init__(shorthand=shorthand, alt=alt, field=field, format=format,
+                                      type=type, **kwds)
+
+
 class X(FieldChannelMixin, core.X):
     """X schema wrapper
 

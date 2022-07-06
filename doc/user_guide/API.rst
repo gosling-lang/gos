@@ -35,6 +35,7 @@ Encoding Channels
    StrokeWidthValue
    Text
    TextValue
+   Tooltip
    X
    X1
    X1Value
