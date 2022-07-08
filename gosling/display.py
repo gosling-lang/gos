@@ -39,11 +39,7 @@ HTML_TEMPLATE = jinja2.Template(
 
 GoslingSpec = Dict[str, Any]
 
-
-def spec_to_html(
-    spec: GoslingSpec,
-    output_div: str = "vis",
-    embed_options: Optional[Dict[str, Any]] = None,
+def get_vis_dependencies(
     gosling_version: str = SCHEMA_VERSION.lstrip("v"),
     higlass_version: str = "1.11",
     react_version: str = "17",
@@ -55,7 +51,16 @@ def spec_to_html(
     js_url += f"react-dom@{react_version},"
     js_url += f"pixi.js@{pixijs_version}"
     css_url = f"https://esm.sh/higlass@{higlass_version}/dist/hglib.css"
+    return js_url, css_url
 
+
+def spec_to_html(
+    spec: GoslingSpec,
+    output_div: str = "vis",
+    embed_options: Optional[Dict[str, Any]] = None,
+    **kwargs,
+):
+    js_url, css_url = get_vis_dependencies(**kwargs)
     embed_options = embed_options or dict(padding=0, theme=themes.get())
 
     return HTML_TEMPLATE.render(
