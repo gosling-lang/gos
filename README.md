@@ -18,7 +18,7 @@ simplified interface for authoring interactive genomic visualizations.
 > The **gos** API is under active development. Feedback is appreciated and welcomed.
 
 ```bash
-pip install gosling
+pip install gosling[all]
 ```
 
 ## Documentation
