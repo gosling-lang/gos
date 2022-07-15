@@ -316,7 +316,7 @@ class CSVData(DataDeep):
     genomicFieldsToConvert : List(Mapping(required=[chromosomeField, genomicFields]))
         experimental
     headerNames : List(string)
-        Specify the names of data fields if a CSV file is headerless.
+        Specify the names of data fields if a CSV file does not contain a header.
     longToWideId : string
         experimental
     sampleLength : float
@@ -408,7 +408,7 @@ class DisplaceTransform(DataTransform):
     boundingBox : Mapping(required=[startField, endField])
 
     method : :class:`DisplacementType`
-        A string that specifies the type of diseplancement.
+        A string that specifies the type of displacement.
     newField : string
 
     type : string
@@ -461,6 +461,8 @@ class EventStyle(GoslingSchema):
     """EventStyle schema wrapper
 
     Mapping(required=[])
+    The styles defined here will be applied to the target marks of mouse events, such as a point
+    mark after the user clicks on it.
 
     Attributes
     ----------
@@ -468,15 +470,15 @@ class EventStyle(GoslingSchema):
     arrange : enum('behind', 'front')
         Show event effects behind or in front of marks.
     color : string
-
+        color of the marks when mouse events are triggered
     opacity : float
-
+        opacity of the marks when mouse events are triggered
     stroke : string
-
+        stroke color of the marks when mouse events are triggered
     strokeOpacity : float
 
     strokeWidth : float
-
+        stroke width of the marks when mouse events are triggered
     """
     _schema = {'$ref': '#/definitions/EventStyle'}
     _rootschema = GoslingSchema._rootschema
@@ -614,7 +616,7 @@ class DomainInterval(GenomicDomain):
     ----------
 
     interval : List([float, float])
-
+        Show a certain interval within entire chromosome
     """
     _schema = {'$ref': '#/definitions/DomainInterval'}
     _rootschema = GoslingSchema._rootschema
@@ -872,9 +874,11 @@ class MouseEventsDeep(GoslingSchema):
     click : boolean
 
     enableMouseOverOnMultipleMarks : boolean
-
+        Determine whether all marks underneath the mouse point should be affected by mouse
+        over. __Default__: `false`
     groupMarksByField : string
-
+        Group marks using keys in a data field. This affects how a set of marks are
+        highlighted/selected by interaction. __Default__: `undefined`
     mouseOver : boolean
 
     rangeSelect : boolean
@@ -935,7 +939,7 @@ class MultipleViews(GoslingSchema):
     style : :class:`Style`
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overriden by the style of children elements (e.g., view,
+        multive views. Will be overwritten by the style of children elements (e.g., view,
         track).
     xAxis : :class:`AxisPosition`
         not supported
@@ -1173,7 +1177,7 @@ class OverlaidTracks(GoslingSchema):
     style : :class:`Style`
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overriden by the style of children elements (e.g., view,
+        multive views. Will be overwritten by the style of children elements (e.g., view,
         track).
     subtitle : string
 
@@ -1351,7 +1355,7 @@ class PartialTrack(GoslingSchema):
     style : :class:`Style`
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overriden by the style of children elements (e.g., view,
+        multive views. Will be overwritten by the style of children elements (e.g., view,
         track).
     subtitle : string
 
@@ -1549,7 +1553,7 @@ class SelectivityCondition(GoslingSchema):
     operation : :class:`LogicalOperation`
 
     threshold : float
-
+        Threshold in the unit of pixels.
     target : enum('self', 'container')
         Does the condition applied to the visualization itself or its container?
         __Default__: `'self'`
@@ -1727,7 +1731,7 @@ class Style(GoslingSchema):
     backgroundOpacity : float
 
     brush : Mapping(required=[])
-        Customize the style of range brushes.
+        Customize the style of the brush mark in the `rangeSelect` mouse event.
     curve : enum('top', 'bottom', 'left', 'right')
         Specify the curve of `rule` marks.
     dashed : List([float, float])
@@ -1762,13 +1766,13 @@ class Style(GoslingSchema):
         Determine to show only one side of the diagonal in a HiGlass matrix. __Default__:
         `"full"`
     mouseOver : :class:`EventStyle`
-        Customize visual effects of mouse over events on marks.
+        Customize visual effects of `mouseOver` events on marks.
     outline : string
 
     outlineWidth : float
 
     select : :class:`EventStyle`
-        Customize visual effects selection events on marks with range brushes.
+        Customize visual effects of `rangeSelect` events on marks .
     textAnchor : enum('start', 'middle', 'end')
         Specify the alignment of `text` marks to a given point.
     textFontSize : float
@@ -1865,13 +1869,14 @@ class Tooltip(GoslingSchema):
     ----------
 
     field : string
-
+        Specifiy a data field whose value will show in the tooltip.
     type : :class:`FieldType`
-
+        Type of the data field.
     alt : string
-
+        Name of the data field for showing in the tooltip. Will use the field name if not
+        specified.
     format : string
-
+        format of the data value.
     """
     _schema = {'$ref': '#/definitions/Tooltip'}
     _rootschema = GoslingSchema._rootschema
@@ -1961,7 +1966,7 @@ class DataTrack(Track):
     style : :class:`Style`
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overriden by the style of children elements (e.g., view,
+        multive views. Will be overwritten by the style of children elements (e.g., view,
         track).
     subtitle : string
 
@@ -2102,7 +2107,7 @@ class OverlaidTrack(Track):
     style : :class:`Style`
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overriden by the style of children elements (e.g., view,
+        multive views. Will be overwritten by the style of children elements (e.g., view,
         track).
     subtitle : string
 
@@ -2277,7 +2282,7 @@ class SingleTrack(Track):
     style : :class:`Style`
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overriden by the style of children elements (e.g., view,
+        multive views. Will be overwritten by the style of children elements (e.g., view,
         track).
     subtitle : string
 
@@ -2429,7 +2434,7 @@ class TemplateTrack(Track):
     style : :class:`Style`
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overriden by the style of children elements (e.g., view,
+        multive views. Will be overwritten by the style of children elements (e.g., view,
         track).
     subtitle : string
 
@@ -2575,7 +2580,7 @@ class SizeVisibilityCondition(VisibilityCondition):
     measure : enum('width', 'height')
         Specify which aspect of the `target` will be compared to the `threshold`.
     operation : :class:`LogicalOperation`
-        A string that pecifies the logical operation to conduct between `threshold` and the
+        A string that specifies the logical operation to conduct between `threshold` and the
         `measure` of `target`. Support
 
         - greater than : "greater-than", "gt", "GT"
@@ -2711,7 +2716,7 @@ class ZoomLevelVisibilityCondition(VisibilityCondition):
     measure : string
         Specify which aspect of the `target` will be compared to the `threshold`.
     operation : :class:`LogicalOperation`
-        A string that pecifies the logical operation to conduct between `threshold` and the
+        A string that specifies the logical operation to conduct between `threshold` and the
         `measure` of `target`. Support
 
         - greater than : "greater-than", "gt", "GT"

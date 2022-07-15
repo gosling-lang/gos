@@ -277,7 +277,7 @@
           "type": "array"
         },
         "headerNames": {
-          "description": "Specify the names of data fields if a CSV file is headerless.",
+          "description": "Specify the names of data fields if a CSV file does not contain a header.",
           "items": {
             "type": "string"
           },
@@ -620,7 +620,7 @@
         },
         "style": {
           "$ref": "#/definitions/Style",
-          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "subtitle": {
           "type": "string"
@@ -767,7 +767,7 @@
         },
         "method": {
           "$ref": "#/definitions/DisplacementType",
-          "description": "A string that specifies the type of diseplancement."
+          "description": "A string that specifies the type of displacement."
         },
         "newField": {
           "type": "string"
@@ -879,6 +879,7 @@
       "additionalProperties": false,
       "properties": {
         "interval": {
+          "description": "Show a certain interval within entire chromosome",
           "items": [
             {
               "type": "number"
@@ -899,6 +900,7 @@
     },
     "EventStyle": {
       "additionalProperties": false,
+      "description": "The styles defined here will be applied to the target marks of mouse events, such as a point mark after the user clicks on it.",
       "properties": {
         "arrange": {
           "description": "Show event effects behind or in front of marks.",
@@ -909,18 +911,22 @@
           "type": "string"
         },
         "color": {
+          "description": "color of the marks when mouse events are triggered",
           "type": "string"
         },
         "opacity": {
+          "description": "opacity of the marks when mouse events are triggered",
           "type": "number"
         },
         "stroke": {
+          "description": "stroke color of the marks when mouse events are triggered",
           "type": "string"
         },
         "strokeOpacity": {
           "type": "number"
         },
         "strokeWidth": {
+          "description": "stroke width of the marks when mouse events are triggered",
           "type": "number"
         }
       },
@@ -1391,7 +1397,7 @@
                       },
                       "style": {
                         "$ref": "#/definitions/Style",
-                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
                       },
                       "subtitle": {
                         "type": "string"
@@ -1641,7 +1647,7 @@
             },
             "style": {
               "$ref": "#/definitions/Style",
-              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
             },
             "subtitle": {
               "type": "string"
@@ -2149,7 +2155,7 @@
                       },
                       "style": {
                         "$ref": "#/definitions/Style",
-                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
                       },
                       "subtitle": {
                         "type": "string"
@@ -2399,7 +2405,7 @@
             },
             "style": {
               "$ref": "#/definitions/Style",
-              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
             },
             "subtitle": {
               "type": "string"
@@ -2812,7 +2818,7 @@
                       },
                       "style": {
                         "$ref": "#/definitions/Style",
-                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
                       },
                       "subtitle": {
                         "type": "string"
@@ -3015,7 +3021,7 @@
             },
             "style": {
               "$ref": "#/definitions/Style",
-              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
             },
             "subtitle": {
               "type": "string"
@@ -3185,7 +3191,7 @@
                       },
                       "style": {
                         "$ref": "#/definitions/Style",
-                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
                       },
                       "views": {
                         "description": "An array of view specifications",
@@ -3266,7 +3272,7 @@
             },
             "style": {
               "$ref": "#/definitions/Style",
-              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
             },
             "subtitle": {
               "type": "string"
@@ -3581,9 +3587,11 @@
           "type": "boolean"
         },
         "enableMouseOverOnMultipleMarks": {
+          "description": "Determine whether all marks underneath the mouse point should be affected by mouse over. __Default__: `false`",
           "type": "boolean"
         },
         "groupMarksByField": {
+          "description": "Group marks using keys in a data field. This affects how a set of marks are highlighted/selected by interaction. __Default__: `undefined`",
           "type": "string"
         },
         "mouseOver": {
@@ -3645,7 +3653,7 @@
         },
         "style": {
           "$ref": "#/definitions/Style",
-          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "views": {
           "description": "An array of view specifications",
@@ -4130,7 +4138,7 @@
               },
               "style": {
                 "$ref": "#/definitions/Style",
-                "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
               },
               "text": {
                 "anyOf": [
@@ -4350,7 +4358,7 @@
         },
         "style": {
           "$ref": "#/definitions/Style",
-          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "subtitle": {
           "type": "string"
@@ -4702,7 +4710,7 @@
         },
         "style": {
           "$ref": "#/definitions/Style",
-          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "subtitle": {
           "type": "string"
@@ -5170,7 +5178,7 @@
               },
               "style": {
                 "$ref": "#/definitions/Style",
-                "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
               },
               "text": {
                 "anyOf": [
@@ -5390,7 +5398,7 @@
         },
         "style": {
           "$ref": "#/definitions/Style",
-          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "subtitle": {
           "type": "string"
@@ -5689,6 +5697,7 @@
           "type": "string"
         },
         "threshold": {
+          "description": "Threshold in the unit of pixels.",
           "type": "number"
         }
       },
@@ -5881,7 +5890,7 @@
         },
         "style": {
           "$ref": "#/definitions/Style",
-          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "subtitle": {
           "type": "string"
@@ -6378,7 +6387,7 @@
                       },
                       "style": {
                         "$ref": "#/definitions/Style",
-                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
                       },
                       "subtitle": {
                         "type": "string"
@@ -6628,7 +6637,7 @@
             },
             "style": {
               "$ref": "#/definitions/Style",
-              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
             },
             "subtitle": {
               "type": "string"
@@ -7129,7 +7138,7 @@
                       },
                       "style": {
                         "$ref": "#/definitions/Style",
-                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
                       },
                       "subtitle": {
                         "type": "string"
@@ -7379,7 +7388,7 @@
             },
             "style": {
               "$ref": "#/definitions/Style",
-              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
             },
             "subtitle": {
               "type": "string"
@@ -7785,7 +7794,7 @@
                       },
                       "style": {
                         "$ref": "#/definitions/Style",
-                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+                        "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
                       },
                       "subtitle": {
                         "type": "string"
@@ -7988,7 +7997,7 @@
             },
             "style": {
               "$ref": "#/definitions/Style",
-              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
             },
             "tracks": {
               "items": {
@@ -8094,7 +8103,7 @@
         },
         "operation": {
           "$ref": "#/definitions/LogicalOperation",
-          "description": "A string that pecifies the logical operation to conduct between `threshold` and the `measure` of `target`. Support\n\n- greater than : \"greater-than\", \"gt\", \"GT\"\n\n- less than : \"less-than\", \"lt\", \"LT\"\n\n- greater than or equal to : \"greater-than-or-equal-to\", \"gtet\", \"GTET\"\n\n- less than or equal to : \"less-than-or-equal-to\", \"ltet\", \"LTET\""
+          "description": "A string that specifies the logical operation to conduct between `threshold` and the `measure` of `target`. Support\n\n- greater than : \"greater-than\", \"gt\", \"GT\"\n\n- less than : \"less-than\", \"lt\", \"LT\"\n\n- greater than or equal to : \"greater-than-or-equal-to\", \"gtet\", \"GTET\"\n\n- less than or equal to : \"less-than-or-equal-to\", \"ltet\", \"LTET\""
         },
         "target": {
           "description": "Target specifies the object that you want to compare with the threshold.",
@@ -8291,21 +8300,25 @@
         },
         "brush": {
           "additionalProperties": false,
-          "description": "Customize the style of range brushes.",
+          "description": "Customize the style of the brush mark in the `rangeSelect` mouse event.",
           "properties": {
             "color": {
+              "description": "color of the marks when mouse events are triggered",
               "type": "string"
             },
             "opacity": {
+              "description": "opacity of the marks when mouse events are triggered",
               "type": "number"
             },
             "stroke": {
+              "description": "stroke color of the marks when mouse events are triggered",
               "type": "string"
             },
             "strokeOpacity": {
               "type": "number"
             },
             "strokeWidth": {
+              "description": "stroke width of the marks when mouse events are triggered",
               "type": "number"
             }
           },
@@ -8410,7 +8423,7 @@
         },
         "mouseOver": {
           "$ref": "#/definitions/EventStyle",
-          "description": "Customize visual effects of mouse over events on marks."
+          "description": "Customize visual effects of `mouseOver` events on marks."
         },
         "outline": {
           "type": "string"
@@ -8420,7 +8433,7 @@
         },
         "select": {
           "$ref": "#/definitions/EventStyle",
-          "description": "Customize visual effects selection events on marks with range brushes."
+          "description": "Customize visual effects of `rangeSelect` events on marks ."
         },
         "textAnchor": {
           "description": "Specify the alignment of `text` marks to a given point.",
@@ -8604,7 +8617,7 @@
         },
         "style": {
           "$ref": "#/definitions/Style",
-          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overriden by the style of children elements (e.g., view, track)."
+          "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "subtitle": {
           "type": "string"
@@ -8708,16 +8721,20 @@
       "additionalProperties": false,
       "properties": {
         "alt": {
+          "description": "Name of the data field for showing in the tooltip. Will use the field name if not specified.",
           "type": "string"
         },
         "field": {
+          "description": "Specifiy a data field whose value will show in the tooltip.",
           "type": "string"
         },
         "format": {
+          "description": "format of the data value.",
           "type": "string"
         },
         "type": {
-          "$ref": "#/definitions/FieldType"
+          "$ref": "#/definitions/FieldType",
+          "description": "Type of the data field."
         }
       },
       "required": [
@@ -8967,7 +8984,7 @@
         },
         "operation": {
           "$ref": "#/definitions/LogicalOperation",
-          "description": "A string that pecifies the logical operation to conduct between `threshold` and the `measure` of `target`. Support\n\n- greater than : \"greater-than\", \"gt\", \"GT\"\n\n- less than : \"less-than\", \"lt\", \"LT\"\n\n- greater than or equal to : \"greater-than-or-equal-to\", \"gtet\", \"GTET\"\n\n- less than or equal to : \"less-than-or-equal-to\", \"ltet\", \"LTET\""
+          "description": "A string that specifies the logical operation to conduct between `threshold` and the `measure` of `target`. Support\n\n- greater than : \"greater-than\", \"gt\", \"GT\"\n\n- less than : \"less-than\", \"lt\", \"LT\"\n\n- greater than or equal to : \"greater-than-or-equal-to\", \"gtet\", \"GTET\"\n\n- less than or equal to : \"less-than-or-equal-to\", \"ltet\", \"LTET\""
         },
         "target": {
           "description": "Target specifies the object that you want to compare with the threshold.",
