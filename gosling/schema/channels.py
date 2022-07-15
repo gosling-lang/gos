@@ -435,13 +435,14 @@ class Tooltip(FieldChannelMixin, core.Tooltip):
     shorthand : string
         shorthand for field, aggregate, and type
     alt : string
-
+        Name of the data field for showing in the tooltip. Will use the field name if not
+        specified.
     field : string
-
+        Specifiy a data field whose value will show in the tooltip.
     format : string
-
+        format of the data value.
     type : :class:`FieldType`
-
+        Type of the data field.
     """
     _class_is_valid_at_instantiation = False
     _encoding_name = "tooltip"
