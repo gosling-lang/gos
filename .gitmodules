@@ -1,0 +1,3 @@
+[submodule "tools/altair"]
+	path = tools/altair
+	url = https://github.com/altair-viz/altair.git
