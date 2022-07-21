@@ -6,14 +6,15 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives import flag
 
-from gosling.display import get_display_dependencies
+from gosling.display import get_vis_dependencies
 from gosling.schemapi import SchemaValidationError
 from gosling.utils.execeval import eval_block
 
 TEMPLATE = jinja2.Template(
     """
 <div id="{{ div_id }}">
-<script>
+<script type="module">
+  import * as gosling from '{{ js_url }}';
   document.addEventListener("DOMContentLoaded", function(event) {
       var spec = {{ spec }};
       console.log(spec);
@@ -83,29 +84,32 @@ class GoslingPlotDirective(Directive):
 
         return result
 
+def get_html_visit_gosling_plot(js_url: str):
 
-def html_visit_gosling_plot(self, node):
-    # Execute the code, saving output and namespace
-    try:
-        chart = eval_block(node["code"])
-    except Exception as e:
-        warnings.warn(
-            "gosling-plot: {}:{} Code Execution failed:"
-            "{}: {}".format(
-                node["rst_source"], node["rst_lineno"], e.__class__.__name__, str(e)
+    def html_visit_gosling_plot(self, node):
+        # Execute the code, saving output and namespace
+        try:
+            chart = eval_block(node["code"])
+        except Exception as e:
+            warnings.warn(
+                "gosling-plot: {}:{} Code Execution failed:"
+                "{}: {}".format(
+                    node["rst_source"], node["rst_lineno"], e.__class__.__name__, str(e)
+                )
             )
-        )
-        raise nodes.SkipNode
+            raise nodes.SkipNode
 
-    # Last line should be a chart; convert to spec dict
-    try:
-        spec = chart.to_json()
-    except SchemaValidationError:
-        raise ValueError("Invalid chart: {0}".format(node["code"]))
+        # Last line should be a chart; convert to spec dict
+        try:
+            spec = chart.to_json()
+        except SchemaValidationError:
+            raise ValueError("Invalid chart: {0}".format(node["code"]))
 
-    # Pass relevant info into the template and append to the output
-    html = TEMPLATE.render(div_id=node["div_id"], spec=spec)
-    self.body.append(html)
+        # Pass relevant info into the template and append to the output
+        html = TEMPLATE.render(div_id=node["div_id"], spec=spec, js_url=js_url)
+        self.body.append(html)
+
+    return html_visit_gosling_plot
 
 
 def depart_gosling_plot(self, node):
@@ -113,25 +117,15 @@ def depart_gosling_plot(self, node):
 
 
 def builder_inited(app):
-    app.add_css_file(app.config.higlass_css_url)
-    app.add_js_file(app.config.react_url)
-    app.add_js_file(app.config.reactdom_url)
-    app.add_js_file(app.config.pixi_url)
-    app.add_js_file(app.config.higlass_js_url)
-    app.add_js_file(app.config.gosling_url)
-
+    app.add_css_file(app.config.css_url)
 
 def setup(app):
-    deps = get_display_dependencies()
-    app.add_config_value("react_url", deps.react, "html")
-    app.add_config_value("reactdom_url", deps.react_dom, "html")
-    app.add_config_value("pixi_url", deps.pixijs, "html")
-    app.add_config_value("higlass_js_url", deps.higlass_js, "html")
-    app.add_config_value("higlass_css_url", deps.higlass_css, "html")
-    app.add_config_value("gosling_url", deps.gosling, "html")
+    js_url, css_url = get_vis_dependencies()
+    app.add_config_value("js_url", js_url, "html")
+    app.add_config_value("css_url", css_url, "html")
 
     app.add_directive("gosling-plot", GoslingPlotDirective)
-    app.add_node(gosling_plot, html=(html_visit_gosling_plot, depart_gosling_plot))
+    app.add_node(gosling_plot, html=(get_html_visit_gosling_plot(js_url), depart_gosling_plot))
 
     app.connect("builder-inited", builder_inited)
     return {"version": "0.1"}
