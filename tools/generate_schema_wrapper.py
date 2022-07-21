@@ -7,9 +7,11 @@ from urllib import request
 import textwrap
 from typing import Optional, TypeVar
 
+import generate_api_docs  # noqa: E402
+
 # import schemapi from here
 here = pathlib.Path(__file__)
-sys.path.insert(0, str(here.parent))
+sys.path.insert(0, str(here.parent / 'altair' / 'tools'))
 
 from schemapi import codegen
 from schemapi.codegen import CodeSnippet
@@ -19,7 +21,6 @@ from schemapi.utils import (
     indent_arglist,
     resolve_references,
 )
-import generate_api_docs  # noqa: E402
 
 T = TypeVar("T")
 
@@ -202,10 +203,9 @@ def copy_schemapi_util():
     """
     Copy the schemapi utility and its test file into gosling/utils/
     """
-    current_dir = here.parent
     # copy the schemapi utility file
-    source_path = current_dir / "schemapi" / "schemapi.py"
-    destination_path = current_dir / ".." / "gosling" / "schemapi.py"
+    source_path = here.parent / 'altair' / 'tools' / "schemapi" / "schemapi.py"
+    destination_path = here.parent / ".." / "gosling" / "schemapi.py"
 
     if not destination_path.parent.exists():
         os.makedirs(destination_path.parent)
