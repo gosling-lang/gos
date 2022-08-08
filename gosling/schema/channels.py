@@ -89,7 +89,7 @@ class Color(FieldChannelMixin, core.Color):
         determined considering the field type.
     scale : enum('linear', 'log')
 
-    scaleOffset : List([float, float])
+    scaleOffset : List(float)
         Whether to use offset of the domain proportionally. This is bound to brushes on the
         color legend. __Default__: `[0, 1]`
     title : string
@@ -296,7 +296,7 @@ class Stroke(FieldChannelMixin, core.Stroke):
         Whether to display legend. __Default__: `false`
     range : :class:`Range`
         Ranges of visual channel values
-    scaleOffset : List([float, float])
+    scaleOffset : List(float)
         Whether to use offset of the domain proportionally. This is bound to brushes on the
         color legend. __Default__: `[0, 1]`
     title : string

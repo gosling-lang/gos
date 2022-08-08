@@ -76,17 +76,18 @@ Low-Level Schema Wrappers
    Aggregate
    Assembly
    AxisPosition
-   BAMData
-   BEDDBData
-   BIGWIGData
+   BamData
+   BeddbData
+   BigWigData
    BinAggregate
-   CSVData
    Channel
    ChannelDeep
    ChannelValue
+   ChromSizes
    Chromosome
    Color
    CoverageTransform
+   CsvData
    DataDeep
    DataTrack
    DataTransform
@@ -107,8 +108,8 @@ Low-Level Schema Wrappers
    GoslingSchema
    GoslingSpec
    IncludeFilter
-   JSONData
-   JSONParseTransform
+   JsonData
+   JsonParseTransform
    Layout
    LogBase
    LogTransform
@@ -146,8 +147,8 @@ Low-Level Schema Wrappers
    Text
    Tooltip
    Track
-   VCFData
    ValueExtent
+   VcfData
    VectorData
    VisibilityCondition
    X

@@ -99,7 +99,7 @@ def test_transforms(basic_track: gos.Track) -> None:
         genomicField="xx",
         genomicLengthField="xxx",
     )
-    assert track.dataTransform == [gos.JSONParseTransform(**kwds)]
+    assert track.dataTransform == [gos.JsonParseTransform(**kwds)]
 
 
 def test_chained_transforms(basic_track: gos.Track) -> None:

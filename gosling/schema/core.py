@@ -21,7 +21,7 @@ class GoslingSchema(SchemaBase):
 class Root(GoslingSchema):
     """Root schema wrapper
 
-    anyOf(Mapping(required=[alignment, height, tracks, width]), Mapping(required=[tracks]),
+    anyOf(Mapping(required=[alignment, tracks]), Mapping(required=[tracks]),
     Mapping(required=[tracks]), Mapping(required=[views]))
     """
     _schema = GoslingSchema._rootschema
@@ -46,13 +46,13 @@ class Aggregate(GoslingSchema):
 class Assembly(GoslingSchema):
     """Assembly schema wrapper
 
-    enum('hg38', 'hg19', 'hg18', 'hg17', 'hg16', 'mm10', 'mm9', 'unknown')
+    anyOf(string, string, string, string, string, string, string, string, :class:`ChromSizes`)
     """
     _schema = {'$ref': '#/definitions/Assembly'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, *args):
-        super(Assembly, self).__init__(*args)
+    def __init__(self, *args, **kwds):
+        super(Assembly, self).__init__(*args, **kwds)
 
 
 class AxisPosition(GoslingSchema):
@@ -122,6 +122,19 @@ class ChannelValue(Channel):
         super(ChannelValue, self).__init__(value=value, **kwds)
 
 
+class ChromSizes(Assembly):
+    """ChromSizes schema wrapper
+
+    List(List([string, float]))
+    Custom chromosome sizes, e.g., [["foo", 1000], ["bar", 300], ["baz", 240]]
+    """
+    _schema = {'$ref': '#/definitions/ChromSizes'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, *args):
+        super(ChromSizes, self).__init__(*args)
+
+
 class Chromosome(GoslingSchema):
     """Chromosome schema wrapper
 
@@ -156,7 +169,7 @@ class Color(ChannelDeep):
         determined considering the field type.
     scale : enum('linear', 'log')
 
-    scaleOffset : List([float, float])
+    scaleOffset : List(float)
         Whether to use offset of the domain proportionally. This is bound to brushes on the
         color legend. __Default__: `[0, 1]`
     title : string
@@ -176,9 +189,9 @@ class Color(ChannelDeep):
 class DataDeep(GoslingSchema):
     """DataDeep schema wrapper
 
-    anyOf(:class:`JSONData`, :class:`CSVData`, :class:`BIGWIGData`, :class:`MultivecData`,
-    :class:`BEDDBData`, :class:`VectorData`, :class:`MatrixData`, :class:`BAMData`,
-    :class:`VCFData`)
+    anyOf(:class:`JsonData`, :class:`CsvData`, :class:`BigWigData`, :class:`MultivecData`,
+    :class:`BeddbData`, :class:`VectorData`, :class:`MatrixData`, :class:`BamData`,
+    :class:`VcfData`)
     """
     _schema = {'$ref': '#/definitions/DataDeep'}
     _rootschema = GoslingSchema._rootschema
@@ -187,8 +200,8 @@ class DataDeep(GoslingSchema):
         super(DataDeep, self).__init__(*args, **kwds)
 
 
-class BAMData(DataDeep):
-    """BAMData schema wrapper
+class BamData(DataDeep):
+    """BamData schema wrapper
 
     Mapping(required=[type, url, indexUrl])
     Binary Alignment Map (BAM) is the comprehensive raw data of genome sequencing; it consists
@@ -214,19 +227,19 @@ class BAMData(DataDeep):
         Determines the threshold of insert sizes for determining the structural variants.
         __Default__: `5000`
     """
-    _schema = {'$ref': '#/definitions/BAMData'}
+    _schema = {'$ref': '#/definitions/BamData'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, extractJunction=Undefined,
                  junctionMinCoverage=Undefined, loadMates=Undefined, maxInsertSize=Undefined, **kwds):
-        super(BAMData, self).__init__(indexUrl=indexUrl, type=type, url=url,
+        super(BamData, self).__init__(indexUrl=indexUrl, type=type, url=url,
                                       extractJunction=extractJunction,
                                       junctionMinCoverage=junctionMinCoverage, loadMates=loadMates,
                                       maxInsertSize=maxInsertSize, **kwds)
 
 
-class BEDDBData(DataDeep):
-    """BEDDBData schema wrapper
+class BeddbData(DataDeep):
+    """BeddbData schema wrapper
 
     Mapping(required=[type, url, genomicFields])
     Regular BED or similar files can be pre-aggregated for the scalable data exploration. Find
@@ -248,53 +261,54 @@ class BEDDBData(DataDeep):
     valueFields : List(Mapping(required=[index, name, type]))
         Specify the column indexes, field names, and field types.
     """
-    _schema = {'$ref': '#/definitions/BEDDBData'}
+    _schema = {'$ref': '#/definitions/BeddbData'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, genomicFields=Undefined, type=Undefined, url=Undefined,
                  exonIntervalFields=Undefined, valueFields=Undefined, **kwds):
-        super(BEDDBData, self).__init__(genomicFields=genomicFields, type=type, url=url,
+        super(BeddbData, self).__init__(genomicFields=genomicFields, type=type, url=url,
                                         exonIntervalFields=exonIntervalFields, valueFields=valueFields,
                                         **kwds)
 
 
-class BIGWIGData(DataDeep):
-    """BIGWIGData schema wrapper
+class BigWigData(DataDeep):
+    """BigWigData schema wrapper
 
-    Mapping(required=[type, url, column, value])
+    Mapping(required=[type, url])
 
     Attributes
     ----------
 
-    column : string
-        Assign a field name of the middle position of genomic intervals.
     type : string
 
     url : string
         Specify the URL address of the data file.
-    value : string
-        Assign a field name of quantitative values.
     aggregation : :class:`BinAggregate`
         Determine aggregation function to apply within bins. __Default__: `"mean"`
     binSize : float
         Binning the genomic interval in tiles (unit size: 256).
+    column : string
+        Assign a field name of the middle position of genomic intervals. __Default__:
+        `"position"`
     end : string
-        Assign a field name of the end position of genomic intervals.
+        Assign a field name of the end position of genomic intervals. __Default__: `"end"`
     start : string
-        Assign a field name of the start position of genomic intervals.
+        Assign a field name of the start position of genomic intervals. __Default__:
+        `"start"`
+    value : string
+        Assign a field name of quantitative values. __Default__: `"value"`
     """
-    _schema = {'$ref': '#/definitions/BIGWIGData'}
+    _schema = {'$ref': '#/definitions/BigWigData'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, column=Undefined, type=Undefined, url=Undefined, value=Undefined,
-                 aggregation=Undefined, binSize=Undefined, end=Undefined, start=Undefined, **kwds):
-        super(BIGWIGData, self).__init__(column=column, type=type, url=url, value=value,
-                                         aggregation=aggregation, binSize=binSize, end=end, start=start,
-                                         **kwds)
+    def __init__(self, type=Undefined, url=Undefined, aggregation=Undefined, binSize=Undefined,
+                 column=Undefined, end=Undefined, start=Undefined, value=Undefined, **kwds):
+        super(BigWigData, self).__init__(type=type, url=url, aggregation=aggregation, binSize=binSize,
+                                         column=column, end=end, start=start, value=value, **kwds)
 
 
-class CSVData(DataDeep):
-    """CSVData schema wrapper
+class CsvData(DataDeep):
+    """CsvData schema wrapper
 
     Mapping(required=[type, url])
     Any small enough tabular data files, such as tsv, csv, BED, BEDPE, and GFF, can be loaded
@@ -326,14 +340,14 @@ class CSVData(DataDeep):
     separator : string
         Specify file separator, __Default:__ ','
     """
-    _schema = {'$ref': '#/definitions/CSVData'}
+    _schema = {'$ref': '#/definitions/CsvData'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, type=Undefined, url=Undefined, chromosomeField=Undefined,
                  chromosomePrefix=Undefined, genomicFields=Undefined, genomicFieldsToConvert=Undefined,
                  headerNames=Undefined, longToWideId=Undefined, sampleLength=Undefined,
                  separator=Undefined, **kwds):
-        super(CSVData, self).__init__(type=type, url=url, chromosomeField=chromosomeField,
+        super(CsvData, self).__init__(type=type, url=url, chromosomeField=chromosomeField,
                                       chromosomePrefix=chromosomePrefix, genomicFields=genomicFields,
                                       genomicFieldsToConvert=genomicFieldsToConvert,
                                       headerNames=headerNames, longToWideId=longToWideId,
@@ -346,7 +360,7 @@ class DataTransform(GoslingSchema):
     anyOf(:class:`FilterTransform`, :class:`StrConcatTransform`, :class:`StrReplaceTransform`,
     :class:`LogTransform`, :class:`DisplaceTransform`, :class:`ExonSplitTransform`,
     :class:`GenomicLengthTransform`, :class:`SvTypeTransform`, :class:`CoverageTransform`,
-    :class:`JSONParseTransform`)
+    :class:`JsonParseTransform`)
     """
     _schema = {'$ref': '#/definitions/DataTransform'}
     _rootschema = GoslingSchema._rootschema
@@ -579,7 +593,7 @@ class DomainChrInterval(GenomicDomain):
 
     chromosome : :class:`Chromosome`
         If specified, only showing a certain interval in a chromosome.
-    interval : List([float, float])
+    interval : List(float)
 
     """
     _schema = {'$ref': '#/definitions/DomainChrInterval'}
@@ -597,7 +611,7 @@ class DomainGene(GenomicDomain):
     Attributes
     ----------
 
-    gene : anyOf(string, List([string, string]))
+    gene : anyOf(string, List(string))
 
     """
     _schema = {'$ref': '#/definitions/DomainGene'}
@@ -615,7 +629,7 @@ class DomainInterval(GenomicDomain):
     Attributes
     ----------
 
-    interval : List([float, float])
+    interval : List(float)
         Show a certain interval within entire chromosome
     """
     _schema = {'$ref': '#/definitions/DomainInterval'}
@@ -655,7 +669,7 @@ class GenomicLengthTransform(DataTransform):
 class GoslingSpec(GoslingSchema):
     """GoslingSpec schema wrapper
 
-    anyOf(Mapping(required=[alignment, height, tracks, width]), Mapping(required=[tracks]),
+    anyOf(Mapping(required=[alignment, tracks]), Mapping(required=[tracks]),
     Mapping(required=[tracks]), Mapping(required=[views]))
     """
     _schema = {'$ref': '#/definitions/GoslingSpec'}
@@ -691,8 +705,8 @@ class IncludeFilter(FilterTransform):
         super(IncludeFilter, self).__init__(field=field, include=include, type=type, **kwds)
 
 
-class JSONData(DataDeep):
-    """JSONData schema wrapper
+class JsonData(DataDeep):
+    """JsonData schema wrapper
 
     Mapping(required=[type, values])
     The JSON data format allows users to include data directly in the Gosling's JSON
@@ -716,20 +730,20 @@ class JSONData(DataDeep):
 
         __Default:__ `1000`
     """
-    _schema = {'$ref': '#/definitions/JSONData'}
+    _schema = {'$ref': '#/definitions/JsonData'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, type=Undefined, values=Undefined, chromosomeField=Undefined,
                  genomicFields=Undefined, genomicFieldsToConvert=Undefined, sampleLength=Undefined,
                  **kwds):
-        super(JSONData, self).__init__(type=type, values=values, chromosomeField=chromosomeField,
+        super(JsonData, self).__init__(type=type, values=values, chromosomeField=chromosomeField,
                                        genomicFields=genomicFields,
                                        genomicFieldsToConvert=genomicFieldsToConvert,
                                        sampleLength=sampleLength, **kwds)
 
 
-class JSONParseTransform(DataTransform):
-    """JSONParseTransform schema wrapper
+class JsonParseTransform(DataTransform):
+    """JsonParseTransform schema wrapper
 
     Mapping(required=[type, field, baseGenomicField, genomicField, genomicLengthField])
     Parse JSON Object Array and append vertically
@@ -748,12 +762,12 @@ class JSONParseTransform(DataTransform):
     type : string
 
     """
-    _schema = {'$ref': '#/definitions/JSONParseTransform'}
+    _schema = {'$ref': '#/definitions/JsonParseTransform'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, baseGenomicField=Undefined, field=Undefined, genomicField=Undefined,
                  genomicLengthField=Undefined, type=Undefined, **kwds):
-        super(JSONParseTransform, self).__init__(baseGenomicField=baseGenomicField, field=field,
+        super(JsonParseTransform, self).__init__(baseGenomicField=baseGenomicField, field=field,
                                                  genomicField=genomicField,
                                                  genomicLengthField=genomicLengthField, type=type,
                                                  **kwds)
@@ -867,12 +881,13 @@ class MouseEventsDeep(GoslingSchema):
     """MouseEventsDeep schema wrapper
 
     Mapping(required=[])
+    Options for determining mouse events in detail, e.g., turning on specific events only
 
     Attributes
     ----------
 
     click : boolean
-
+        Whether to enable click events.
     enableMouseOverOnMultipleMarks : boolean
         Determine whether all marks underneath the mouse point should be affected by mouse
         over. __Default__: `false`
@@ -880,9 +895,9 @@ class MouseEventsDeep(GoslingSchema):
         Group marks using keys in a data field. This affects how a set of marks are
         highlighted/selected by interaction. __Default__: `undefined`
     mouseOver : boolean
-
+        Whether to enable mouseover events.
     rangeSelect : boolean
-
+        Whether to send range selection events.
     """
     _schema = {'$ref': '#/definitions/MouseEventsDeep'}
     _rootschema = GoslingSchema._rootschema
@@ -928,10 +943,12 @@ class MultipleViews(GoslingSchema):
     orientation : :class:`Orientation`
         Specify the orientation.
     spacing : float
-        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
+        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
+        circular tracks. The effect of this property depends on where on the spec you
+        specify the `spacing`.
 
-        - If `{"layout": "circular"}`, specify the space between tracks in percentage
-        ranging from 0 to 100.
+        In a linear layout, this value is used in pixels, while in a circular layout, this
+        value is used relative to the height of the tracks or views.
     static : boolean
         Whether to disable [Zooming and
         Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
@@ -974,7 +991,7 @@ class MultipleViews(GoslingSchema):
 class MultivecData(DataDeep):
     """MultivecData schema wrapper
 
-    Mapping(required=[type, url, column, row, value])
+    Mapping(required=[type, url])
     Two-dimensional quantitative values, one axis for genomic coordinate and the other for
     different samples, can be converted into HiGlass' `"multivec"` data. For example, multiple
     BigWig files can be converted into a single multivec file. You can also convert sequence
@@ -985,36 +1002,38 @@ class MultivecData(DataDeep):
     Attributes
     ----------
 
-    column : string
-        Assign a field name of the middle position of genomic intervals.
-    row : string
-        Assign a field name of samples.
     type : string
 
     url : string
         Specify the URL address of the data file.
-    value : string
-        Assign a field name of quantitative values.
     aggregation : :class:`BinAggregate`
         Determine aggregation function to apply within bins. __Default__: `"mean"`
     binSize : float
         Binning the genomic interval in tiles (unit size: 256).
     categories : List(string)
         assign names of individual samples.
+    column : string
+        Assign a field name of the middle position of genomic intervals. __Default__:
+        `"position"`
     end : string
-        Assign a field name of the end position of genomic intervals.
+        Assign a field name of the end position of genomic intervals. __Default__: `"end"`
+    row : string
+        Assign a field name of samples. __Default__: `"category"`
     start : string
-        Assign a field name of the start position of genomic intervals.
+        Assign a field name of the start position of genomic intervals. __Default__:
+        `"start"`
+    value : string
+        Assign a field name of quantitative values. __Default__: `"value"`
     """
     _schema = {'$ref': '#/definitions/MultivecData'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, column=Undefined, row=Undefined, type=Undefined, url=Undefined, value=Undefined,
-                 aggregation=Undefined, binSize=Undefined, categories=Undefined, end=Undefined,
-                 start=Undefined, **kwds):
-        super(MultivecData, self).__init__(column=column, row=row, type=type, url=url, value=value,
-                                           aggregation=aggregation, binSize=binSize,
-                                           categories=categories, end=end, start=start, **kwds)
+    def __init__(self, type=Undefined, url=Undefined, aggregation=Undefined, binSize=Undefined,
+                 categories=Undefined, column=Undefined, end=Undefined, row=Undefined, start=Undefined,
+                 value=Undefined, **kwds):
+        super(MultivecData, self).__init__(type=type, url=url, aggregation=aggregation, binSize=binSize,
+                                           categories=categories, column=column, end=end, row=row,
+                                           start=start, value=value, **kwds)
 
 
 class OneOfFilter(FilterTransform):
@@ -1082,19 +1101,15 @@ class Orientation(GoslingSchema):
 class OverlaidTracks(GoslingSchema):
     """OverlaidTracks schema wrapper
 
-    Mapping(required=[alignment, tracks, width, height])
+    Mapping(required=[alignment, tracks])
 
     Attributes
     ----------
 
     alignment : string
 
-    height : float
-        Specify the track height in pixels.
     tracks : List(:class:`PartialTrack`)
 
-    width : float
-        Specify the track width in pixels.
     _assignedHeight : float
 
     _assignedWidth : float
@@ -1129,6 +1144,8 @@ class OverlaidTracks(GoslingSchema):
 
     flipY : boolean
 
+    height : float
+        Specify the track height in pixels.
     id : string
 
     innerRadius : float
@@ -1157,10 +1174,12 @@ class OverlaidTracks(GoslingSchema):
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
-        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
+        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
+        circular tracks. The effect of this property depends on where on the spec you
+        specify the `spacing`.
 
-        - If `{"layout": "circular"}`, specify the space between tracks in percentage
-        ranging from 0 to 100.
+        In a linear layout, this value is used in pixels, while in a circular layout, this
+        value is used relative to the height of the tracks or views.
     startAngle : float
         Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
@@ -1189,6 +1208,8 @@ class OverlaidTracks(GoslingSchema):
 
     visibility : List(:class:`VisibilityCondition`)
 
+    width : float
+        Specify the track width in pixels.
     x : anyOf(:class:`X`, :class:`ChannelValue`)
 
     x1 : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -1221,30 +1242,30 @@ class OverlaidTracks(GoslingSchema):
     _schema = {'$ref': '#/definitions/OverlaidTracks'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, alignment=Undefined, height=Undefined, tracks=Undefined, width=Undefined,
-                 _assignedHeight=Undefined, _assignedWidth=Undefined, _invalidTrack=Undefined,
-                 _renderingId=Undefined, assembly=Undefined, baselineY=Undefined,
-                 centerRadius=Undefined, color=Undefined, data=Undefined, dataTransform=Undefined,
-                 displacement=Undefined, endAngle=Undefined, experimental=Undefined, flipY=Undefined,
-                 id=Undefined, innerRadius=Undefined, layout=Undefined, linkingId=Undefined,
-                 mark=Undefined, opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+    def __init__(self, alignment=Undefined, tracks=Undefined, _assignedHeight=Undefined,
+                 _assignedWidth=Undefined, _invalidTrack=Undefined, _renderingId=Undefined,
+                 assembly=Undefined, baselineY=Undefined, centerRadius=Undefined, color=Undefined,
+                 data=Undefined, dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
+                 experimental=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
+                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
+                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
                  overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
                  row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
                  static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
                  style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
-                 tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
-                 xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
-                 y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
-                 zoomLimits=Undefined, **kwds):
-        super(OverlaidTracks, self).__init__(alignment=alignment, height=height, tracks=tracks,
-                                             width=width, _assignedHeight=_assignedHeight,
+                 tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined,
+                 x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
+                 y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined,
+                 ye=Undefined, zoomLimits=Undefined, **kwds):
+        super(OverlaidTracks, self).__init__(alignment=alignment, tracks=tracks,
+                                             _assignedHeight=_assignedHeight,
                                              _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                              _renderingId=_renderingId, assembly=assembly,
                                              baselineY=baselineY, centerRadius=centerRadius,
                                              color=color, data=data, dataTransform=dataTransform,
                                              displacement=displacement, endAngle=endAngle,
-                                             experimental=experimental, flipY=flipY, id=id,
-                                             innerRadius=innerRadius, layout=layout,
+                                             experimental=experimental, flipY=flipY, height=height,
+                                             id=id, innerRadius=innerRadius, layout=layout,
                                              linkingId=linkingId, mark=mark, opacity=opacity,
                                              orientation=orientation, outerRadius=outerRadius,
                                              overlayOnPreviousTrack=overlayOnPreviousTrack,
@@ -1253,9 +1274,9 @@ class OverlaidTracks(GoslingSchema):
                                              static=static, stretch=stretch, stroke=stroke,
                                              strokeWidth=strokeWidth, style=style, subtitle=subtitle,
                                              text=text, title=title, tooltip=tooltip,
-                                             visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
-                                             xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1,
-                                             y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
+                                             visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
+                                             xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
+                                             y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
                                              zoomLimits=zoomLimits, **kwds)
 
 
@@ -1335,10 +1356,12 @@ class PartialTrack(GoslingSchema):
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
-        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
+        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
+        circular tracks. The effect of this property depends on where on the spec you
+        specify the `spacing`.
 
-        - If `{"layout": "circular"}`, specify the space between tracks in percentage
-        ranging from 0 to 100.
+        In a linear layout, this value is used in pixels, while in a circular layout, this
+        value is used relative to the height of the tracks or views.
     startAngle : float
         Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
@@ -1570,7 +1593,7 @@ class SelectivityCondition(GoslingSchema):
 class SingleView(GoslingSchema):
     """SingleView schema wrapper
 
-    anyOf(Mapping(required=[alignment, height, tracks, width]), Mapping(required=[tracks]),
+    anyOf(Mapping(required=[alignment, tracks]), Mapping(required=[tracks]),
     Mapping(required=[tracks]))
     """
     _schema = {'$ref': '#/definitions/SingleView'}
@@ -1674,7 +1697,7 @@ class Stroke(ChannelDeep):
         Whether to display legend. __Default__: `false`
     range : :class:`Range`
         Ranges of visual channel values
-    scaleOffset : List([float, float])
+    scaleOffset : List(float)
         Whether to use offset of the domain proportionally. This is bound to brushes on the
         color legend. __Default__: `[0, 1]`
     title : string
@@ -1734,7 +1757,7 @@ class Style(GoslingSchema):
         Customize the style of the brush mark in the `rangeSelect` mouse event.
     curve : enum('top', 'bottom', 'left', 'right')
         Specify the curve of `rule` marks.
-    dashed : List([float, float])
+    dashed : List(float)
         Specify the pattern of dashes and gaps for `rule` marks.
     dx : float
         Offset the position of marks in x direction. This property is currently only
@@ -1901,7 +1924,7 @@ class Track(GoslingSchema):
 class DataTrack(Track):
     """DataTrack schema wrapper
 
-    Mapping(required=[data, height, width])
+    Mapping(required=[data])
     Partial specification of `BasicSingleTrack` to use default visual encoding predefined by
     data type.
 
@@ -1910,10 +1933,6 @@ class DataTrack(Track):
 
     data : :class:`DataDeep`
 
-    height : float
-        Specify the track height in pixels.
-    width : float
-        Specify the track width in pixels.
     _assignedHeight : float
 
     _assignedWidth : float
@@ -1934,6 +1953,8 @@ class DataTrack(Track):
     endAngle : float
         Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
+    height : float
+        Specify the track height in pixels.
     id : string
 
     innerRadius : float
@@ -1952,10 +1973,12 @@ class DataTrack(Track):
     prerelease : Mapping(required=[])
         internal
     spacing : float
-        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
+        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
+        circular tracks. The effect of this property depends on where on the spec you
+        specify the `spacing`.
 
-        - If `{"layout": "circular"}`, specify the space between tracks in percentage
-        ranging from 0 to 100.
+        In a linear layout, this value is used in pixels, while in a circular layout, this
+        value is used relative to the height of the tracks or views.
     startAngle : float
         Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
@@ -1972,6 +1995,8 @@ class DataTrack(Track):
 
     title : string
         If defined, will show the textual label on the left-top corner of a track.
+    width : float
+        Specify the track width in pixels.
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
@@ -1988,43 +2013,40 @@ class DataTrack(Track):
     _schema = {'$ref': '#/definitions/DataTrack'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, data=Undefined, height=Undefined, width=Undefined, _assignedHeight=Undefined,
-                 _assignedWidth=Undefined, _invalidTrack=Undefined, _renderingId=Undefined,
-                 assembly=Undefined, centerRadius=Undefined, endAngle=Undefined, id=Undefined,
+    def __init__(self, data=Undefined, _assignedHeight=Undefined, _assignedWidth=Undefined,
+                 _invalidTrack=Undefined, _renderingId=Undefined, assembly=Undefined,
+                 centerRadius=Undefined, endAngle=Undefined, height=Undefined, id=Undefined,
                  innerRadius=Undefined, layout=Undefined, linkingId=Undefined, orientation=Undefined,
                  outerRadius=Undefined, overlayOnPreviousTrack=Undefined, prerelease=Undefined,
                  spacing=Undefined, startAngle=Undefined, static=Undefined, style=Undefined,
-                 subtitle=Undefined, title=Undefined, xAxis=Undefined, xDomain=Undefined,
-                 xOffset=Undefined, yDomain=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
-        super(DataTrack, self).__init__(data=data, height=height, width=width,
-                                        _assignedHeight=_assignedHeight, _assignedWidth=_assignedWidth,
-                                        _invalidTrack=_invalidTrack, _renderingId=_renderingId,
-                                        assembly=assembly, centerRadius=centerRadius, endAngle=endAngle,
+                 subtitle=Undefined, title=Undefined, width=Undefined, xAxis=Undefined,
+                 xDomain=Undefined, xOffset=Undefined, yDomain=Undefined, yOffset=Undefined,
+                 zoomLimits=Undefined, **kwds):
+        super(DataTrack, self).__init__(data=data, _assignedHeight=_assignedHeight,
+                                        _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
+                                        _renderingId=_renderingId, assembly=assembly,
+                                        centerRadius=centerRadius, endAngle=endAngle, height=height,
                                         id=id, innerRadius=innerRadius, layout=layout,
                                         linkingId=linkingId, orientation=orientation,
                                         outerRadius=outerRadius,
                                         overlayOnPreviousTrack=overlayOnPreviousTrack,
                                         prerelease=prerelease, spacing=spacing, startAngle=startAngle,
                                         static=static, style=style, subtitle=subtitle, title=title,
-                                        xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
-                                        yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
+                                        width=width, xAxis=xAxis, xDomain=xDomain, xOffset=xOffset,
+                                        yDomain=yDomain, yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class OverlaidTrack(Track):
     """OverlaidTrack schema wrapper
 
-    Mapping(required=[height, overlay, width])
+    Mapping(required=[overlay])
     Superposing multiple tracks.
 
     Attributes
     ----------
 
-    height : float
-        Specify the track height in pixels.
     overlay : List(Mapping(required=[]))
 
-    width : float
-        Specify the track width in pixels.
     _assignedHeight : float
 
     _assignedWidth : float
@@ -2059,6 +2081,8 @@ class OverlaidTrack(Track):
 
     flipY : boolean
 
+    height : float
+        Specify the track height in pixels.
     id : string
 
     innerRadius : float
@@ -2087,10 +2111,12 @@ class OverlaidTrack(Track):
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
-        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
+        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
+        circular tracks. The effect of this property depends on where on the spec you
+        specify the `spacing`.
 
-        - If `{"layout": "circular"}`, specify the space between tracks in percentage
-        ranging from 0 to 100.
+        In a linear layout, this value is used in pixels, while in a circular layout, this
+        value is used relative to the height of the tracks or views.
     startAngle : float
         Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
@@ -2119,6 +2145,8 @@ class OverlaidTrack(Track):
 
     visibility : List(:class:`VisibilityCondition`)
 
+    width : float
+        Specify the track width in pixels.
     x : anyOf(:class:`X`, :class:`ChannelValue`)
 
     x1 : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -2151,59 +2179,55 @@ class OverlaidTrack(Track):
     _schema = {'$ref': '#/definitions/OverlaidTrack'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, height=Undefined, overlay=Undefined, width=Undefined, _assignedHeight=Undefined,
-                 _assignedWidth=Undefined, _invalidTrack=Undefined, _renderingId=Undefined,
-                 assembly=Undefined, baselineY=Undefined, centerRadius=Undefined, color=Undefined,
-                 data=Undefined, dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
-                 experimental=Undefined, flipY=Undefined, id=Undefined, innerRadius=Undefined,
-                 layout=Undefined, linkingId=Undefined, mark=Undefined, opacity=Undefined,
-                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
-                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
-                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
-                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
-                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined, x=Undefined,
-                 x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined,
-                 yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
-        super(OverlaidTrack, self).__init__(height=height, overlay=overlay, width=width,
-                                            _assignedHeight=_assignedHeight,
+    def __init__(self, overlay=Undefined, _assignedHeight=Undefined, _assignedWidth=Undefined,
+                 _invalidTrack=Undefined, _renderingId=Undefined, assembly=Undefined,
+                 baselineY=Undefined, centerRadius=Undefined, color=Undefined, data=Undefined,
+                 dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
+                 experimental=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
+                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
+                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
+                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
+                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
+                 style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
+                 tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined,
+                 x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
+                 y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined,
+                 ye=Undefined, zoomLimits=Undefined, **kwds):
+        super(OverlaidTrack, self).__init__(overlay=overlay, _assignedHeight=_assignedHeight,
                                             _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, assembly=assembly,
                                             baselineY=baselineY, centerRadius=centerRadius, color=color,
                                             data=data, dataTransform=dataTransform,
                                             displacement=displacement, endAngle=endAngle,
-                                            experimental=experimental, flipY=flipY, id=id,
-                                            innerRadius=innerRadius, layout=layout, linkingId=linkingId,
-                                            mark=mark, opacity=opacity, orientation=orientation,
-                                            outerRadius=outerRadius,
+                                            experimental=experimental, flipY=flipY, height=height,
+                                            id=id, innerRadius=innerRadius, layout=layout,
+                                            linkingId=linkingId, mark=mark, opacity=opacity,
+                                            orientation=orientation, outerRadius=outerRadius,
                                             overlayOnPreviousTrack=overlayOnPreviousTrack,
                                             overrideTemplate=overrideTemplate, prerelease=prerelease,
                                             row=row, size=size, spacing=spacing, startAngle=startAngle,
                                             static=static, stretch=stretch, stroke=stroke,
                                             strokeWidth=strokeWidth, style=style, subtitle=subtitle,
                                             text=text, title=title, tooltip=tooltip,
-                                            visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
-                                            xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1,
-                                            y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
+                                            visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
+                                            xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
+                                            y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
                                             zoomLimits=zoomLimits, **kwds)
 
 
 class SingleTrack(Track):
     """SingleTrack schema wrapper
 
-    Mapping(required=[data, height, mark, width])
+    Mapping(required=[data, mark])
 
     Attributes
     ----------
 
     data : :class:`DataDeep`
 
-    height : float
-        Specify the track height in pixels.
     mark : :class:`Mark`
 
-    width : float
-        Specify the track width in pixels.
     _assignedHeight : float
 
     _assignedWidth : float
@@ -2236,6 +2260,8 @@ class SingleTrack(Track):
 
     flipY : boolean
 
+    height : float
+        Specify the track height in pixels.
     id : string
 
     innerRadius : float
@@ -2262,10 +2288,12 @@ class SingleTrack(Track):
     size : anyOf(:class:`Size`, :class:`ChannelValue`)
 
     spacing : float
-        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
+        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
+        circular tracks. The effect of this property depends on where on the spec you
+        specify the `spacing`.
 
-        - If `{"layout": "circular"}`, specify the space between tracks in percentage
-        ranging from 0 to 100.
+        In a linear layout, this value is used in pixels, while in a circular layout, this
+        value is used relative to the height of the tracks or views.
     startAngle : float
         Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
@@ -2294,6 +2322,8 @@ class SingleTrack(Track):
 
     visibility : List(:class:`VisibilityCondition`)
 
+    width : float
+        Specify the track width in pixels.
     x : anyOf(:class:`X`, :class:`ChannelValue`)
 
     x1 : anyOf(:class:`X`, :class:`ChannelValue`)
@@ -2326,29 +2356,28 @@ class SingleTrack(Track):
     _schema = {'$ref': '#/definitions/SingleTrack'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, data=Undefined, height=Undefined, mark=Undefined, width=Undefined,
-                 _assignedHeight=Undefined, _assignedWidth=Undefined, _invalidTrack=Undefined,
-                 _renderingId=Undefined, assembly=Undefined, baselineY=Undefined,
-                 centerRadius=Undefined, color=Undefined, dataTransform=Undefined,
-                 displacement=Undefined, endAngle=Undefined, experimental=Undefined, flipY=Undefined,
-                 id=Undefined, innerRadius=Undefined, layout=Undefined, linkingId=Undefined,
-                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
-                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
-                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
-                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
-                 style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
-                 tooltip=Undefined, visibility=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
-                 xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
-                 y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+    def __init__(self, data=Undefined, mark=Undefined, _assignedHeight=Undefined,
+                 _assignedWidth=Undefined, _invalidTrack=Undefined, _renderingId=Undefined,
+                 assembly=Undefined, baselineY=Undefined, centerRadius=Undefined, color=Undefined,
+                 dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
+                 experimental=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
+                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, opacity=Undefined,
+                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
+                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
+                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
+                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined,
+                 width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined, xAxis=Undefined,
+                 xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined, y1=Undefined,
+                 y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
                  zoomLimits=Undefined, **kwds):
-        super(SingleTrack, self).__init__(data=data, height=height, mark=mark, width=width,
-                                          _assignedHeight=_assignedHeight,
+        super(SingleTrack, self).__init__(data=data, mark=mark, _assignedHeight=_assignedHeight,
                                           _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                           _renderingId=_renderingId, assembly=assembly,
                                           baselineY=baselineY, centerRadius=centerRadius, color=color,
                                           dataTransform=dataTransform, displacement=displacement,
                                           endAngle=endAngle, experimental=experimental, flipY=flipY,
-                                          id=id, innerRadius=innerRadius, layout=layout,
+                                          height=height, id=id, innerRadius=innerRadius, layout=layout,
                                           linkingId=linkingId, opacity=opacity, orientation=orientation,
                                           outerRadius=outerRadius,
                                           overlayOnPreviousTrack=overlayOnPreviousTrack,
@@ -2357,16 +2386,16 @@ class SingleTrack(Track):
                                           static=static, stretch=stretch, stroke=stroke,
                                           strokeWidth=strokeWidth, style=style, subtitle=subtitle,
                                           text=text, title=title, tooltip=tooltip,
-                                          visibility=visibility, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
-                                          xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1, y1e=y1e,
-                                          yDomain=yDomain, yOffset=yOffset, ye=ye,
+                                          visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
+                                          xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
+                                          y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
                                           zoomLimits=zoomLimits, **kwds)
 
 
 class TemplateTrack(Track):
     """TemplateTrack schema wrapper
 
-    Mapping(required=[data, height, template, width])
+    Mapping(required=[template, data])
     Template specification that will be internally converted into `SingleTrack` for rendering.
 
     Attributes
@@ -2374,12 +2403,8 @@ class TemplateTrack(Track):
 
     data : :class:`DataDeep`
 
-    height : float
-        Specify the track height in pixels.
     template : string
 
-    width : float
-        Specify the track width in pixels.
     _assignedHeight : float
 
     _assignedWidth : float
@@ -2402,6 +2427,8 @@ class TemplateTrack(Track):
     endAngle : float
         Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
+    height : float
+        Specify the track height in pixels.
     id : string
 
     innerRadius : float
@@ -2420,10 +2447,12 @@ class TemplateTrack(Track):
     prerelease : Mapping(required=[])
         internal
     spacing : float
-        - If `{"layout": "linear"}`, specify the space between tracks in pixels;
+        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
+        circular tracks. The effect of this property depends on where on the spec you
+        specify the `spacing`.
 
-        - If `{"layout": "circular"}`, specify the space between tracks in percentage
-        ranging from 0 to 100.
+        In a linear layout, this value is used in pixels, while in a circular layout, this
+        value is used relative to the height of the tracks or views.
     startAngle : float
         Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
@@ -2440,6 +2469,8 @@ class TemplateTrack(Track):
 
     title : string
         If defined, will show the textual label on the left-top corner of a track.
+    width : float
+        Specify the track width in pixels.
     xAxis : :class:`AxisPosition`
         not supported
     xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
@@ -2456,33 +2487,45 @@ class TemplateTrack(Track):
     _schema = {'$ref': '#/definitions/TemplateTrack'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, data=Undefined, height=Undefined, template=Undefined, width=Undefined,
-                 _assignedHeight=Undefined, _assignedWidth=Undefined, _invalidTrack=Undefined,
-                 _renderingId=Undefined, assembly=Undefined, centerRadius=Undefined, encoding=Undefined,
-                 endAngle=Undefined, id=Undefined, innerRadius=Undefined, layout=Undefined,
+    def __init__(self, data=Undefined, template=Undefined, _assignedHeight=Undefined,
+                 _assignedWidth=Undefined, _invalidTrack=Undefined, _renderingId=Undefined,
+                 assembly=Undefined, centerRadius=Undefined, encoding=Undefined, endAngle=Undefined,
+                 height=Undefined, id=Undefined, innerRadius=Undefined, layout=Undefined,
                  linkingId=Undefined, orientation=Undefined, outerRadius=Undefined,
                  overlayOnPreviousTrack=Undefined, prerelease=Undefined, spacing=Undefined,
                  startAngle=Undefined, static=Undefined, style=Undefined, subtitle=Undefined,
-                 title=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 yDomain=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
-        super(TemplateTrack, self).__init__(data=data, height=height, template=template, width=width,
+                 title=Undefined, width=Undefined, xAxis=Undefined, xDomain=Undefined,
+                 xOffset=Undefined, yDomain=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
+        super(TemplateTrack, self).__init__(data=data, template=template,
                                             _assignedHeight=_assignedHeight,
                                             _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, assembly=assembly,
                                             centerRadius=centerRadius, encoding=encoding,
-                                            endAngle=endAngle, id=id, innerRadius=innerRadius,
-                                            layout=layout, linkingId=linkingId, orientation=orientation,
-                                            outerRadius=outerRadius,
+                                            endAngle=endAngle, height=height, id=id,
+                                            innerRadius=innerRadius, layout=layout, linkingId=linkingId,
+                                            orientation=orientation, outerRadius=outerRadius,
                                             overlayOnPreviousTrack=overlayOnPreviousTrack,
                                             prerelease=prerelease, spacing=spacing,
                                             startAngle=startAngle, static=static, style=style,
-                                            subtitle=subtitle, title=title, xAxis=xAxis,
+                                            subtitle=subtitle, title=title, width=width, xAxis=xAxis,
                                             xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
                                             yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
-class VCFData(DataDeep):
-    """VCFData schema wrapper
+class ValueExtent(Range):
+    """ValueExtent schema wrapper
+
+    anyOf(List(string), List(float))
+    """
+    _schema = {'$ref': '#/definitions/ValueExtent'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, *args, **kwds):
+        super(ValueExtent, self).__init__(*args, **kwds)
+
+
+class VcfData(DataDeep):
+    """VcfData schema wrapper
 
     Mapping(required=[type, url, indexUrl])
     The Variant Call Format (VCF).
@@ -2499,30 +2542,18 @@ class VCFData(DataDeep):
     sampleLength : float
         The maximum number of rows to be loaded from the URL. __Default:__ `1000`
     """
-    _schema = {'$ref': '#/definitions/VCFData'}
+    _schema = {'$ref': '#/definitions/VcfData'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, sampleLength=Undefined, **kwds):
-        super(VCFData, self).__init__(indexUrl=indexUrl, type=type, url=url, sampleLength=sampleLength,
+        super(VcfData, self).__init__(indexUrl=indexUrl, type=type, url=url, sampleLength=sampleLength,
                                       **kwds)
-
-
-class ValueExtent(Range):
-    """ValueExtent schema wrapper
-
-    anyOf(List(string), List(float))
-    """
-    _schema = {'$ref': '#/definitions/ValueExtent'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, *args, **kwds):
-        super(ValueExtent, self).__init__(*args, **kwds)
 
 
 class VectorData(DataDeep):
     """VectorData schema wrapper
 
-    Mapping(required=[type, url, column, value])
+    Mapping(required=[type, url])
     One-dimensional quantitative values along genomic position (e.g., bigwig) can be converted
     into HiGlass' `"vector"` format data. Find out more about this format at [HiGlass
     Docs](https://docs.higlass.io/data_preparation.html#bigwig-files).
@@ -2530,31 +2561,32 @@ class VectorData(DataDeep):
     Attributes
     ----------
 
-    column : string
-        Assign a field name of the middle position of genomic intervals.
     type : string
 
     url : string
         Specify the URL address of the data file.
-    value : string
-        Assign a field name of quantitative values.
     aggregation : :class:`BinAggregate`
         Determine aggregation function to apply within bins. __Default__: `"mean"`
     binSize : float
         Binning the genomic interval in tiles (unit size: 256).
+    column : string
+        Assign a field name of the middle position of genomic intervals. __Default__:
+        `"position"`
     end : string
-        Assign a field name of the end position of genomic intervals.
+        Assign a field name of the end position of genomic intervals. __Default__: `"end"`
     start : string
-        Assign a field name of the start position of genomic intervals.
+        Assign a field name of the start position of genomic intervals. __Default__:
+        `"start"`
+    value : string
+        Assign a field name of quantitative values. __Default__: `"value"`
     """
     _schema = {'$ref': '#/definitions/VectorData'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, column=Undefined, type=Undefined, url=Undefined, value=Undefined,
-                 aggregation=Undefined, binSize=Undefined, end=Undefined, start=Undefined, **kwds):
-        super(VectorData, self).__init__(column=column, type=type, url=url, value=value,
-                                         aggregation=aggregation, binSize=binSize, end=end, start=start,
-                                         **kwds)
+    def __init__(self, type=Undefined, url=Undefined, aggregation=Undefined, binSize=Undefined,
+                 column=Undefined, end=Undefined, start=Undefined, value=Undefined, **kwds):
+        super(VectorData, self).__init__(type=type, url=url, aggregation=aggregation, binSize=binSize,
+                                         column=column, end=end, start=start, value=value, **kwds)
 
 
 class VisibilityCondition(GoslingSchema):
@@ -2754,7 +2786,7 @@ class ZoomLevelVisibilityCondition(VisibilityCondition):
 class ZoomLimits(GoslingSchema):
     """ZoomLimits schema wrapper
 
-    List([anyOf(float, None), anyOf(float, None)])
+    List(anyOf(float, None))
     """
     _schema = {'$ref': '#/definitions/ZoomLimits'}
     _rootschema = GoslingSchema._rootschema
