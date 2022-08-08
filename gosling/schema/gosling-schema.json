@@ -13,17 +13,43 @@
       "type": "string"
     },
     "Assembly": {
-      "enum": [
-        "hg38",
-        "hg19",
-        "hg18",
-        "hg17",
-        "hg16",
-        "mm10",
-        "mm9",
-        "unknown"
-      ],
-      "type": "string"
+      "anyOf": [
+        {
+          "const": "hg38",
+          "type": "string"
+        },
+        {
+          "const": "hg19",
+          "type": "string"
+        },
+        {
+          "const": "hg18",
+          "type": "string"
+        },
+        {
+          "const": "hg17",
+          "type": "string"
+        },
+        {
+          "const": "hg16",
+          "type": "string"
+        },
+        {
+          "const": "mm10",
+          "type": "string"
+        },
+        {
+          "const": "mm9",
+          "type": "string"
+        },
+        {
+          "const": "unknown",
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/ChromSizes"
+        }
+      ]
     },
     "AxisPosition": {
       "enum": [
@@ -35,7 +61,7 @@
       ],
       "type": "string"
     },
-    "BAMData": {
+    "BamData": {
       "additionalProperties": false,
       "description": "Binary Alignment Map (BAM) is the comprehensive raw data of genome sequencing; it consists of the lossless, compressed binary representation of the Sequence Alignment Map-files.",
       "properties": {
@@ -75,7 +101,7 @@
       ],
       "type": "object"
     },
-    "BEDDBData": {
+    "BeddbData": {
       "additionalProperties": false,
       "description": "Regular BED or similar files can be pre-aggregated for the scalable data exploration. Find our more about this format at [HiGlass Docs](https://docs.higlass.io/data_preparation.html#bed-files).",
       "properties": {
@@ -183,7 +209,7 @@
       ],
       "type": "object"
     },
-    "BIGWIGData": {
+    "BigWigData": {
       "additionalProperties": false,
       "properties": {
         "aggregation": {
@@ -195,15 +221,15 @@
           "type": "number"
         },
         "column": {
-          "description": "Assign a field name of the middle position of genomic intervals.",
+          "description": "Assign a field name of the middle position of genomic intervals. __Default__: `\"position\"`",
           "type": "string"
         },
         "end": {
-          "description": "Assign a field name of the end position of genomic intervals.",
+          "description": "Assign a field name of the end position of genomic intervals. __Default__: `\"end\"`",
           "type": "string"
         },
         "start": {
-          "description": "Assign a field name of the start position of genomic intervals.",
+          "description": "Assign a field name of the start position of genomic intervals. __Default__: `\"start\"`",
           "type": "string"
         },
         "type": {
@@ -215,15 +241,13 @@
           "type": "string"
         },
         "value": {
-          "description": "Assign a field name of quantitative values.",
+          "description": "Assign a field name of quantitative values. __Default__: `\"value\"`",
           "type": "string"
         }
       },
       "required": [
         "type",
-        "url",
-        "column",
-        "value"
+        "url"
       ],
       "type": "object"
     },
@@ -233,82 +257,6 @@
         "sum"
       ],
       "type": "string"
-    },
-    "CSVData": {
-      "additionalProperties": false,
-      "description": "Any small enough tabular data files, such as tsv, csv, BED, BEDPE, and GFF, can be loaded using \"csv\" data specification.",
-      "properties": {
-        "chromosomeField": {
-          "description": "Specify the name of chromosome data fields.",
-          "type": "string"
-        },
-        "chromosomePrefix": {
-          "description": "experimental",
-          "type": "string"
-        },
-        "genomicFields": {
-          "description": "Specify the name of genomic data fields.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "genomicFieldsToConvert": {
-          "description": "experimental",
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "chromosomeField": {
-                "type": "string"
-              },
-              "genomicFields": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "required": [
-              "chromosomeField",
-              "genomicFields"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "headerNames": {
-          "description": "Specify the names of data fields if a CSV file does not contain a header.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "longToWideId": {
-          "description": "experimental",
-          "type": "string"
-        },
-        "sampleLength": {
-          "description": "Specify the number of rows loaded from the URL.\n\n__Default:__ `1000`",
-          "type": "number"
-        },
-        "separator": {
-          "description": "Specify file separator, __Default:__ ','",
-          "type": "string"
-        },
-        "type": {
-          "const": "csv",
-          "type": "string"
-        },
-        "url": {
-          "description": "Specify the URL address of the data file.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "url"
-      ],
-      "type": "object"
     },
     "Channel": {
       "anyOf": [
@@ -366,6 +314,23 @@
         "value"
       ],
       "type": "object"
+    },
+    "ChromSizes": {
+      "description": "Custom chromosome sizes, e.g., [[\"foo\", 1000], [\"bar\", 300], [\"baz\", 240]]",
+      "items": {
+        "items": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "maxItems": 2,
+        "minItems": 2,
+        "type": "array"
+      },
+      "type": "array"
     },
     "Chromosome": {
       "enum": [
@@ -450,14 +415,9 @@
         },
         "scaleOffset": {
           "description": "Whether to use offset of the domain proportionally. This is bound to brushes on the color legend. __Default__: `[0, 1]`",
-          "items": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "number"
-            }
-          ],
+          "items": {
+            "type": "number"
+          },
           "maxItems": 2,
           "minItems": 2,
           "type": "array"
@@ -506,22 +466,98 @@
       ],
       "type": "object"
     },
+    "CsvData": {
+      "additionalProperties": false,
+      "description": "Any small enough tabular data files, such as tsv, csv, BED, BEDPE, and GFF, can be loaded using \"csv\" data specification.",
+      "properties": {
+        "chromosomeField": {
+          "description": "Specify the name of chromosome data fields.",
+          "type": "string"
+        },
+        "chromosomePrefix": {
+          "description": "experimental",
+          "type": "string"
+        },
+        "genomicFields": {
+          "description": "Specify the name of genomic data fields.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "genomicFieldsToConvert": {
+          "description": "experimental",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "chromosomeField": {
+                "type": "string"
+              },
+              "genomicFields": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "chromosomeField",
+              "genomicFields"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "headerNames": {
+          "description": "Specify the names of data fields if a CSV file does not contain a header.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "longToWideId": {
+          "description": "experimental",
+          "type": "string"
+        },
+        "sampleLength": {
+          "description": "Specify the number of rows loaded from the URL.\n\n__Default:__ `1000`",
+          "type": "number"
+        },
+        "separator": {
+          "description": "Specify file separator, __Default:__ ','",
+          "type": "string"
+        },
+        "type": {
+          "const": "csv",
+          "type": "string"
+        },
+        "url": {
+          "description": "Specify the URL address of the data file.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url"
+      ],
+      "type": "object"
+    },
     "DataDeep": {
       "anyOf": [
         {
-          "$ref": "#/definitions/JSONData"
+          "$ref": "#/definitions/JsonData"
         },
         {
-          "$ref": "#/definitions/CSVData"
+          "$ref": "#/definitions/CsvData"
         },
         {
-          "$ref": "#/definitions/BIGWIGData"
+          "$ref": "#/definitions/BigWigData"
         },
         {
           "$ref": "#/definitions/MultivecData"
         },
         {
-          "$ref": "#/definitions/BEDDBData"
+          "$ref": "#/definitions/BeddbData"
         },
         {
           "$ref": "#/definitions/VectorData"
@@ -530,10 +566,10 @@
           "$ref": "#/definitions/MatrixData"
         },
         {
-          "$ref": "#/definitions/BAMData"
+          "$ref": "#/definitions/BamData"
         },
         {
-          "$ref": "#/definitions/VCFData"
+          "$ref": "#/definitions/VcfData"
         }
       ]
     },
@@ -607,7 +643,7 @@
           "type": "object"
         },
         "spacing": {
-          "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+          "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
           "type": "number"
         },
         "startAngle": {
@@ -678,9 +714,7 @@
         }
       },
       "required": [
-        "data",
-        "height",
-        "width"
+        "data"
       ],
       "type": "object"
     },
@@ -714,7 +748,7 @@
           "$ref": "#/definitions/CoverageTransform"
         },
         {
-          "$ref": "#/definitions/JSONParseTransform"
+          "$ref": "#/definitions/JsonParseTransform"
         }
       ]
     },
@@ -827,14 +861,9 @@
           "description": "If specified, only showing a certain interval in a chromosome."
         },
         "interval": {
-          "items": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "number"
-            }
-          ],
+          "items": {
+            "type": "number"
+          },
           "maxItems": 2,
           "minItems": 2,
           "type": "array"
@@ -855,14 +884,9 @@
               "type": "string"
             },
             {
-              "items": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "string"
-                }
-              ],
+              "items": {
+                "type": "string"
+              },
               "maxItems": 2,
               "minItems": 2,
               "type": "array"
@@ -880,14 +904,9 @@
       "properties": {
         "interval": {
           "description": "Show a certain interval within entire chromosome",
-          "items": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "number"
-            }
-          ],
+          "items": {
+            "type": "number"
+          },
           "maxItems": 2,
           "minItems": 2,
           "type": "array"
@@ -1361,7 +1380,7 @@
                         ]
                       },
                       "spacing": {
-                        "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                        "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                         "type": "number"
                       },
                       "startAngle": {
@@ -1611,7 +1630,7 @@
               ]
             },
             "spacing": {
-              "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+              "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
               "type": "number"
             },
             "startAngle": {
@@ -1814,9 +1833,7 @@
           },
           "required": [
             "alignment",
-            "height",
-            "tracks",
-            "width"
+            "tracks"
           ],
           "type": "object"
         },
@@ -2119,7 +2136,7 @@
                         ]
                       },
                       "spacing": {
-                        "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                        "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                         "type": "number"
                       },
                       "startAngle": {
@@ -2369,7 +2386,7 @@
               ]
             },
             "spacing": {
-              "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+              "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
               "type": "number"
             },
             "startAngle": {
@@ -2782,7 +2799,7 @@
                         ]
                       },
                       "spacing": {
-                        "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                        "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                         "type": "number"
                       },
                       "startAngle": {
@@ -3012,7 +3029,7 @@
               "type": "array"
             },
             "spacing": {
-              "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+              "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
               "type": "number"
             },
             "static": {
@@ -3182,7 +3199,7 @@
                         "description": "Specify the orientation."
                       },
                       "spacing": {
-                        "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                        "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                         "type": "number"
                       },
                       "static": {
@@ -3263,7 +3280,7 @@
               "type": "array"
             },
             "spacing": {
-              "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+              "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
               "type": "number"
             },
             "static": {
@@ -3372,7 +3389,7 @@
       ],
       "type": "object"
     },
-    "JSONData": {
+    "JsonData": {
       "additionalProperties": false,
       "description": "The JSON data format allows users to include data directly in the Gosling's JSON specification.",
       "properties": {
@@ -3433,7 +3450,7 @@
       ],
       "type": "object"
     },
-    "JSONParseTransform": {
+    "JsonParseTransform": {
       "additionalProperties": false,
       "description": "Parse JSON Object Array and append vertically",
       "properties": {
@@ -3582,8 +3599,10 @@
     },
     "MouseEventsDeep": {
       "additionalProperties": false,
+      "description": "Options for determining mouse events in detail, e.g., turning on specific events only",
       "properties": {
         "click": {
+          "description": "Whether to enable click events.",
           "type": "boolean"
         },
         "enableMouseOverOnMultipleMarks": {
@@ -3595,9 +3614,11 @@
           "type": "string"
         },
         "mouseOver": {
+          "description": "Whether to enable mouseover events.",
           "type": "boolean"
         },
         "rangeSelect": {
+          "description": "Whether to send range selection events.",
           "type": "boolean"
         }
       },
@@ -3644,7 +3665,7 @@
           "description": "Specify the orientation."
         },
         "spacing": {
-          "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+          "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
           "type": "number"
         },
         "static": {
@@ -3738,19 +3759,19 @@
           "type": "array"
         },
         "column": {
-          "description": "Assign a field name of the middle position of genomic intervals.",
+          "description": "Assign a field name of the middle position of genomic intervals. __Default__: `\"position\"`",
           "type": "string"
         },
         "end": {
-          "description": "Assign a field name of the end position of genomic intervals.",
+          "description": "Assign a field name of the end position of genomic intervals. __Default__: `\"end\"`",
           "type": "string"
         },
         "row": {
-          "description": "Assign a field name of samples.",
+          "description": "Assign a field name of samples. __Default__: `\"category\"`",
           "type": "string"
         },
         "start": {
-          "description": "Assign a field name of the start position of genomic intervals.",
+          "description": "Assign a field name of the start position of genomic intervals. __Default__: `\"start\"`",
           "type": "string"
         },
         "type": {
@@ -3762,16 +3783,13 @@
           "type": "string"
         },
         "value": {
-          "description": "Assign a field name of quantitative values.",
+          "description": "Assign a field name of quantitative values. __Default__: `\"value\"`",
           "type": "string"
         }
       },
       "required": [
         "type",
-        "url",
-        "column",
-        "row",
-        "value"
+        "url"
       ],
       "type": "object"
     },
@@ -4102,7 +4120,7 @@
                 ]
               },
               "spacing": {
-                "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                 "type": "number"
               },
               "startAngle": {
@@ -4322,7 +4340,7 @@
           ]
         },
         "spacing": {
-          "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+          "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
           "type": "number"
         },
         "startAngle": {
@@ -4518,9 +4536,7 @@
         }
       },
       "required": [
-        "height",
-        "overlay",
-        "width"
+        "overlay"
       ],
       "type": "object"
     },
@@ -4674,7 +4690,7 @@
           ]
         },
         "spacing": {
-          "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+          "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
           "type": "number"
         },
         "startAngle": {
@@ -4877,9 +4893,7 @@
       },
       "required": [
         "alignment",
-        "tracks",
-        "width",
-        "height"
+        "tracks"
       ],
       "type": "object"
     },
@@ -5142,7 +5156,7 @@
                 ]
               },
               "spacing": {
-                "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                 "type": "number"
               },
               "startAngle": {
@@ -5362,7 +5376,7 @@
           ]
         },
         "spacing": {
-          "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+          "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
           "type": "number"
         },
         "startAngle": {
@@ -5854,7 +5868,7 @@
           ]
         },
         "spacing": {
-          "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+          "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
           "type": "number"
         },
         "startAngle": {
@@ -6051,9 +6065,7 @@
       },
       "required": [
         "data",
-        "height",
-        "mark",
-        "width"
+        "mark"
       ],
       "type": "object"
     },
@@ -6351,7 +6363,7 @@
                         ]
                       },
                       "spacing": {
-                        "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                        "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                         "type": "number"
                       },
                       "startAngle": {
@@ -6601,7 +6613,7 @@
               ]
             },
             "spacing": {
-              "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+              "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
               "type": "number"
             },
             "startAngle": {
@@ -6804,9 +6816,7 @@
           },
           "required": [
             "alignment",
-            "height",
-            "tracks",
-            "width"
+            "tracks"
           ],
           "type": "object"
         },
@@ -7102,7 +7112,7 @@
                         ]
                       },
                       "spacing": {
-                        "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                        "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                         "type": "number"
                       },
                       "startAngle": {
@@ -7352,7 +7362,7 @@
               ]
             },
             "spacing": {
-              "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+              "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
               "type": "number"
             },
             "startAngle": {
@@ -7758,7 +7768,7 @@
                         ]
                       },
                       "spacing": {
-                        "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+                        "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
                         "type": "number"
                       },
                       "startAngle": {
@@ -7988,7 +7998,7 @@
               "type": "array"
             },
             "spacing": {
-              "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+              "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
               "type": "number"
             },
             "static": {
@@ -8228,14 +8238,9 @@
         },
         "scaleOffset": {
           "description": "Whether to use offset of the domain proportionally. This is bound to brushes on the color legend. __Default__: `[0, 1]`",
-          "items": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "number"
-            }
-          ],
+          "items": {
+            "type": "number"
+          },
           "maxItems": 2,
           "minItems": 2,
           "type": "array"
@@ -8336,14 +8341,9 @@
         },
         "dashed": {
           "description": "Specify the pattern of dashes and gaps for `rule` marks.",
-          "items": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "number"
-            }
-          ],
+          "items": {
+            "type": "number"
+          },
           "maxItems": 2,
           "minItems": 2,
           "type": "array"
@@ -8604,7 +8604,7 @@
           "type": "object"
         },
         "spacing": {
-          "description": "- If `{\"layout\": \"linear\"}`, specify the space between tracks in pixels;\n\n- If `{\"layout\": \"circular\"}`, specify the space between tracks in percentage ranging from 0 to 100.",
+          "description": "The size of the gap (1) between tracks, (2) between views, and (3) of the origin of circular tracks. The effect of this property depends on where on the spec you specify the `spacing`.\n\nIn a linear layout, this value is used in pixels, while in a circular layout, this value is used relative to the height of the tracks or views.",
           "type": "number"
         },
         "startAngle": {
@@ -8678,10 +8678,8 @@
         }
       },
       "required": [
-        "data",
-        "height",
         "template",
-        "width"
+        "data"
       ],
       "type": "object"
     },
@@ -8759,7 +8757,23 @@
         }
       ]
     },
-    "VCFData": {
+    "ValueExtent": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "VcfData": {
       "additionalProperties": false,
       "description": "The Variant Call Format (VCF).",
       "properties": {
@@ -8787,22 +8801,6 @@
       ],
       "type": "object"
     },
-    "ValueExtent": {
-      "anyOf": [
-        {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        {
-          "items": {
-            "type": "number"
-          },
-          "type": "array"
-        }
-      ]
-    },
     "VectorData": {
       "additionalProperties": false,
       "description": "One-dimensional quantitative values along genomic position (e.g., bigwig) can be converted into HiGlass' `\"vector\"` format data. Find out more about this format at [HiGlass Docs](https://docs.higlass.io/data_preparation.html#bigwig-files).",
@@ -8816,15 +8814,15 @@
           "type": "number"
         },
         "column": {
-          "description": "Assign a field name of the middle position of genomic intervals.",
+          "description": "Assign a field name of the middle position of genomic intervals. __Default__: `\"position\"`",
           "type": "string"
         },
         "end": {
-          "description": "Assign a field name of the end position of genomic intervals.",
+          "description": "Assign a field name of the end position of genomic intervals. __Default__: `\"end\"`",
           "type": "string"
         },
         "start": {
-          "description": "Assign a field name of the start position of genomic intervals.",
+          "description": "Assign a field name of the start position of genomic intervals. __Default__: `\"start\"`",
           "type": "string"
         },
         "type": {
@@ -8836,15 +8834,13 @@
           "type": "string"
         },
         "value": {
-          "description": "Assign a field name of quantitative values.",
+          "description": "Assign a field name of quantitative values. __Default__: `\"value\"`",
           "type": "string"
         }
       },
       "required": [
         "type",
-        "url",
-        "column",
-        "value"
+        "url"
       ],
       "type": "object"
     },
@@ -9012,20 +9008,12 @@
       "type": "object"
     },
     "ZoomLimits": {
-      "items": [
-        {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      ],
+      "items": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
       "maxItems": 2,
       "minItems": 2,
       "type": "array"

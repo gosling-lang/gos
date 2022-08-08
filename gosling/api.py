@@ -140,11 +140,11 @@ class _TransformsMixin:
             )
         )
 
-    @utils.use_signature(core.JSONParseTransform)
+    @utils.use_signature(core.JsonParseTransform)
     def transform_json_parse(self: T, field, **kwargs) -> T:
         """Add JSONParseTransform to Track"""
         return self._add_transform(
-            core.JSONParseTransform(type="subjson", field=field, **kwargs)
+            core.JsonParseTransform(type="subjson", field=field, **kwargs)
         )
 
 
