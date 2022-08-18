@@ -210,7 +210,7 @@ class View(_PropertiesMixin, core.Root):
 
         if format == "json":
             data = self.to_json(**kwargs)
-        if format == "html":
+        elif format == "html":
             data = display.spec_to_html(self.to_dict(), **kwargs)
         else:
             raise ValueError(f"unrecognized format: '{format}'")
