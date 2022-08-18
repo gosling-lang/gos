@@ -1,5 +1,5 @@
 import pathlib
-from typing import Iterable, TypeVar, Union
+from typing import Iterable, TypeVar, Union, Literal
 
 import gosling.display as display
 import gosling.utils as utils
@@ -195,11 +195,28 @@ class View(_PropertiesMixin, core.Root):
 
         display(self)
 
-    def save(self, path: Union[pathlib.Path, str]):
-        spec = self.to_dict()
-        html_str = display.spec_to_html(spec)
+    def save(
+        self,
+        path: Union[pathlib.Path, str],
+        format: Union[Literal["json", "html"], None] = None,
+        **kwargs,
+    ):
+        if format is None:
+            suffix = pathlib.Path(path).suffix.lstrip(".")
+            if suffix in ("json", "html"):
+                format = suffix
+            else:
+                raise ValueError("must specify file format: ['html', 'json']")
+
+        if format == "json":
+            data = self.to_json(**kwargs)
+        if format == "html":
+            data = display.spec_to_html(self.to_dict(), **kwargs)
+        else:
+            raise ValueError(f"unrecognized format: '{format}'")
+
         with open(path, mode="w") as f:
-            f.write(html_str)
+            f.write(data)
 
     def widget(self):
         try:
@@ -210,6 +227,7 @@ class View(_PropertiesMixin, core.Root):
             )
 
         return GoslingWidget(self.to_dict())
+
 
 # View utilities
 
