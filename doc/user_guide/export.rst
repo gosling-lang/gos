@@ -2,11 +2,11 @@
 
 .. _export:
 
-Exporting Gosling Visualization
-===============================
+Exporting Visualization
+=======================
 
-A Gosling visualization created using **gos** can be exported to either a standalone 
-HTML file or a JSON value.
+A Gosling visualization created using **gos** can be exported to either a **standalone 
+HTML file** or a **JSON object**.
 
 HTML
 ----
@@ -26,7 +26,7 @@ JSON
 
 You can save the JSON object of your Gosling visualization. This object contains 
 all the information needed to draw your visualization. For example, you can copy and 
-paste the object on the `Gosling Editor` to see your visualization.
+paste the object on the `Gosling Editor`_ to see your visualization.
 
 .. code-block:: python
 
