@@ -5,8 +5,6 @@ import gosling.display as display
 import gosling.utils as utils
 from gosling.schema import Undefined, channels, core, mixins
 
-DEFAULT_WIDTH = 800
-DEFAULT_HEIGHT = 180
 DEFAULT_MARK = "bar"
 
 T = TypeVar("T")
@@ -251,8 +249,6 @@ class Track(
     def __init__(self, data=Undefined, **kwargs):
         super().__init__(
             data=data,
-            width=kwargs.pop("width", DEFAULT_WIDTH),
-            height=kwargs.pop("height", DEFAULT_HEIGHT),
             mark=kwargs.pop("mark", DEFAULT_MARK),
             **kwargs,
         )
@@ -265,24 +261,7 @@ class Track(
 
 def overlay(*tracks: Union[Track, View], **kwargs) -> View:
     """Compose an overlaid view from multiple tracks or overliad tracks"""
-    # Overlay requires a `width` and `height`. Check if provided as kwargs, otherwise
-    # eagerly grab the width/height from the tracks, otherwise use defaults.
-    width = kwargs.pop(
-        "width", next((t.width for t in tracks if t.width != Undefined), DEFAULT_WIDTH)
-    )
-
-    height = kwargs.pop(
-        "height",
-        next((t.height for t in tracks if t.height != Undefined), DEFAULT_HEIGHT),
-    )
-
-    # TODO: Gosling.js doesn't respect the parent width/height if defined in children.
-    # This is a hack to ensure the children respect the view-level config.
-    tracks = tuple(t.properties(width=Undefined, height=Undefined) for t in tracks)
-
-    return View(
-        alignment="overlay", tracks=tracks, width=width, height=height, **kwargs
-    )
+    return View(alignment="overlay", tracks=tracks, **kwargs)
 
 
 def stack(*tracks: Union[Track, View], **kwargs) -> View:
