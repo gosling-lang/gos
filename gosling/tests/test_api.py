@@ -130,12 +130,10 @@ def test_visibilities(basic_track: gos.Track) -> None:
 
 
 def test_track_composition(basic_track: gos.Track) -> None:
-    view = gos.overlay(basic_track.properties(width=500, height=10), basic_track)
+    view = gos.overlay(basic_track, basic_track)
     assert isinstance(view, gos.View)
     assert view.alignment == "overlay"
     # uses width and height from first track
-    assert view.width == 500
-    assert view.height == 10
     assert len(view.tracks) == 2
 
     # override w/h at view-level
@@ -149,9 +147,6 @@ def test_track_composition(basic_track: gos.Track) -> None:
     assert view.width == 60
     assert view.height == 60
     assert len(view.tracks) == 3
-    for track in view.tracks:
-        assert track.width == gos.Undefined
-        assert track.height == gos.Undefined
 
     view = gos.stack(
         basic_track.properties(width=50, height=50),
