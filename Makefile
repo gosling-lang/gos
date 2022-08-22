@@ -1,5 +1,5 @@
 test:
-	pytest --ignore gosling/examples --doctest-modules gosling
+	pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling
 
 clean-generated:
 	rm -rf doc/_build
