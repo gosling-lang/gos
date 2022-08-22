@@ -4,6 +4,7 @@ __pycache__/
 build/
 dist/
 test_notebooks/
+gosling/_version.py
 
 .ipynb_checkpoints
 Untitled*.ipynb
