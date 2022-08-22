@@ -14,7 +14,7 @@ data = gos.multivec(
     binSize=5,
 )
 
-domain = gos.GenomicDomain(chromosome="1", interval=[1, 30005000])
+domain = gos.GenomicDomain(chromosome="chr1", interval=[1, 30005000])
 
 track = gos.Track(data).mark_line().encode(
     x=gos.X("position:G", domain=domain, axis="bottom"),

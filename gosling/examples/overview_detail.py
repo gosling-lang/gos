@@ -79,8 +79,8 @@ def detail(background, linkingId, legend, chromosome):
     ).properties(width=245, height=150)
 
 details = gos.horizontal(
-    detail("blue", "detail-1", legend=False, chromosome="5"),
-    detail("red", "detail-2", legend=True, chromosome="16"),
+    detail("blue", "detail-1", legend=False, chromosome="chr5"),
+    detail("red", "detail-2", legend=True, chromosome="chr16"),
     spacing=10,
 )
 

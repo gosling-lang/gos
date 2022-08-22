@@ -75,7 +75,7 @@ lolipop = gos.overlay(
     ),
     width=725,
     height=150,
-    xDomain=gos.GenomicDomain(chromosome="13", interval=[31500000, 33150000]),
+    xDomain=gos.GenomicDomain(chromosome="chr13", interval=[31500000, 33150000]),
 )
 
 lolipop
