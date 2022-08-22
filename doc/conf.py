@@ -2,6 +2,7 @@
 
 import sys
 import os
+from setuptools_scm import get_version
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -34,7 +35,7 @@ project = "gos"
 copyright = "2021, Trevor Manz"
 author = "Trevor Manz"
 
-version = "0.0.11"
+version = get_version(root="..", relative_to=__file__)
 release = version
 
 todo_include_todos = False
