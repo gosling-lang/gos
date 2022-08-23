@@ -15,11 +15,10 @@ TEMPLATE = jinja2.Template(
 <div id="{{ div_id }}">
 <script>
   document.addEventListener("DOMContentLoaded", function(event) {
-      var spec = {{ spec }};
+      let spec = {{ spec }};
+      let el = document.querySelector('#{{ div_id }}');
+      gosling.embed(el, spec, { padding: 0 }).catch(console.error);
       console.log(spec);
-      var opt = { padding: 0 };
-      var el = document.querySelector('#{{ div_id }}');
-      gosling.embed(el, spec, opt).catch(console.err);
   });
 </script>
 </div>
@@ -113,22 +112,19 @@ def depart_gosling_plot(self, node):
 
 
 def builder_inited(app):
-    app.add_css_file(app.config.higlass_css_url)
-    app.add_js_file(app.config.react_url)
-    app.add_js_file(app.config.reactdom_url)
-    app.add_js_file(app.config.pixi_url)
-    app.add_js_file(app.config.higlass_js_url)
-    app.add_js_file(app.config.gosling_url)
+    app.add_css_file(app.config.css_url)
+    # inline script that adds `gosling` global
+    app.add_js_file(
+        filename=None,
+        type="module",
+        body=f"import * as gosling from '{app.config.esm_url}';globalThis.gosling = gosling;",
+    )
 
 
 def setup(app):
     deps = get_display_dependencies()
-    app.add_config_value("react_url", deps.react, "html")
-    app.add_config_value("reactdom_url", deps.react_dom, "html")
-    app.add_config_value("pixi_url", deps.pixijs, "html")
-    app.add_config_value("higlass_js_url", deps.higlass_js, "html")
-    app.add_config_value("higlass_css_url", deps.higlass_css, "html")
-    app.add_config_value("gosling_url", deps.gosling, "html")
+    app.add_config_value("esm_url", deps.esm_url, "html")
+    app.add_config_value("css_url", deps.css_url, "html")
 
     app.add_directive("gosling-plot", GoslingPlotDirective)
     app.add_node(gosling_plot, html=(html_visit_gosling_plot, depart_gosling_plot))
