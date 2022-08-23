@@ -27,7 +27,7 @@ See the [Documentation Site](https://gosling-lang.github.io/gos) for more inform
 
 ## Example
 
-<img src="https://github.com/gosling-lang/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization" width="800" />
+<img src="https://github.com/gosling-lang/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization"/>
 
 ```python
 import gosling as gos
