@@ -19,7 +19,7 @@ from gosling.data import (
     multivec,
     vector,
 )
-from gosling.display import themes
+from gosling.display import themes, renderers
 
 
 @pd.api.extensions.register_dataframe_accessor("gos")  # type: ignore

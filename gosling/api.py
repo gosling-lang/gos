@@ -184,8 +184,8 @@ class View(_PropertiesMixin, core.Root):
     """Create a basic Gosling View."""
 
     def _repr_mimebundle_(self, include=None, exclude=None):
-        dct = self.to_dict()
-        return display.html_renderer(dct)
+        render = display.renderers.get()
+        return render(self.to_dict())
 
     def display(self):
         """Render top-level chart using IPython.display."""

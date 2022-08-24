@@ -1,9 +1,10 @@
 import json
 import uuid
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional, Set, Union
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 import jinja2
+from gosling.plugin_registry import PluginRegistry
 
 from gosling.schema import SCHEMA_VERSION, THEMES
 
@@ -102,36 +103,13 @@ class HTMLRenderer(Renderer):
         html = spec_to_html(spec=spec, output_div=self.output_div, **kwargs)
         return {"text/html": html}
 
-
-html_renderer = HTMLRenderer()
+renderers = PluginRegistry[Renderer]("gosling.renderer")
+renderers.register("default", HTMLRenderer())
+renderers.enable("default")
 
 CustomTheme = Dict[str, Any]
 
-
-@dataclass
-class ThemesRegistry:
-    themes: Set[str]
-    custom_themes: Dict[str, CustomTheme] = field(default_factory=dict)
-    active: Optional[str] = None
-
-    def register(self, name: str, theme: CustomTheme) -> None:
-        assert (
-            name not in self.themes
-        ), f"cannot override built-in themes, {self.themes}"
-        self.custom_themes[name] = theme
-
-    def enable(self, name: str) -> None:
-        assert (
-            name in self.custom_themes or name in self.themes
-        ), f"theme must be one of {self.themes} or {set(self.custom_themes.keys())}."
-        self.active = name
-
-    def get(self) -> Union[None, str, CustomTheme]:
-        if self.active is None:
-            return None
-        if self.active in self.themes:
-            return self.active
-        return self.custom_themes[self.active]
-
-
-themes = ThemesRegistry(THEMES)
+themes = PluginRegistry[CustomTheme]("gosling.theme")
+for theme in THEMES:
+    # Add builtin string themes
+    themes.register(theme, theme) # type: ignore
