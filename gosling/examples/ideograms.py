@@ -86,11 +86,11 @@ def ideogram_with_bars(chromosome: str, width: int):
 Composition
 """
 gos.parallel(
-    ideogram_with_bars("1", 1000),
-    ideogram_with_bars("2", 970),
-    ideogram_with_bars("3", 800),
-    ideogram_with_bars("4", 770),
-    ideogram_with_bars("5", 740)
+    ideogram_with_bars("chr1", 1000),
+    ideogram_with_bars("chr2", 970),
+    ideogram_with_bars("chr3", 800),
+    ideogram_with_bars("chr4", 770),
+    ideogram_with_bars("chr5", 740)
 ).properties(
     static=True
 )

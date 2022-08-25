@@ -148,6 +148,6 @@ tracks = [
 # COMPOSE
 
 gos.vertical(
-    gos.View(layout="linear", tracks=[ideogram], centerRadius=0.8, xDomain=gos.GenomicDomain(chromosome="3")),
-    gos.View(tracks=tracks, linkingId="detail", xDomain=gos.GenomicDomain(chromosome="3", interval=[52168000, 52890000])),
+    gos.View(layout="linear", tracks=[ideogram], centerRadius=0.8, xDomain=gos.GenomicDomain(chromosome="chr3")),
+    gos.View(tracks=tracks, linkingId="detail", xDomain=gos.GenomicDomain(chromosome="chr3", interval=[52168000, 52890000])),
 )

@@ -13,7 +13,7 @@ data = gos.multivec(
     categories=["sample 1"],
 )
 
-domain = gos.GenomicDomain(chromosome="1", interval=[2000500, 3000500])
+domain = gos.GenomicDomain(chromosome="chr1", interval=[2000500, 3000500])
 
 track = gos.Track(data).mark_area().encode(
     x=gos.X("position:G", domain=domain, axis="bottom"),

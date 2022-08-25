@@ -153,7 +153,7 @@ right = gos.View(views=[left_matrix, right_matrix], spacing=30)
 gos.horizontal(left, right).properties(
     title="Matrix Visualization",
     subtitle="Comparison of Micro-C and Hi-C for HFFc6 Cells",
-    xDomain=gos.GenomicDomain(chromosome="7", interval=[77700000, 81000000]),
+    xDomain=gos.GenomicDomain(chromosome="chr7", interval=[77700000, 81000000]),
     spacing=1,
     linkingId="-"
 )

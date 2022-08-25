@@ -98,7 +98,7 @@ gos.overlay(
 ).properties(
     width=725, height=100,
     title="Gene Annotation",
-    xDomain=gos.GenomicDomain(chromosome="1", interval=[103400000, 103700000]),
+    xDomain=gos.GenomicDomain(chromosome="chr1", interval=[103400000, 103700000]),
     assembly="hg38",
     layout="linear",
     centerRadius=0.7,
