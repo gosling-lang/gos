@@ -1,4 +1,5 @@
 # derived from https://github.com/altair-viz/altair/blob/8a8642b2e7eeee3b914850a8f7aacd53335302d9/altair/utils/plugin_registry.py
+from dataclasses import dataclass
 from typing import TypeVar, Any, Generic, Dict, Union, List, cast
 import sys
 import functools
@@ -10,23 +11,15 @@ else:
 
 PluginType = TypeVar("PluginType")
 
-
+@dataclass
 class ActivePlugin(Generic[PluginType]):
-    def __init__(self, name: str, plugin: PluginType, options: Dict[str, Any]) -> None:
-        self.name = name
-        self._plugin = plugin
-        self.options = options
-
-    @functools.cached_property
-    def plugin(self) -> PluginType:
-        if self.options and callable(self._plugin):
-            # apply options if provided
-            return cast(PluginType, functools.partial(self._plugin, **self.options))
-        return self._plugin
-
+    name: str
+    plugin: PluginType
+    options: Dict[str, Any]
 
 class PluginEnabler(Generic[PluginType]):
-    """Context manager for enabling plugins
+    """Context manager for enabling plugins.
+
     This object lets you use enable() as a context manager to
     temporarily enable a given plugin::
         with plugins.enable('name'):
@@ -103,38 +96,74 @@ class PluginRegistry(Generic[PluginType]):
 
     def names(self) -> List[str]:
         """List the names of the registered and entry points plugins."""
-        exts = list(self._plugins.keys())
-        exts.extend(e.name for e in entry_points(group=self.entry_point_group))
-        return sorted(set(exts))
+        names = list(self._plugins.keys())
+        names.extend(e.name for e in entry_points(group=self.entry_point_group))
+        return sorted(set(names))
 
-    def enable(self, name: Union[None, str] = None, **options):
+    def enable(self, name: Union[None, str] = None, **options) -> PluginEnabler:
+        """Enable a plugin by name.
+
+        This can be either called directly, or used as a context manager.
+        Parameters
+        ----------
+        name : string (optional)
+            The name of the plugin to enable. If not specified, then use the
+            current active name.
+        **options :
+            Any additional parameters will be passed to the plugin as keyword
+            arguments
+
+        Returns
+        -------
+        PluginEnabler:
+            An object that allows enable() to be used as a context manager
+        """
         name = name or self.active
-        if name is None:
-            raise ValueError("Must first enable a plugin before re-enabling.")
-        return PluginEnabler(self, reset=self._enable(name, **options))
 
-    def _enable(self, name: str, **options):
-        if name not in self._plugins:
-            exts = entry_points(group=self.entry_point_group, name=name)
-            # Only load if we find an entrypoint
-            if len(exts) > 0:
-                assert len(exts) == 1, f"Conflicting entry-point '{name}'"
-                ext = tuple(exts)[0]
-                self.register(name, cast(PluginType, ext.load()))
+        if name not in self._plugins and (plugin := self._find_plugin(name)):
+            self.register(name, plugin)
+
         prev = self._active
         self._active = ActivePlugin(name, self._plugins[name], options)
-        return prev
+        return PluginEnabler(self, reset=prev)
+
+    def _find_plugin(self, name: str) -> Union[PluginType, None]:
+        """Find and load named EntryPoint.
+
+        Raises if multiple EntryPoints have conflicting names.
+
+        Parameters
+        ==========
+        name: str
+            The name of the plugin.
+
+        Returns
+        =======
+        plugin: PluginType or None
+            The (un)found plugin
+        """
+        eps = entry_points(group=self.entry_point_group, name=name)
+        if len(eps) == 0:
+            return None
+        assert len(eps) == 1, f"Conflicting entry-point '{name}'"
+        return cast(PluginType, tuple(eps)[0].load())
 
     @property
-    def active(self):
+    def active(self) -> str:
+        """Return the name of the currently active plugin."""
         return "" if self._active is None else self._active.name
 
     @property
-    def options(self):
+    def options(self) -> Dict[str, Any]:
+        """Return the current options dictionary."""
         return {} if self._active is None else self._active.options
 
-    def get(self):
-        return self._active and self._active.plugin
+    def get(self) -> Union[None, PluginType]:
+        """Return the currently active plugin."""
+        if active := self._active:
+            if active.options and callable(active.plugin):
+                return functools.partial(active.plugin, **active.options)
+            return active.plugin
 
     def __repr__(self) -> str:
         return "{}(active={!r}, registered={!r})" "".format(
