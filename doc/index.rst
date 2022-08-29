@@ -28,6 +28,7 @@ interactive genomic visualizations. The source is available on
 
    user_guide/API
    user_guide/local_data
+   user_guide/export
    user_guide/themes
 
 
