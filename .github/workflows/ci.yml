@@ -1,9 +1,13 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
-  test:
+
+  Test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -28,7 +32,7 @@ jobs:
       - name: Run pytest
         run: pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling
 
-  deploy:
+  Deploy:
     runs-on: ubuntu-latest
 
     if: contains(github.ref, 'tags')
