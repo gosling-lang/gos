@@ -85,8 +85,8 @@ file and will starts a background Higlass server to power the visualization.
 .. important::
    Note that visualizations will only render as long as your Python session is active.
 
-.. _Data sources: https://gosling-lang.github.io/gosling-website/docs/data
-.. _Higlass server: https://gosling-lang.github.io/gosling-website/docs/data#pre-aggregated-datasets-higlass-server
+.. _Data sources: http://gosling-lang.org/docs/data
+.. _Higlass server: http://gosling-lang.org/docs/data#pre-aggregated-datasets-higlass-server
 .. _multivec data source: http://gosling-lang.org/docs/data/#multivec
 .. _Gosling: http://gosling-lang.org/
 .. _cistrome multivec file: https://s3.amazonaws.com/gosling-lang.org/data/cistrome.multires.mv5
