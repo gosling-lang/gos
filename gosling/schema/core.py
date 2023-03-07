@@ -1012,7 +1012,7 @@ class OneOfFilter(FilterTransform):
 
     field : string
         A filter is applied based on the values of the specified data field
-    oneOf : anyOf(List(string), List(float))
+    oneOf : List(anyOf(string, float, None))
         Check whether the value is an element in the provided list.
     type : string
 
@@ -1748,7 +1748,7 @@ class Style(GoslingSchema):
     linkMinHeight : float
         The minimum height of `withinLink` and `betweenLink` marks. Unit is a percentagle.
         __Default__: `0.5`
-    linkStyle : enum('elliptical', 'circular', 'straight', 'experimentalEdgeBundling')
+    linkStyle : enum('elliptical', 'circular', 'straight')
         The style of `withinLink` and `betweenLink` marks. __Default__: `'circular'`
         `'elliptical'` will be used as a default option.
     matrixExtent : enum('full', 'upper-right', 'lower-left')
@@ -1775,6 +1775,9 @@ class Style(GoslingSchema):
     textStrokeWidth : float
         Specify the stroke width of `text` marks. Can also be specified using the
         `strokeWidth` channel option of `text` marks.
+    withinLinkVerticalLines : boolean
+        Whether to show vertical lines that connect to the baseline (axis) when `y` and `ye`
+        are both used. __Default__: `false`
     """
     _schema = {'$ref': '#/definitions/Style'}
     _rootschema = GoslingSchema._rootschema
@@ -1785,7 +1788,8 @@ class Style(GoslingSchema):
                  linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
                  linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                  outlineWidth=Undefined, select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                 textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
+                 textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
+                 withinLinkVerticalLines=Undefined, **kwds):
         super(Style, self).__init__(align=align, background=background,
                                     backgroundOpacity=backgroundOpacity, brush=brush, curve=curve,
                                     dashed=dashed, dx=dx, dy=dy, enableSmoothPath=enableSmoothPath,
@@ -1795,7 +1799,8 @@ class Style(GoslingSchema):
                                     matrixExtent=matrixExtent, mouseOver=mouseOver, outline=outline,
                                     outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                                     textFontSize=textFontSize, textFontWeight=textFontWeight,
-                                    textStroke=textStroke, textStrokeWidth=textStrokeWidth, **kwds)
+                                    textStroke=textStroke, textStrokeWidth=textStrokeWidth,
+                                    withinLinkVerticalLines=withinLinkVerticalLines, **kwds)
 
 
 class SvTypeTransform(DataTransform):
