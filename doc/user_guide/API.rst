@@ -84,7 +84,6 @@ Low-Level Schema Wrappers
    ChannelDeep
    ChannelValue
    ChromSizes
-   Chromosome
    Color
    CoverageTransform
    CsvData
@@ -97,7 +96,6 @@ Low-Level Schema Wrappers
    DisplacementType
    DomainChr
    DomainChrInterval
-   DomainGene
    DomainInterval
    EventStyle
    ExonSplitTransform

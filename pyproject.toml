@@ -41,8 +41,6 @@ dev = [
   "pytest",
   "requests",
   "jupyterlab",
-]
-docs = [
   "sphinx",
   "numpydoc",
   "furo",
@@ -60,9 +58,4 @@ features = ["dev", "all"]
 [tool.hatch.envs.default.scripts]
 test = "pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling"
 clean = "rm -rf doc/_build doc/user_guide/generated/ doc/gallery"
-
-[tool.hatch.envs.docs]
-features = ["docs"]
-
-[tool.hatch.envs.docs.scripts]
-build = "sphinx-build -b html doc dist"
+docs = "sphinx-build -b html doc dist"

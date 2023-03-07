@@ -2,7 +2,7 @@
 
 import sys
 import os
-from setuptools_scm import get_version
+import gosling
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -35,7 +35,7 @@ project = "gos"
 copyright = "2021, Trevor Manz"
 author = "Trevor Manz"
 
-version = get_version(root="..", relative_to=__file__)
+version = gosling.__version__
 release = version
 
 todo_include_todos = False
