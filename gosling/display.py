@@ -91,7 +91,7 @@ class GoslingBundle:
 
 def get_display_dependencies(
     gosling_version: str = SCHEMA_VERSION.lstrip("v"),
-    higlass_version: str = "1.11",
+    higlass_version: str = "~1.11",
     react_version: str = "17",
     pixijs_version: str = "6",
     base_url: str = "https://unpkg.com",
