@@ -16,7 +16,7 @@ class MarkMethodMixin(object):
                    linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                    outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                    textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                   textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                   textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'point'
     
         For information on additional arguments, see :class:`Style`
@@ -29,8 +29,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "point"
         if any(val is not Undefined for val in kwds.values()):
@@ -44,7 +43,7 @@ class MarkMethodMixin(object):
                   linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                   outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                  textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'line'
     
         For information on additional arguments, see :class:`Style`
@@ -57,8 +56,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "line"
         if any(val is not Undefined for val in kwds.values()):
@@ -72,7 +70,7 @@ class MarkMethodMixin(object):
                   linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                   outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                  textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'area'
     
         For information on additional arguments, see :class:`Style`
@@ -85,8 +83,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "area"
         if any(val is not Undefined for val in kwds.values()):
@@ -99,8 +96,7 @@ class MarkMethodMixin(object):
                  linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
                  linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                  outlineWidth=Undefined, select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
-                 textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
-                 withinLinkVerticalLines=Undefined, **kwds) -> T:
+                 textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'bar'
     
         For information on additional arguments, see :class:`Style`
@@ -113,8 +109,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "bar"
         if any(val is not Undefined for val in kwds.values()):
@@ -128,7 +123,7 @@ class MarkMethodMixin(object):
                   linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                   outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                  textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'rect'
     
         For information on additional arguments, see :class:`Style`
@@ -141,8 +136,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "rect"
         if any(val is not Undefined for val in kwds.values()):
@@ -156,7 +150,7 @@ class MarkMethodMixin(object):
                   linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                   outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                  textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'text'
     
         For information on additional arguments, see :class:`Style`
@@ -169,8 +163,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "text"
         if any(val is not Undefined for val in kwds.values()):
@@ -184,8 +177,7 @@ class MarkMethodMixin(object):
                         linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined,
                         outline=Undefined, outlineWidth=Undefined, select=Undefined,
                         textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
-                        textStroke=Undefined, textStrokeWidth=Undefined,
-                        withinLinkVerticalLines=Undefined, **kwds) -> T:
+                        textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'withinLink'
     
         For information on additional arguments, see :class:`Style`
@@ -198,8 +190,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "withinLink"
         if any(val is not Undefined for val in kwds.values()):
@@ -213,8 +204,7 @@ class MarkMethodMixin(object):
                          linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined,
                          outline=Undefined, outlineWidth=Undefined, select=Undefined,
                          textAnchor=Undefined, textFontSize=Undefined, textFontWeight=Undefined,
-                         textStroke=Undefined, textStrokeWidth=Undefined,
-                         withinLinkVerticalLines=Undefined, **kwds) -> T:
+                         textStroke=Undefined, textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'betweenLink'
     
         For information on additional arguments, see :class:`Style`
@@ -227,8 +217,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "betweenLink"
         if any(val is not Undefined for val in kwds.values()):
@@ -242,7 +231,7 @@ class MarkMethodMixin(object):
                   linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                   outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                   textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                  textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                  textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'rule'
     
         For information on additional arguments, see :class:`Style`
@@ -255,8 +244,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "rule"
         if any(val is not Undefined for val in kwds.values()):
@@ -271,7 +259,7 @@ class MarkMethodMixin(object):
                           mouseOver=Undefined, outline=Undefined, outlineWidth=Undefined,
                           select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
                           textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
-                          withinLinkVerticalLines=Undefined, **kwds) -> T:
+                          **kwds) -> T:
         """Set the track's mark to 'triangleLeft'
     
         For information on additional arguments, see :class:`Style`
@@ -284,8 +272,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "triangleLeft"
         if any(val is not Undefined for val in kwds.values()):
@@ -300,7 +287,7 @@ class MarkMethodMixin(object):
                            mouseOver=Undefined, outline=Undefined, outlineWidth=Undefined,
                            select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
                            textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
-                           withinLinkVerticalLines=Undefined, **kwds) -> T:
+                           **kwds) -> T:
         """Set the track's mark to 'triangleRight'
     
         For information on additional arguments, see :class:`Style`
@@ -313,8 +300,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "triangleRight"
         if any(val is not Undefined for val in kwds.values()):
@@ -329,7 +315,7 @@ class MarkMethodMixin(object):
                             mouseOver=Undefined, outline=Undefined, outlineWidth=Undefined,
                             select=Undefined, textAnchor=Undefined, textFontSize=Undefined,
                             textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined,
-                            withinLinkVerticalLines=Undefined, **kwds) -> T:
+                            **kwds) -> T:
         """Set the track's mark to 'triangleBottom'
     
         For information on additional arguments, see :class:`Style`
@@ -342,8 +328,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "triangleBottom"
         if any(val is not Undefined for val in kwds.values()):
@@ -357,7 +342,7 @@ class MarkMethodMixin(object):
                    linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                    outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                    textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                   textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                   textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'brush'
     
         For information on additional arguments, see :class:`Style`
@@ -370,8 +355,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "brush"
         if any(val is not Undefined for val in kwds.values()):
@@ -385,7 +369,7 @@ class MarkMethodMixin(object):
                     linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
                     outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
                     textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                    textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+                    textStrokeWidth=Undefined, **kwds) -> T:
         """Set the track's mark to 'header'
     
         For information on additional arguments, see :class:`Style`
@@ -398,8 +382,7 @@ class MarkMethodMixin(object):
                     linkStyle=linkStyle, matrixExtent=matrixExtent, mouseOver=mouseOver,
                     outline=outline, outlineWidth=outlineWidth, select=select, textAnchor=textAnchor,
                     textFontSize=textFontSize, textFontWeight=textFontWeight, textStroke=textStroke,
-                    textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
-                    **kwds)
+                    textStrokeWidth=textStrokeWidth, **kwds)
         copy = self.copy()
         copy.mark = "header"
         if any(val is not Undefined for val in kwds.values()):
