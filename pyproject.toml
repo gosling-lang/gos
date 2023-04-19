@@ -31,9 +31,7 @@ dependencies = [
 
 [project.optional-dependencies]
 all = [
-  "portpicker>=1.5.2",
-  "uvicorn>=0.21.1",
-  "starlette>=0.26.1",
+  "bgserve>=0.0.0",
   "gosling-widget>=0.0.2",
   "clodius>=0.20.0",
 ]
