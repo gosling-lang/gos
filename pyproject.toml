@@ -24,9 +24,9 @@ classifiers = [
 dynamic = ["version"]
 urls = { homepage = "https://github.com/gosling-lang/gos" }
 dependencies = [
-  "jsonschema>=3.0,<4.0",
-  "jinja2>=3.0,<4.0",
-  "pandas>=1.0",
+  "jsonschema>=3.0",
+  "jinja2",
+  "pandas>=1.0,<2.0",
 ]
 
 [project.optional-dependencies]
@@ -51,7 +51,8 @@ source = "vcs"
 version-file = "gosling/_version.py"
 
 [tool.hatch.envs.default]
-features = ["dev", "all"]
+python = "3.10"
+features = ["all"]
 
 [tool.hatch.envs.default.scripts]
 test = "pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling"
