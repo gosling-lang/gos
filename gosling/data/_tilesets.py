@@ -1,15 +1,17 @@
+from __future__ import annotations
+
 import functools
 import pathlib
+import typing
 from dataclasses import dataclass
-from typing import Any, Callable, Iterable, List, Optional
 
 
 @dataclass(frozen=True)
 class Tileset:
     filepath: pathlib.Path
-    tiles: Callable[[Iterable[str]], List]
-    info: Callable[[], Any]
-    type: Optional[str] = None
+    tiles: typing.Callable[[typing.Sequence[str]], list[typing.Any]]
+    info: typing.Callable[[], typing.Any]
+    type: None | str = None
 
 
 def beddb(filepath: pathlib.Path):

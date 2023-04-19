@@ -1,24 +1,60 @@
+from __future__ import annotations
+
 import pathlib
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Union
+import typing
 
 import gosling.data._tilesets as tilesets
 from gosling.utils.core import _compute_data_hash
 
-if TYPE_CHECKING:
-    from gosling.data._provider import Provider, Resource, TilesetResource
+if typing.TYPE_CHECKING:
+    from bgserve import Provider
+    from bgserve._provide import Resource, TilesetResource
+
 
 def _hash_path(path: pathlib.Path):
-    return _compute_data_hash(str(path))
+    """Computes a hash for a path.
+
+    Parameters
+    ----------
+    path : pathlib.Path
+        The path to hash.
+    Returns
+    -------
+    str
+        The hash.
+    """
+    return _compute_data_hash(path.resolve().as_posix())
+
+
+def _extract_url(resource: Resource | TilesetResource) -> str:
+    """Extracts the URL for Gosling from a server resource.
+
+    Parameters
+    ----------
+    resource : Resource | TilesetResource
+        The resource to extract the URL from.
+    Returns
+    -------
+    str
+        The URL for Gosling.
+    """
+    from bgserve._provide import TilesetResource
+
+    if isinstance(resource, TilesetResource):
+        return f"{resource.server.rstrip('/')}/tileset_info/?d={resource.uid}"
+
+    return resource.url
 
 
 class GoslingDataServer:
     """Backend server for Gosling datasets."""
 
     def __init__(self) -> None:
-        self._provider: Optional[Provider] = None
+        self._provider: None | Provider = None
+
         # We need to keep references to served resources, because the background
         # server uses weakrefs.
-        self._resources: Dict[str, Union[Resource, TilesetResource]] = {}
+        self._resources: dict[str, Resource | TilesetResource] = {}
 
     @property
     def port(self):
@@ -33,32 +69,30 @@ class GoslingDataServer:
 
     def __call__(
         self,
-        data: Union[str, pathlib.Path, tilesets.Tileset],
-        port: Optional[int] = None,
-        **kwargs,
-    ):
+        data: str | pathlib.Path | tilesets.Tileset,
+        port: int | None = None,
+        **kwargs: typing.Any,
+    ) -> str:
         if self._provider is None:
-            # only try to import server dependencies when using server
-            from gosling.data._provider import Provider
-            self._provider = Provider(allowed_origins=["*"]).start(port=port)
+            from bgserve import Provider
+
+            self._provider = Provider()
+            self._provider.start(port=port)
 
         if port is not None and port != self._provider.port:
             self._provider.stop().start(port=port)
 
         if isinstance(data, tilesets.Tileset):
-            kwargs["tileset"] = data
             resource_id = _hash_path(data.filepath)
         elif isinstance(data, pathlib.Path):
-            kwargs["filepath"] = data
             resource_id = _hash_path(data)
         else:
-            kwargs["content"] = data
             resource_id = _compute_data_hash(data)
 
         if resource_id not in self._resources:
-            self._resources[resource_id] = self._provider.create(**kwargs)
+            self._resources[resource_id] = self._provider.create(data, **kwargs)
 
-        return self._resources[resource_id].url
+        return _extract_url(self._resources[resource_id])
 
     def __rich_repr__(self):
         yield "resources", self._resources
@@ -71,11 +105,11 @@ class GoslingDataServer:
 
 data_server = GoslingDataServer()
 
-CreateTileset = Callable[[pathlib.Path], tilesets.Tileset]
-
-
-def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
-    def load(url: Union[pathlib.Path, str], **kwargs):
+def _create_loader(
+    type_: str,
+    create_ts: typing.Callable[[pathlib.Path], tilesets.Tileset] | None = None
+):
+    def load(url: pathlib.Path | str, **kwargs):
         """Adds resource to data_server if local file is detected."""
         fp = pathlib.Path(url)
         if fp.is_file():
@@ -94,7 +128,7 @@ def _create_loader(type_: str, create_ts: Optional[CreateTileset] = None):
 
 
 # in-memory data
-def json(values: List[Dict[str, Any]], **kwargs):
+def json(values: list[dict[str, typing.Any]], **kwargs):
     return dict(type="json", values=values, **kwargs)
 
 
