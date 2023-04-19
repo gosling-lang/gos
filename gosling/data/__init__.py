@@ -37,7 +37,7 @@ def _extract_url(resource: Resource | TilesetResource) -> str:
     str
         The URL for Gosling.
     """
-    from servir._provide import TilesetResource
+    from servir import TilesetResource
 
     if isinstance(resource, TilesetResource):
         return f"{resource.server.rstrip('/')}/tileset_info/?d={resource.uid}"
