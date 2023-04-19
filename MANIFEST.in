@@ -1,3 +1,0 @@
-include *.md
-include LICENSE
-recursive-include gosling *.py *.js *.json
