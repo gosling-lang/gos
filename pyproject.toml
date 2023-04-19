@@ -24,16 +24,14 @@ classifiers = [
 dynamic = ["version"]
 urls = { homepage = "https://github.com/gosling-lang/gos" }
 dependencies = [
-  "jsonschema>=3.0,<4.0",
-  "jinja2>=3.0,<4.0",
-  "pandas>=1.0",
+  "jsonschema>=3.0",
+  "jinja2",
+  "pandas>=1.0,<2.0",
 ]
 
 [project.optional-dependencies]
 all = [
-  "portpicker>=1.5.2",
-  "uvicorn>=0.21.1",
-  "starlette>=0.26.1",
+  "bgserve>=0.0.0",
   "gosling-widget>=0.0.2",
   "clodius>=0.20.0",
 ]

@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import pathlib
-from typing import Any
+import typing
 
 import pandas as pd
 import pytest
@@ -14,21 +16,23 @@ def session_context(request: pytest.Session) -> None:
     request.addfinalizer(data_server.reset)
 
 
-def test_creates_no_resources(tmpdir: pytest.Testdir, session_context: Any):
+def test_creates_no_resources(tmp_path: pathlib.Path, session_context: typing.Any):
     data = csv(url="http://localhost:8000/data.csv")
     assert data["url"] == "http://localhost:8000/data.csv"
     assert data["type"] == "csv"
     assert len(data_server._resources) == 0
 
-    data = csv(url=str(tmpdir.mkdir("data").join("data.csv")))
+    (tmp_path / "data").mkdir()
+    data = csv(url=str(tmp_path / "data" / "data.csv"))
     assert "url" in data
     assert isinstance(data["url"], str)
     assert data["type"] == "csv"
     assert len(data_server._resources) == 0
 
 
-def test_creates_resources(tmpdir: pytest.Testdir, session_context: Any):
-    data_dir = pathlib.Path(tmpdir.mkdir("data"))
+def test_creates_resources(tmp_path: pathlib.path, session_context: typing.Any):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
 
     tmp1 = data_dir / "data1.csv"
     tmp2 = data_dir / "data2.csv"
@@ -54,7 +58,7 @@ def test_creates_resources(tmpdir: pytest.Testdir, session_context: Any):
     assert len(data_server._resources) == 2
 
 
-def test_df_extension(session_context: Any):
+def test_df_extension(session_context: typing.Any):
     df = pd.DataFrame(
         {
             "x": [1, 2, 3, 4, 5],
@@ -69,8 +73,9 @@ def test_df_extension(session_context: Any):
     assert len(data_server._resources) == 1
 
 
-def test_missing_files(tmpdir: pytest.Testdir, session_context: Any):
-    data_dir = pathlib.Path(tmpdir.mkdir("data"))
+def test_missing_files(tmp_path: pathlib.Path, session_context: typing.Any):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
     tmp = data_dir / "data.csv"
 
     # returns if passed a string
