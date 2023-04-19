@@ -7,8 +7,7 @@ import gosling.data._tilesets as tilesets
 from gosling.utils.core import _compute_data_hash
 
 if typing.TYPE_CHECKING:
-    from bgserve import Provider
-    from bgserve._provide import Resource, TilesetResource
+    from servir import Provider, Resource, TilesetResource
 
 
 def _hash_path(path: pathlib.Path):
@@ -38,7 +37,7 @@ def _extract_url(resource: Resource | TilesetResource) -> str:
     str
         The URL for Gosling.
     """
-    from bgserve._provide import TilesetResource
+    from servir._provide import TilesetResource
 
     if isinstance(resource, TilesetResource):
         return f"{resource.server.rstrip('/')}/tileset_info/?d={resource.uid}"
@@ -74,7 +73,7 @@ class GoslingDataServer:
         **kwargs: typing.Any,
     ) -> str:
         if self._provider is None:
-            from bgserve import Provider
+            from servir import Provider
 
             self._provider = Provider()
             self._provider.start(port=port)

@@ -31,7 +31,7 @@ dependencies = [
 
 [project.optional-dependencies]
 all = [
-  "bgserve>=0.0.0",
+  "servir>=0.0.3",
   "gosling-widget>=0.0.2",
   "clodius>=0.20.0",
 ]
