@@ -8,6 +8,10 @@ import jinja2
 from gosling.plugin_registry import PluginRegistry
 from gosling.schema import SCHEMA_VERSION, THEMES
 
+# TODO: This is kind of a mess. Gosling.js can be very finky with its 
+# peer dependencies in various Jupyter-like environments. This is a 
+# hacky way to get things working in JupyterLab, Jupyter Notebook, 
+# VSCode, and Colab consistently.
 HTML_TEMPLATE = jinja2.Template(
     """
 <!DOCTYPE html>
@@ -91,7 +95,7 @@ class GoslingBundle:
 
 def get_display_dependencies(
     gosling_version: str = SCHEMA_VERSION.lstrip("v"),
-    higlass_version: str = "~1.11",
+    higlass_version: str = "~1.12",
     react_version: str = "17",
     pixijs_version: str = "6",
     base_url: str = "https://unpkg.com",
