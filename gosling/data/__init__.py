@@ -135,6 +135,7 @@ def json(values: list[dict[str, typing.Any]], **kwargs):
 bam = _create_loader("bam")
 csv = _create_loader("csv")
 bigwig = _create_loader("bigwig")
+bed = _create_loader("bed")
 
 # tileset resources
 beddb = _create_loader("beddb", tilesets.beddb)
