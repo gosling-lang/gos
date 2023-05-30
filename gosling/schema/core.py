@@ -174,9 +174,9 @@ class Color(ChannelDeep):
 class DataDeep(GoslingSchema):
     """DataDeep schema wrapper
 
-    anyOf(:class:`JsonData`, :class:`CsvData`, :class:`BigWigData`, :class:`MultivecData`,
-    :class:`BeddbData`, :class:`VectorData`, :class:`MatrixData`, :class:`BamData`,
-    :class:`VcfData`)
+    anyOf(:class:`JsonData`, :class:`CsvData`, :class:`BedData`, :class:`BigWigData`,
+    :class:`MultivecData`, :class:`BeddbData`, :class:`VectorData`, :class:`MatrixData`,
+    :class:`BamData`, :class:`VcfData`)
     """
     _schema = {'$ref': '#/definitions/DataDeep'}
     _rootschema = GoslingSchema._rootschema
@@ -221,6 +221,39 @@ class BamData(DataDeep):
                                       extractJunction=extractJunction,
                                       junctionMinCoverage=junctionMinCoverage, loadMates=loadMates,
                                       maxInsertSize=maxInsertSize, **kwds)
+
+
+class BedData(DataDeep):
+    """BedData schema wrapper
+
+    Mapping(required=[type, url, indexUrl])
+    BED file format
+
+    Attributes
+    ----------
+
+    indexUrl : string
+        Specify the URL address of the data file index.
+    type : string
+
+    url : string
+        Specify the URL address of the data file.
+    customFields : List(string)
+        An array of strings, where each string is the name of a non-standard field in the
+        BED file. If there are `n` custom fields, we assume that the last `n` columns of the
+        BED file correspond to the custom fields.
+    sampleLength : float
+        Specify the number of rows loaded from the URL.
+
+        __Default:__ `1000`
+    """
+    _schema = {'$ref': '#/definitions/BedData'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, customFields=Undefined,
+                 sampleLength=Undefined, **kwds):
+        super(BedData, self).__init__(indexUrl=indexUrl, type=type, url=url, customFields=customFields,
+                                      sampleLength=sampleLength, **kwds)
 
 
 class BeddbData(DataDeep):
@@ -309,7 +342,8 @@ class CsvData(DataDeep):
     chromosomeField : string
         Specify the name of chromosome data fields.
     chromosomePrefix : string
-        experimental
+        Specify the chromosome prefix if chromosomes are denoted using a prefix besides
+        "chr" or a number
     genomicFields : List(string)
         Specify the name of genomic data fields.
     genomicFieldsToConvert : List(Mapping(required=[chromosomeField, genomicFields]))

@@ -63,3 +63,4 @@ features = ["dev", "all"]
 test = "pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling"
 clean = "rm -rf doc/_build doc/user_guide/generated/ doc/gallery"
 docs = "sphinx-build -b html doc dist"
+generate-schema-wrapper = "python tools/generate_schema_wrapper.py"
