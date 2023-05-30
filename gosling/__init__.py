@@ -29,5 +29,5 @@ class GosAccessor:
 
     def csv(self, **kwargs):
         content = self._df.to_csv(index=False) or ""
-        url = data_server(content, extension="csv")
+        url = data_server(content, extension=".csv")
         return dict(type="csv", url=url, **kwargs)
