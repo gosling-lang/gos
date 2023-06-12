@@ -10,6 +10,7 @@ from gosling.api import *
 from gosling.data import (
     GoslingDataServer,
     bam,
+    bed,
     beddb,
     bigwig,
     csv,

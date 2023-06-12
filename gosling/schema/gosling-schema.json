@@ -101,6 +101,41 @@
       ],
       "type": "object"
     },
+    "BedData": {
+      "additionalProperties": false,
+      "description": "BED file format",
+      "properties": {
+        "customFields": {
+          "description": "An array of strings, where each string is the name of a non-standard field in the BED file. If there are `n` custom fields, we assume that the last `n` columns of the BED file correspond to the custom fields.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "indexUrl": {
+          "description": "Specify the URL address of the data file index.",
+          "type": "string"
+        },
+        "sampleLength": {
+          "description": "Specify the number of rows loaded from the URL.\n\n__Default:__ `1000`",
+          "type": "number"
+        },
+        "type": {
+          "const": "bed",
+          "type": "string"
+        },
+        "url": {
+          "description": "Specify the URL address of the data file.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "indexUrl"
+      ],
+      "type": "object"
+    },
     "BeddbData": {
       "additionalProperties": false,
       "description": "Regular BED or similar files can be pre-aggregated for the scalable data exploration. Find our more about this format at [HiGlass Docs](https://docs.higlass.io/data_preparation.html#bed-files).",
@@ -420,7 +455,7 @@
           "type": "string"
         },
         "chromosomePrefix": {
-          "description": "experimental",
+          "description": "Specify the chromosome prefix if chromosomes are denoted using a prefix besides \"chr\" or a number",
           "type": "string"
         },
         "genomicFields": {
@@ -494,6 +529,9 @@
         },
         {
           "$ref": "#/definitions/CsvData"
+        },
+        {
+          "$ref": "#/definitions/BedData"
         },
         {
           "$ref": "#/definitions/BigWigData"

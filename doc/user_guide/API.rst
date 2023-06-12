@@ -77,6 +77,7 @@ Low-Level Schema Wrappers
    Assembly
    AxisPosition
    BamData
+   BedData
    BeddbData
    BigWigData
    BinAggregate
