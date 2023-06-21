@@ -13,6 +13,8 @@ jobs:
     permissions:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
+      # Necessary for changelogithub to publish releases automatically
+      contents: write
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v3
