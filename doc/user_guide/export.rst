@@ -2,8 +2,8 @@
 
 .. _export:
 
-Exporting Visualization
-=======================
+Exporting Visualizations
+========================
 
 A gosling visualization can be exported to either a **standalone HTML file** or a **JSON object** 
 by calling the `save` function. The format of the exported visualization is determined by a file
