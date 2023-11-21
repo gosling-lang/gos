@@ -136,7 +136,7 @@ class ValueSchemaGenerator(codegen.SchemaGenerator):
     )
 
 
-GOSLING_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/schema/{filename}"
+GOSLING_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/src/gosling-schema/{filename}"
 
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
@@ -409,14 +409,13 @@ def generate_mark_mixin(schemafile: pathlib.Path, mark_enum: str, style_def: str
     return imports, "\n".join(code)
 
 
-def main(skip_download: Optional[bool] = False):
+def main(tag_name: str, skip_download: Optional[bool] = False):
     library = "gosling.js"
-    version = "v0.9.31"
 
     schemapath = here.parent / ".." / "gosling" / "schema"
     schemafile = download_schemafile(
         library=library,
-        version=version,
+        version=tag_name,
         schemapath=schemapath,
         skip_download=skip_download,
     )
@@ -434,8 +433,8 @@ def main(skip_download: Optional[bool] = False):
         f.write("# flake8: noqa\n")
         f.write("from .core import *\n")
         f.write("from .channels import *\n")
-        f.write(f"SCHEMA_VERSION = {repr(version)}\n")
-        f.write(f"SCHEMA_URL = {repr(schema_url(library, version))}\n")
+        f.write(f"SCHEMA_VERSION = {repr(tag_name)}\n")
+        f.write(f"SCHEMA_URL = {repr(schema_url(library, tag_name))}\n")
         # sort themes alphabetically, change from list to set
         f.write(f"THEMES = {sorted(themes)}\n".replace("[", "{").replace("]", "}"))
 
@@ -470,6 +469,8 @@ def main(skip_download: Optional[bool] = False):
 
 
 if __name__ == "__main__":
+    import sys
+
     copy_schemapi_util()
-    main()
+    main(tag_name=sys.argv[1])
     generate_api_docs.write_api_file()
