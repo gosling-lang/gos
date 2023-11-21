@@ -93,7 +93,7 @@ files directly.
 
 ```bash
 # generate gosling/schema/*
-python tools/generate_schema_wrapper.py
+python tools/generate_schema_wrapper.py <tag_name>
 ```
 
 ## Release
