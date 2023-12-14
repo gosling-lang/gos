@@ -176,7 +176,7 @@ class DataDeep(GoslingSchema):
 
     anyOf(:class:`JsonData`, :class:`CsvData`, :class:`BedData`, :class:`BigWigData`,
     :class:`MultivecData`, :class:`BeddbData`, :class:`VectorData`, :class:`MatrixData`,
-    :class:`BamData`, :class:`VcfData`)
+    :class:`BamData`, :class:`VcfData`, :class:`GffData`)
     """
     _schema = {'$ref': '#/definitions/DataDeep'}
     _rootschema = GoslingSchema._rootschema
@@ -490,6 +490,38 @@ class DisplacementType(GoslingSchema):
         super(DisplacementType, self).__init__(*args)
 
 
+class DummyTrackStyle(GoslingSchema):
+    """DummyTrackStyle schema wrapper
+
+    Mapping(required=[])
+
+    Attributes
+    ----------
+
+    background : string
+        Background color of the track
+    outline : string
+        Color of the outline of the track
+    textFontSize : float
+        Specify the font size of the title
+    textFontWeight : enum('bold', 'normal')
+        Specify the font weight of the title.
+    textStroke : string
+        Specify the stroke color of title.
+    textStrokeWidth : float
+        Specify the stroke width of the title.
+    """
+    _schema = {'$ref': '#/definitions/DummyTrackStyle'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, background=Undefined, outline=Undefined, textFontSize=Undefined,
+                 textFontWeight=Undefined, textStroke=Undefined, textStrokeWidth=Undefined, **kwds):
+        super(DummyTrackStyle, self).__init__(background=background, outline=outline,
+                                              textFontSize=textFontSize, textFontWeight=textFontWeight,
+                                              textStroke=textStroke, textStrokeWidth=textStrokeWidth,
+                                              **kwds)
+
+
 class EventStyle(GoslingSchema):
     """EventStyle schema wrapper
 
@@ -664,6 +696,48 @@ class GenomicLengthTransform(DataTransform):
                  **kwds):
         super(GenomicLengthTransform, self).__init__(endField=endField, newField=newField,
                                                      startField=startField, type=type, **kwds)
+
+
+class GffData(DataDeep):
+    """GffData schema wrapper
+
+    Mapping(required=[type, url, indexUrl])
+    Generic Feature Format Version 3 (GFF3) format data. It parses files that follow the [GFF3
+    specification](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md).
+
+    Attributes
+    ----------
+
+    indexUrl : string
+        URL link to the tabix index file
+    type : string
+
+    url : string
+        URL link to the GFF file
+    attributesToFields : List(Mapping(required=[attribute, defaultValue]))
+        Specifies which attributes to include as a fields. GFF files have an "attributes"
+        column which contains a list of attributes which are each tag-value pairs
+        (`tag=value`). This option allows for specific attributes to be accessible as a
+        field. For example, if you have an attribute called "gene_name" and you want label
+        features on your track using those values, you can use this option so that you can
+        use `"field": "gene_name"` in the schema.
+
+        If there is a single `value` corresponding to the `tag`, Gosling will parse that
+        value as a string. If there are multiple `value`s corresponding to a `tag`, Gosling
+        will parse it as a comma-separated list string. If a feature does not have a
+        particular attribute, then the attribute value will be set to the `defaultValue`.
+    sampleLength : float
+        The maximum number of samples to be shown on the track. Samples are uniformly
+        randomly selected so that this threshold is not exceeded. __Default:__ `1000`
+    """
+    _schema = {'$ref': '#/definitions/GffData'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, indexUrl=Undefined, type=Undefined, url=Undefined, attributesToFields=Undefined,
+                 sampleLength=Undefined, **kwds):
+        super(GffData, self).__init__(indexUrl=indexUrl, type=type, url=url,
+                                      attributesToFields=attributesToFields, sampleLength=sampleLength,
+                                      **kwds)
 
 
 class GoslingSpec(GoslingSchema):
@@ -935,6 +1009,9 @@ class MultipleViews(GoslingSchema):
         Proportion of the radius of the center white space.
 
         __Default:__ `0.3`
+    id : string
+        The ID of a view that is maintained for the use of JS API functions, e.g., positions
+        of a view
     layout : :class:`Layout`
         Specify the layout type of all tracks.
     linkingId : string
@@ -975,14 +1052,14 @@ class MultipleViews(GoslingSchema):
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, views=Undefined, _assignedHeight=Undefined, _assignedWidth=Undefined,
-                 arrangement=Undefined, assembly=Undefined, centerRadius=Undefined, layout=Undefined,
-                 linkingId=Undefined, orientation=Undefined, spacing=Undefined, static=Undefined,
-                 style=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 yDomain=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
+                 arrangement=Undefined, assembly=Undefined, centerRadius=Undefined, id=Undefined,
+                 layout=Undefined, linkingId=Undefined, orientation=Undefined, spacing=Undefined,
+                 static=Undefined, style=Undefined, xAxis=Undefined, xDomain=Undefined,
+                 xOffset=Undefined, yDomain=Undefined, yOffset=Undefined, zoomLimits=Undefined, **kwds):
         super(MultipleViews, self).__init__(views=views, _assignedHeight=_assignedHeight,
                                             _assignedWidth=_assignedWidth, arrangement=arrangement,
-                                            assembly=assembly, centerRadius=centerRadius, layout=layout,
-                                            linkingId=linkingId, orientation=orientation,
+                                            assembly=assembly, centerRadius=centerRadius, id=id,
+                                            layout=layout, linkingId=linkingId, orientation=orientation,
                                             spacing=spacing, static=static, style=style, xAxis=xAxis,
                                             xDomain=xDomain, xOffset=xOffset, yDomain=yDomain,
                                             yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
@@ -1147,7 +1224,8 @@ class OverlaidTracks(GoslingSchema):
     height : float
         Specify the track height in pixels.
     id : string
-
+        The ID of a view that is maintained for the use of JS API functions, e.g., positions
+        of a view
     innerRadius : float
         Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
@@ -1294,9 +1372,11 @@ class PartialTrack(GoslingSchema):
         Internal: Used for responsive spec
     _invalidTrack : boolean
         internal
+    _overlay : List(Mapping(required=[]))
+
     _renderingId : string
         internal
-    assembly : :class:`Assembly`
+    assembly : anyOf(:class:`Assembly`, string)
         A string that specifies the genome builds to use. Currently support `"hg38"`,
         `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
 
@@ -1327,10 +1407,10 @@ class PartialTrack(GoslingSchema):
     height : float
         Specify the track height in pixels.
     id : string
-
+        Assigned to `uid` in a HiGlass view config, used for API and caching.
     innerRadius : float
         Specify the inner radius of tracks when (`{"layout": "circular"}`).
-    layout : :class:`Layout`
+    layout : anyOf(:class:`Layout`, string)
         Specify the layout type of all tracks.
     linkingId : string
         Specify an ID for [linking multiple
@@ -1343,8 +1423,6 @@ class PartialTrack(GoslingSchema):
         Specify the orientation.
     outerRadius : float
         Specify the outer radius of tracks when `{"layout": "circular"}`.
-    overlay : List(Mapping(required=[]))
-
     overlayOnPreviousTrack : boolean
 
     overrideTemplate : boolean
@@ -1365,7 +1443,7 @@ class PartialTrack(GoslingSchema):
     startAngle : float
         Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
         "circular"}`).
-    static : boolean
+    static : anyOf(boolean, boolean)
         Whether to disable [Zooming and
         Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
         __Default:__ `false`.
@@ -1375,7 +1453,7 @@ class PartialTrack(GoslingSchema):
 
     strokeWidth : anyOf(:class:`StrokeWidth`, :class:`ChannelValue`)
 
-    style : :class:`Style`
+    style : anyOf(:class:`Style`, :class:`DummyTrackStyle`)
         Define the
         [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
         multive views. Will be overwritten by the style of children elements (e.g., view,
@@ -1390,6 +1468,8 @@ class PartialTrack(GoslingSchema):
         If defined, will show the textual label on the left-top corner of a track.
     tooltip : List(:class:`Tooltip`)
 
+    type : string
+        Used to specify the dummy track
     visibility : List(:class:`VisibilityCondition`)
 
     width : float
@@ -1420,48 +1500,48 @@ class PartialTrack(GoslingSchema):
         Specify the y offset of views in the unit of pixels
     ye : anyOf(:class:`Y`, :class:`ChannelValue`)
 
-    zoomLimits : :class:`ZoomLimits`
+    zoomLimits : anyOf(:class:`ZoomLimits`, List(None))
 
     """
     _schema = {'$ref': '#/definitions/PartialTrack'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, _assignedHeight=Undefined, _assignedWidth=Undefined, _invalidTrack=Undefined,
-                 _renderingId=Undefined, assembly=Undefined, baselineY=Undefined,
+                 _overlay=Undefined, _renderingId=Undefined, assembly=Undefined, baselineY=Undefined,
                  centerRadius=Undefined, color=Undefined, data=Undefined, dataTransform=Undefined,
                  displacement=Undefined, encoding=Undefined, endAngle=Undefined, experimental=Undefined,
                  flipY=Undefined, height=Undefined, id=Undefined, innerRadius=Undefined,
                  layout=Undefined, linkingId=Undefined, mark=Undefined, opacity=Undefined,
-                 orientation=Undefined, outerRadius=Undefined, overlay=Undefined,
-                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
-                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
-                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
-                 style=Undefined, subtitle=Undefined, template=Undefined, text=Undefined,
-                 title=Undefined, tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined,
-                 x1=Undefined, x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined,
-                 xe=Undefined, y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined,
-                 yOffset=Undefined, ye=Undefined, zoomLimits=Undefined, **kwds):
+                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
+                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
+                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
+                 template=Undefined, text=Undefined, title=Undefined, tooltip=Undefined, type=Undefined,
+                 visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined,
+                 xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined,
+                 y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(PartialTrack, self).__init__(_assignedHeight=_assignedHeight,
                                            _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
-                                           _renderingId=_renderingId, assembly=assembly,
-                                           baselineY=baselineY, centerRadius=centerRadius, color=color,
-                                           data=data, dataTransform=dataTransform,
-                                           displacement=displacement, encoding=encoding,
-                                           endAngle=endAngle, experimental=experimental, flipY=flipY,
-                                           height=height, id=id, innerRadius=innerRadius, layout=layout,
-                                           linkingId=linkingId, mark=mark, opacity=opacity,
-                                           orientation=orientation, outerRadius=outerRadius,
-                                           overlay=overlay,
+                                           _overlay=_overlay, _renderingId=_renderingId,
+                                           assembly=assembly, baselineY=baselineY,
+                                           centerRadius=centerRadius, color=color, data=data,
+                                           dataTransform=dataTransform, displacement=displacement,
+                                           encoding=encoding, endAngle=endAngle,
+                                           experimental=experimental, flipY=flipY, height=height, id=id,
+                                           innerRadius=innerRadius, layout=layout, linkingId=linkingId,
+                                           mark=mark, opacity=opacity, orientation=orientation,
+                                           outerRadius=outerRadius,
                                            overlayOnPreviousTrack=overlayOnPreviousTrack,
                                            overrideTemplate=overrideTemplate, prerelease=prerelease,
                                            row=row, size=size, spacing=spacing, startAngle=startAngle,
                                            static=static, stretch=stretch, stroke=stroke,
                                            strokeWidth=strokeWidth, style=style, subtitle=subtitle,
                                            template=template, text=text, title=title, tooltip=tooltip,
-                                           visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
-                                           xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
-                                           y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
-                                           zoomLimits=zoomLimits, **kwds)
+                                           type=type, visibility=visibility, width=width, x=x, x1=x1,
+                                           x1e=x1e, xAxis=xAxis, xDomain=xDomain, xOffset=xOffset,
+                                           xe=xe, y=y, y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset,
+                                           ye=ye, zoomLimits=zoomLimits, **kwds)
 
 
 class Range(GoslingSchema):
@@ -1917,7 +1997,7 @@ class Track(GoslingSchema):
     """Track schema wrapper
 
     anyOf(:class:`SingleTrack`, :class:`OverlaidTrack`, :class:`DataTrack`,
-    :class:`TemplateTrack`)
+    :class:`TemplateTrack`, :class:`DummyTrack`)
     """
     _schema = {'$ref': '#/definitions/Track'}
     _rootschema = GoslingSchema._rootschema
@@ -1961,7 +2041,7 @@ class DataTrack(Track):
     height : float
         Specify the track height in pixels.
     id : string
-
+        Assigned to `uid` in a HiGlass view config, used for API and caching.
     innerRadius : float
         Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
@@ -2041,16 +2121,69 @@ class DataTrack(Track):
                                         yDomain=yDomain, yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
+class DummyTrack(Track):
+    """DummyTrack schema wrapper
+
+    Mapping(required=[type])
+    A placeholder track. In contrast to other tracks, this track does not display any data.
+    Instead it provides empty space for third party tools to display their data on top of.
+
+    Attributes
+    ----------
+
+    type : string
+        Used to specify the dummy track
+    _invalidTrack : boolean
+        internal
+    assembly : string
+        No assemblies can be associated with a dummy track
+    height : float
+        Specify the track height in pixels.
+    id : string
+        Assigned to `uid` in a HiGlass view config, used for API and caching.
+    layout : string
+        Only linear layout are supported at this time
+    orientation : :class:`Orientation`
+        Specify the orientation.
+    overlayOnPreviousTrack : boolean
+
+    static : boolean
+        Whether to disable [Zooming and
+        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
+        __Default:__ `false`.
+    style : :class:`DummyTrackStyle`
+        Defines how the track is styled
+    title : string
+        Text that gets shown on the DummyTrack
+    width : float
+        Specify the track width in pixels.
+    zoomLimits : List(None)
+        Unused property for DummyTrack
+    """
+    _schema = {'$ref': '#/definitions/DummyTrack'}
+    _rootschema = GoslingSchema._rootschema
+
+    def __init__(self, type=Undefined, _invalidTrack=Undefined, assembly=Undefined, height=Undefined,
+                 id=Undefined, layout=Undefined, orientation=Undefined,
+                 overlayOnPreviousTrack=Undefined, static=Undefined, style=Undefined, title=Undefined,
+                 width=Undefined, zoomLimits=Undefined, **kwds):
+        super(DummyTrack, self).__init__(type=type, _invalidTrack=_invalidTrack, assembly=assembly,
+                                         height=height, id=id, layout=layout, orientation=orientation,
+                                         overlayOnPreviousTrack=overlayOnPreviousTrack, static=static,
+                                         style=style, title=title, width=width, zoomLimits=zoomLimits,
+                                         **kwds)
+
+
 class OverlaidTrack(Track):
     """OverlaidTrack schema wrapper
 
-    Mapping(required=[overlay])
+    Mapping(required=[_overlay])
     Superposing multiple tracks.
 
     Attributes
     ----------
 
-    overlay : List(Mapping(required=[]))
+    _overlay : List(Mapping(required=[]))
 
     _assignedHeight : float
 
@@ -2089,7 +2222,7 @@ class OverlaidTrack(Track):
     height : float
         Specify the track height in pixels.
     id : string
-
+        Assigned to `uid` in a HiGlass view config, used for API and caching.
     innerRadius : float
         Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
@@ -2184,7 +2317,7 @@ class OverlaidTrack(Track):
     _schema = {'$ref': '#/definitions/OverlaidTrack'}
     _rootschema = GoslingSchema._rootschema
 
-    def __init__(self, overlay=Undefined, _assignedHeight=Undefined, _assignedWidth=Undefined,
+    def __init__(self, _overlay=Undefined, _assignedHeight=Undefined, _assignedWidth=Undefined,
                  _invalidTrack=Undefined, _renderingId=Undefined, assembly=Undefined,
                  baselineY=Undefined, centerRadius=Undefined, color=Undefined, data=Undefined,
                  dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
@@ -2199,7 +2332,7 @@ class OverlaidTrack(Track):
                  x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
                  y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined,
                  ye=Undefined, zoomLimits=Undefined, **kwds):
-        super(OverlaidTrack, self).__init__(overlay=overlay, _assignedHeight=_assignedHeight,
+        super(OverlaidTrack, self).__init__(_overlay=_overlay, _assignedHeight=_assignedHeight,
                                             _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, assembly=assembly,
                                             baselineY=baselineY, centerRadius=centerRadius, color=color,
@@ -2268,7 +2401,7 @@ class SingleTrack(Track):
     height : float
         Specify the track height in pixels.
     id : string
-
+        Assigned to `uid` in a HiGlass view config, used for API and caching.
     innerRadius : float
         Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
@@ -2435,7 +2568,7 @@ class TemplateTrack(Track):
     height : float
         Specify the track height in pixels.
     id : string
-
+        Assigned to `uid` in a HiGlass view config, used for API and caching.
     innerRadius : float
         Specify the inner radius of tracks when (`{"layout": "circular"}`).
     layout : :class:`Layout`
