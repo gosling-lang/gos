@@ -1,24 +1,32 @@
+from __future__ import annotations
+
+import json
 import pathlib
 import warnings
+import typing
 
 import jinja2
 from docutils import nodes
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives import flag
 
-from gosling.display import get_display_dependencies
+from gosling.display import get_gosling_import_map
 from gosling.schemapi import SchemaValidationError
 from gosling.utils.execeval import eval_block
+
+if typing.TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 TEMPLATE = jinja2.Template(
     """
 <div id="{{ div_id }}">
-<script>
-  document.addEventListener("DOMContentLoaded", function(event) {
-      var spec = {{ spec }};
+<script type="module">
+  import * as gosling from "gosling.js";
+  document.addEventListener("DOMContentLoaded", async () => {
+      let el = document.querySelector('#{{ div_id }}');
+      let spec = {{ spec }};
+      let opt = { padding: 0 };
       console.log(spec);
-      var opt = { padding: 0 };
-      var el = document.querySelector('#{{ div_id }}');
       gosling.embed(el, spec, opt).catch(console.err);
   });
 </script>
@@ -84,14 +92,25 @@ class GoslingPlotDirective(Directive):
         return result
 
 
+def add_custom_head(
+    app: Sphinx, pagename: str, templatename: str, context: dict, doctree
+):
+    custom_html = (
+        f'<script type="importmap">{json.dumps(get_gosling_import_map())}</script>'
+    )
+    if context.get("metatags, None"):
+        context["metatags"] += custom_html
+    else:
+        context["metatags"] = custom_html
+
+
 def html_visit_gosling_plot(self, node):
     # Execute the code, saving output and namespace
     try:
         chart = eval_block(node["code"])
     except Exception as e:
         warnings.warn(
-            "gosling-plot: {}:{} Code Execution failed:"
-            "{}: {}".format(
+            "gosling-plot: {}:{} Code Execution failed:" "{}: {}".format(
                 node["rst_source"], node["rst_lineno"], e.__class__.__name__, str(e)
             )
         )
@@ -112,26 +131,8 @@ def depart_gosling_plot(self, node):
     return
 
 
-def builder_inited(app):
-    app.add_css_file(app.config.higlass_css_url)
-    app.add_js_file(app.config.react_url)
-    app.add_js_file(app.config.reactdom_url)
-    app.add_js_file(app.config.pixi_url)
-    app.add_js_file(app.config.higlass_js_url)
-    app.add_js_file(app.config.gosling_url)
-
-
-def setup(app):
-    deps = get_display_dependencies()
-    app.add_config_value("react_url", deps.react, "html")
-    app.add_config_value("reactdom_url", deps.react_dom, "html")
-    app.add_config_value("pixi_url", deps.pixijs, "html")
-    app.add_config_value("higlass_js_url", deps.higlass_js, "html")
-    app.add_config_value("higlass_css_url", deps.higlass_css, "html")
-    app.add_config_value("gosling_url", deps.gosling, "html")
-
+def setup(app: Sphinx):
+    app.connect("html-page-context", add_custom_head)
     app.add_directive("gosling-plot", GoslingPlotDirective)
     app.add_node(gosling_plot, html=(html_visit_gosling_plot, depart_gosling_plot))
-
-    app.connect("builder-inited", builder_inited)
     return {"version": "0.1"}

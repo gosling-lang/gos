@@ -1,79 +1,39 @@
+from __future__ import annotations
+
 import json
 import uuid
-from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import jinja2
 
 from gosling.plugin_registry import PluginRegistry
 from gosling.schema import SCHEMA_VERSION, THEMES
 
-# TODO: This is kind of a mess. Gosling.js can be very finky with its 
-# peer dependencies in various Jupyter-like environments. This is a 
-# hacky way to get things working in JupyterLab, Jupyter Notebook, 
-# VSCode, and Colab consistently.
+# TODO: Ideally we could use a single import but this seems to work ok.
 HTML_TEMPLATE = jinja2.Template(
     """
 <!DOCTYPE html>
 <html>
 <head>
   <style>.error { color: red; }</style>
-  <link rel="stylesheet" href="{{ higlass_css_url }}">
 </head>
 <body>
   <div id="{{ output_div }}"></div>
   <script type="module">
-    async function loadScript(src) {
-        return new Promise(resolve => {
-            const script = document.createElement('script');
-            script.onload = resolve;
-            script.src = src;
-            script.async = false;
-            document.head.appendChild(script);
-        });
-    }
-    async function loadGosling() {
-        // Manually load scripts from window namespace since requirejs might not be
-        // available in all browser environments.
-        // https://github.com/DanielHreben/requirejs-toggle
-        if (!window.gosling) {
-            // https://github.com/DanielHreben/requirejs-toggle
-            window.__requirejsToggleBackup = {
-                define: window.define,
-                require: window.require,
-                requirejs: window.requirejs,
-            };
-            for (const field of Object.keys(window.__requirejsToggleBackup)) {
-                window[field] = undefined;
-            }
-            // load dependencies sequentially
-            const sources = [
-                "{{ react_url }}",
-                "{{ react_dom_url }}",
-                "{{ pixijs_url }}",
-                "{{ higlass_js_url }}",
-                "{{ gosling_url }}",
-            ];
-            for (const src of sources) await loadScript(src);
-            // restore requirejs after scripts have loaded
-            Object.assign(window, window.__requirejsToggleBackup);
-            delete window.__requirejsToggleBackup;
-        }
-        return window.gosling;
-    };
-    var el = document.getElementById('{{ output_div }}');
-    var spec = {{ spec }};
-    var opt = {{ embed_options }};
-    loadGosling()
-        .then(gosling => gosling.embed(el, spec, opt))
-        .catch(err => {
-            el.innerHTML = `\
-<div class="error">
-    <p>JavaScript Error: ${error.message}</p>
-    <p>This usually means there's a typo in your Gosling specification. See the javascript console for the full traceback.</p>
-</div>`;
-            throw error;
-        });
+    import { importWithMap } from "https://unpkg.com/dynamic-importmap@0.1.0";
+    let importMap = {{ import_map }};
+    let gosling = await importWithMap("gosling.js", importMap);
+    let el = document.getElementById('{{ output_div }}');
+    let spec = {{ spec }};
+    let opt = {{ embed_options }};
+    gosling.embed(el, spec, opt).catch((err) => {
+      el.innerHTML = `\
+    <div class="error">
+        <p>JavaScript Error: ${error.message}</p>
+        <p>This usually means there's a typo in your Gosling specification. See the javascript console for the full traceback.</p>
+    </div>`;
+      throw error;
+    });
   </script>
 </body>
 </html>
@@ -83,53 +43,39 @@ HTML_TEMPLATE = jinja2.Template(
 GoslingSpec = Dict[str, Any]
 
 
-@dataclass
-class GoslingBundle:
-    react: str
-    react_dom: str
-    pixijs: str
-    higlass_js: str
-    higlass_css: str
-    gosling: str
-
-
-def get_display_dependencies(
+def get_gosling_import_map(
     gosling_version: str = SCHEMA_VERSION.lstrip("v"),
-    higlass_version: str = "~1.12",
-    react_version: str = "17",
+    higlass_version: str = "1.13",
+    react_version: str = "18",
     pixijs_version: str = "6",
-    base_url: str = "https://unpkg.com",
-) -> GoslingBundle:
-    return GoslingBundle(
-        react=f"{ base_url }/react@{ react_version }/umd/react.production.min.js",
-        react_dom=f"{ base_url }/react-dom@{ react_version }/umd/react-dom.production.min.js",
-        pixijs=f"{ base_url }/pixi.js@{ pixijs_version }/dist/browser/pixi.min.js",
-        higlass_js=f"{ base_url }/higlass@{ higlass_version }/dist/hglib.js",
-        higlass_css=f"{ base_url }/higlass@{ higlass_version }/dist/hglib.css",
-        gosling=f"{ base_url }/gosling.js@{ gosling_version }/dist/gosling.js",
-    )
+) -> dict:
+    return {
+        "imports": {
+            "react": f"https://esm.sh/react@{react_version}",
+            "react-dom": f"https://esm.sh/react-dom@{react_version}",
+            "pixi": f"https://esm.sh/pixi.js@{pixijs_version}",
+            "higlass": f"https://esm.sh/higlass@{higlass_version}?external=react,react-dom,pixi",
+            "gosling.js": f"https://esm.sh/gosling.js@{gosling_version}?external=react,react-dom,pixi,higlass",
+        }
+    }
 
 
 def spec_to_html(
     spec: GoslingSpec,
     output_div: str = "vis",
-    embed_options: Optional[Dict[str, Any]] = None,
+    embed_options: Dict[str, Any] | None = None,
     **kwargs,
 ):
     embed_options = embed_options or dict(padding=0, theme=themes.get())
-    deps = get_display_dependencies(**kwargs)
+    deps = get_gosling_import_map(**kwargs)
 
     return HTML_TEMPLATE.render(
         spec=json.dumps(spec),
         embed_options=json.dumps(embed_options),
         output_div=output_div,
-        react_url=deps.react,
-        react_dom_url=deps.react_dom,
-        pixijs_url=deps.pixijs,
-        higlass_js_url=deps.higlass_js,
-        higlass_css_url=deps.higlass_css,
-        gosling_url=deps.gosling,
+        import_map=json.dumps(deps),
     )
+
 
 class Renderer:
     def __init__(self, output_div: str = "jupyter-gosling-{}", **kwargs: Any):

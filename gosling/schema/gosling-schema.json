@@ -553,6 +553,9 @@
         },
         {
           "$ref": "#/definitions/VcfData"
+        },
+        {
+          "$ref": "#/definitions/GffData"
         }
       ]
     },
@@ -595,6 +598,7 @@
           "type": "number"
         },
         "id": {
+          "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
           "type": "string"
         },
         "innerRadius": {
@@ -876,6 +880,110 @@
       ],
       "type": "object"
     },
+    "DummyTrack": {
+      "additionalProperties": false,
+      "description": "A placeholder track. In contrast to other tracks, this track does not display any data. Instead it provides empty space for third party tools to display their data on top of.",
+      "properties": {
+        "_invalidTrack": {
+          "description": "internal",
+          "type": "boolean"
+        },
+        "assembly": {
+          "const": "unknown",
+          "description": "No assemblies can be associated with a dummy track",
+          "type": "string"
+        },
+        "height": {
+          "description": "Specify the track height in pixels.",
+          "type": "number"
+        },
+        "id": {
+          "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
+          "type": "string"
+        },
+        "layout": {
+          "const": "linear",
+          "description": "Only linear layout are supported at this time",
+          "type": "string"
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation",
+          "description": "Specify the orientation."
+        },
+        "overlayOnPreviousTrack": {
+          "type": "boolean"
+        },
+        "static": {
+          "const": true,
+          "description": "Whether to disable [Zooming and Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning), __Default:__ `false`.",
+          "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/DummyTrackStyle",
+          "description": "Defines how the track is styled"
+        },
+        "title": {
+          "description": "Text that gets shown on the DummyTrack",
+          "type": "string"
+        },
+        "type": {
+          "const": "dummy-track",
+          "description": "Used to specify the dummy track",
+          "type": "string"
+        },
+        "width": {
+          "description": "Specify the track width in pixels.",
+          "type": "number"
+        },
+        "zoomLimits": {
+          "description": "Unused property for DummyTrack",
+          "items": {
+            "type": "null"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "DummyTrackStyle": {
+      "additionalProperties": false,
+      "properties": {
+        "background": {
+          "description": "Background color of the track",
+          "type": "string"
+        },
+        "outline": {
+          "description": "Color of the outline of the track",
+          "type": "string"
+        },
+        "textFontSize": {
+          "description": "Specify the font size of the title",
+          "type": "number"
+        },
+        "textFontWeight": {
+          "description": "Specify the font weight of the title.",
+          "enum": [
+            "bold",
+            "normal"
+          ],
+          "type": "string"
+        },
+        "textStroke": {
+          "description": "Specify the stroke color of title.",
+          "type": "string"
+        },
+        "textStrokeWidth": {
+          "description": "Specify the stroke width of the title.",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "EventStyle": {
       "additionalProperties": false,
       "description": "The styles defined here will be applied to the target marks of mouse events, such as a point mark after the user clicks on it.",
@@ -1035,6 +1143,54 @@
       ],
       "type": "object"
     },
+    "GffData": {
+      "additionalProperties": false,
+      "description": "Generic Feature Format Version 3 (GFF3) format data. It parses files that follow the [GFF3 specification](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md).",
+      "properties": {
+        "attributesToFields": {
+          "description": "Specifies which attributes to include as a fields. GFF files have an \"attributes\" column which contains a list of attributes which are each tag-value pairs (`tag=value`). This option allows for specific attributes to be accessible as a field. For example, if you have an attribute called \"gene_name\" and you want label features on your track using those values, you can use this option so that you can use `\"field\": \"gene_name\"` in the schema.\n\nIf there is a single `value` corresponding to the `tag`, Gosling will parse that value as a string. If there are multiple `value`s corresponding to a `tag`, Gosling will parse it as a comma-separated list string. If a feature does not have a particular attribute, then the attribute value will be set to the `defaultValue`.",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "attribute": {
+                "type": "string"
+              },
+              "defaultValue": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "attribute",
+              "defaultValue"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "indexUrl": {
+          "description": "URL link to the tabix index file",
+          "type": "string"
+        },
+        "sampleLength": {
+          "description": "The maximum number of samples to be shown on the track. Samples are uniformly randomly selected so that this threshold is not exceeded. __Default:__ `1000`",
+          "type": "number"
+        },
+        "type": {
+          "const": "gff",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL link to the GFF file",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "indexUrl"
+      ],
+      "type": "object"
+    },
     "GoslingSpec": {
       "anyOf": [
         {
@@ -1116,6 +1272,15 @@
                   "default": false,
                   "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                   "type": "boolean"
+                },
+                "stretchGraphics": {
+                  "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                  "type": "boolean"
+                },
+                "stretchGraphicsThreshold": {
+                  "default": 1.5,
+                  "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -1128,6 +1293,7 @@
               "type": "number"
             },
             "id": {
+              "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
               "type": "string"
             },
             "innerRadius": {
@@ -1267,6 +1433,15 @@
                             "default": false,
                             "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                             "type": "boolean"
+                          },
+                          "stretchGraphics": {
+                            "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                            "type": "boolean"
+                          },
+                          "stretchGraphicsThreshold": {
+                            "default": 1.5,
+                            "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                            "type": "number"
                           }
                         },
                         "type": "object"
@@ -1279,6 +1454,7 @@
                         "type": "number"
                       },
                       "id": {
+                        "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
                         "type": "string"
                       },
                       "innerRadius": {
@@ -1882,6 +2058,15 @@
                   "default": false,
                   "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                   "type": "boolean"
+                },
+                "stretchGraphics": {
+                  "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                  "type": "boolean"
+                },
+                "stretchGraphicsThreshold": {
+                  "default": 1.5,
+                  "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -1894,6 +2079,7 @@
               "type": "number"
             },
             "id": {
+              "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
               "type": "string"
             },
             "innerRadius": {
@@ -2033,6 +2219,15 @@
                             "default": false,
                             "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                             "type": "boolean"
+                          },
+                          "stretchGraphics": {
+                            "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                            "type": "boolean"
+                          },
+                          "stretchGraphicsThreshold": {
+                            "default": 1.5,
+                            "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                            "type": "number"
                           }
                         },
                         "type": "object"
@@ -2045,6 +2240,7 @@
                         "type": "number"
                       },
                       "id": {
+                        "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
                         "type": "string"
                       },
                       "innerRadius": {
@@ -2596,6 +2792,10 @@
             "description": {
               "type": "string"
             },
+            "id": {
+              "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
+              "type": "string"
+            },
             "layout": {
               "$ref": "#/definitions/Layout",
               "description": "Specify the layout type of all tracks."
@@ -2701,6 +2901,15 @@
                             "default": false,
                             "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                             "type": "boolean"
+                          },
+                          "stretchGraphics": {
+                            "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                            "type": "boolean"
+                          },
+                          "stretchGraphicsThreshold": {
+                            "default": 1.5,
+                            "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                            "type": "number"
                           }
                         },
                         "type": "object"
@@ -2713,6 +2922,7 @@
                         "type": "number"
                       },
                       "id": {
+                        "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
                         "type": "string"
                       },
                       "innerRadius": {
@@ -3113,6 +3323,10 @@
             "description": {
               "type": "string"
             },
+            "id": {
+              "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
+              "type": "string"
+            },
             "layout": {
               "$ref": "#/definitions/Layout",
               "description": "Specify the layout type of all tracks."
@@ -3166,6 +3380,10 @@
                       "centerRadius": {
                         "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
                         "type": "number"
+                      },
+                      "id": {
+                        "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
+                        "type": "string"
                       },
                       "layout": {
                         "$ref": "#/definitions/Layout",
@@ -3633,6 +3851,10 @@
           "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
           "type": "number"
         },
+        "id": {
+          "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
+          "type": "string"
+        },
         "layout": {
           "$ref": "#/definitions/Layout",
           "description": "Specify the layout type of all tracks."
@@ -3856,112 +4078,7 @@
           "description": "internal",
           "type": "boolean"
         },
-        "_renderingId": {
-          "description": "internal",
-          "type": "string"
-        },
-        "assembly": {
-          "$ref": "#/definitions/Assembly",
-          "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
-        },
-        "baselineY": {
-          "type": "number"
-        },
-        "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
-          "type": "number"
-        },
-        "color": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Color"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "data": {
-          "$ref": "#/definitions/DataDeep"
-        },
-        "dataTransform": {
-          "items": {
-            "$ref": "#/definitions/DataTransform"
-          },
-          "type": "array"
-        },
-        "displacement": {
-          "$ref": "#/definitions/Displacement"
-        },
-        "endAngle": {
-          "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
-          "type": "number"
-        },
-        "experimental": {
-          "additionalProperties": false,
-          "properties": {
-            "mouseEvents": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "$ref": "#/definitions/MouseEventsDeep"
-                }
-              ]
-            },
-            "performanceMode": {
-              "default": false,
-              "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
-              "type": "boolean"
-            }
-          },
-          "type": "object"
-        },
-        "flipY": {
-          "type": "boolean"
-        },
-        "height": {
-          "description": "Specify the track height in pixels.",
-          "type": "number"
-        },
-        "id": {
-          "type": "string"
-        },
-        "innerRadius": {
-          "description": "Specify the inner radius of tracks when (`{\"layout\": \"circular\"}`).",
-          "type": "number"
-        },
-        "layout": {
-          "$ref": "#/definitions/Layout",
-          "description": "Specify the layout type of all tracks."
-        },
-        "linkingId": {
-          "description": "Specify an ID for [linking multiple views](http://gosling-lang.org/docs/user-interaction#linking-views)",
-          "type": "string"
-        },
-        "mark": {
-          "$ref": "#/definitions/Mark"
-        },
-        "opacity": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Opacity"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "orientation": {
-          "$ref": "#/definitions/Orientation",
-          "description": "Specify the orientation."
-        },
-        "outerRadius": {
-          "description": "Specify the outer radius of tracks when `{\"layout\": \"circular\"}`.",
-          "type": "number"
-        },
-        "overlay": {
+        "_overlay": {
           "items": {
             "additionalProperties": false,
             "properties": {
@@ -4034,6 +4151,15 @@
                     "default": false,
                     "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                     "type": "boolean"
+                  },
+                  "stretchGraphics": {
+                    "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                    "type": "boolean"
+                  },
+                  "stretchGraphicsThreshold": {
+                    "default": 1.5,
+                    "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                    "type": "number"
                   }
                 },
                 "type": "object"
@@ -4042,6 +4168,7 @@
                 "type": "boolean"
               },
               "id": {
+                "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
                 "type": "string"
               },
               "innerRadius": {
@@ -4293,6 +4420,121 @@
           },
           "type": "array"
         },
+        "_renderingId": {
+          "description": "internal",
+          "type": "string"
+        },
+        "assembly": {
+          "$ref": "#/definitions/Assembly",
+          "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
+        },
+        "baselineY": {
+          "type": "number"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
+          "type": "number"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Color"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            }
+          ]
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "dataTransform": {
+          "items": {
+            "$ref": "#/definitions/DataTransform"
+          },
+          "type": "array"
+        },
+        "displacement": {
+          "$ref": "#/definitions/Displacement"
+        },
+        "endAngle": {
+          "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
+          "type": "number"
+        },
+        "experimental": {
+          "additionalProperties": false,
+          "properties": {
+            "mouseEvents": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/definitions/MouseEventsDeep"
+                }
+              ]
+            },
+            "performanceMode": {
+              "default": false,
+              "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
+              "type": "boolean"
+            },
+            "stretchGraphics": {
+              "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+              "type": "boolean"
+            },
+            "stretchGraphicsThreshold": {
+              "default": 1.5,
+              "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "flipY": {
+          "type": "boolean"
+        },
+        "height": {
+          "description": "Specify the track height in pixels.",
+          "type": "number"
+        },
+        "id": {
+          "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
+          "type": "string"
+        },
+        "innerRadius": {
+          "description": "Specify the inner radius of tracks when (`{\"layout\": \"circular\"}`).",
+          "type": "number"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout",
+          "description": "Specify the layout type of all tracks."
+        },
+        "linkingId": {
+          "description": "Specify an ID for [linking multiple views](http://gosling-lang.org/docs/user-interaction#linking-views)",
+          "type": "string"
+        },
+        "mark": {
+          "$ref": "#/definitions/Mark"
+        },
+        "opacity": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Opacity"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            }
+          ]
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation",
+          "description": "Specify the orientation."
+        },
+        "outerRadius": {
+          "description": "Specify the outer radius of tracks when `{\"layout\": \"circular\"}`.",
+          "type": "number"
+        },
         "overlayOnPreviousTrack": {
           "type": "boolean"
         },
@@ -4521,7 +4763,7 @@
         }
       },
       "required": [
-        "overlay"
+        "_overlay"
       ],
       "type": "object"
     },
@@ -4601,6 +4843,15 @@
               "default": false,
               "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
               "type": "boolean"
+            },
+            "stretchGraphics": {
+              "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+              "type": "boolean"
+            },
+            "stretchGraphicsThreshold": {
+              "default": 1.5,
+              "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+              "type": "number"
             }
           },
           "type": "object"
@@ -4613,6 +4864,7 @@
           "type": "number"
         },
         "id": {
+          "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
           "type": "string"
         },
         "innerRadius": {
@@ -4901,118 +5153,7 @@
           "description": "internal",
           "type": "boolean"
         },
-        "_renderingId": {
-          "description": "internal",
-          "type": "string"
-        },
-        "assembly": {
-          "$ref": "#/definitions/Assembly",
-          "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
-        },
-        "baselineY": {
-          "type": "number"
-        },
-        "centerRadius": {
-          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
-          "type": "number"
-        },
-        "color": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Color"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "data": {
-          "$ref": "#/definitions/DataDeep"
-        },
-        "dataTransform": {
-          "items": {
-            "$ref": "#/definitions/DataTransform"
-          },
-          "type": "array"
-        },
-        "displacement": {
-          "$ref": "#/definitions/Displacement"
-        },
-        "encoding": {
-          "additionalProperties": {
-            "$ref": "#/definitions/Channel"
-          },
-          "type": "object"
-        },
-        "endAngle": {
-          "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
-          "type": "number"
-        },
-        "experimental": {
-          "additionalProperties": false,
-          "properties": {
-            "mouseEvents": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "$ref": "#/definitions/MouseEventsDeep"
-                }
-              ]
-            },
-            "performanceMode": {
-              "default": false,
-              "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
-              "type": "boolean"
-            }
-          },
-          "type": "object"
-        },
-        "flipY": {
-          "type": "boolean"
-        },
-        "height": {
-          "description": "Specify the track height in pixels.",
-          "type": "number"
-        },
-        "id": {
-          "type": "string"
-        },
-        "innerRadius": {
-          "description": "Specify the inner radius of tracks when (`{\"layout\": \"circular\"}`).",
-          "type": "number"
-        },
-        "layout": {
-          "$ref": "#/definitions/Layout",
-          "description": "Specify the layout type of all tracks."
-        },
-        "linkingId": {
-          "description": "Specify an ID for [linking multiple views](http://gosling-lang.org/docs/user-interaction#linking-views)",
-          "type": "string"
-        },
-        "mark": {
-          "$ref": "#/definitions/Mark"
-        },
-        "opacity": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Opacity"
-            },
-            {
-              "$ref": "#/definitions/ChannelValue"
-            }
-          ]
-        },
-        "orientation": {
-          "$ref": "#/definitions/Orientation",
-          "description": "Specify the orientation."
-        },
-        "outerRadius": {
-          "description": "Specify the outer radius of tracks when `{\"layout\": \"circular\"}`.",
-          "type": "number"
-        },
-        "overlay": {
+        "_overlay": {
           "items": {
             "additionalProperties": false,
             "properties": {
@@ -5085,6 +5226,15 @@
                     "default": false,
                     "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                     "type": "boolean"
+                  },
+                  "stretchGraphics": {
+                    "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                    "type": "boolean"
+                  },
+                  "stretchGraphicsThreshold": {
+                    "default": 1.5,
+                    "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                    "type": "number"
                   }
                 },
                 "type": "object"
@@ -5093,6 +5243,7 @@
                 "type": "boolean"
               },
               "id": {
+                "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
                 "type": "string"
               },
               "innerRadius": {
@@ -5344,6 +5495,147 @@
           },
           "type": "array"
         },
+        "_renderingId": {
+          "description": "internal",
+          "type": "string"
+        },
+        "assembly": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Assembly",
+              "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
+            },
+            {
+              "const": "unknown",
+              "description": "No assemblies can be associated with a dummy track",
+              "type": "string"
+            }
+          ],
+          "description": "A string that specifies the genome builds to use. Currently support `\"hg38\"`, `\"hg19\"`, `\"hg18\"`, `\"hg17\"`, `\"hg16\"`, `\"mm10\"`, `\"mm9\"`, and `\"unknown\"`.\n\n__Note:__: with `\"unknown\"` assembly, genomic axes do not show chrN: in labels."
+        },
+        "baselineY": {
+          "type": "number"
+        },
+        "centerRadius": {
+          "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
+          "type": "number"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Color"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            }
+          ]
+        },
+        "data": {
+          "$ref": "#/definitions/DataDeep"
+        },
+        "dataTransform": {
+          "items": {
+            "$ref": "#/definitions/DataTransform"
+          },
+          "type": "array"
+        },
+        "displacement": {
+          "$ref": "#/definitions/Displacement"
+        },
+        "encoding": {
+          "additionalProperties": {
+            "$ref": "#/definitions/Channel"
+          },
+          "type": "object"
+        },
+        "endAngle": {
+          "description": "Specify the end angle (in the range of [0, 360]) of circular tracks (`{\"layout\": \"circular\"}`).",
+          "type": "number"
+        },
+        "experimental": {
+          "additionalProperties": false,
+          "properties": {
+            "mouseEvents": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "$ref": "#/definitions/MouseEventsDeep"
+                }
+              ]
+            },
+            "performanceMode": {
+              "default": false,
+              "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
+              "type": "boolean"
+            },
+            "stretchGraphics": {
+              "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+              "type": "boolean"
+            },
+            "stretchGraphicsThreshold": {
+              "default": 1.5,
+              "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "flipY": {
+          "type": "boolean"
+        },
+        "height": {
+          "description": "Specify the track height in pixels.",
+          "type": "number"
+        },
+        "id": {
+          "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
+          "type": "string"
+        },
+        "innerRadius": {
+          "description": "Specify the inner radius of tracks when (`{\"layout\": \"circular\"}`).",
+          "type": "number"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Layout",
+              "description": "Specify the layout type of all tracks."
+            },
+            {
+              "const": "linear",
+              "description": "Only linear layout are supported at this time",
+              "type": "string"
+            }
+          ],
+          "description": "Specify the layout type of all tracks."
+        },
+        "linkingId": {
+          "description": "Specify an ID for [linking multiple views](http://gosling-lang.org/docs/user-interaction#linking-views)",
+          "type": "string"
+        },
+        "mark": {
+          "$ref": "#/definitions/Mark"
+        },
+        "opacity": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Opacity"
+            },
+            {
+              "$ref": "#/definitions/ChannelValue"
+            }
+          ]
+        },
+        "orientation": {
+          "$ref": "#/definitions/Orientation",
+          "description": "Specify the orientation."
+        },
+        "outerRadius": {
+          "description": "Specify the outer radius of tracks when `{\"layout\": \"circular\"}`.",
+          "type": "number"
+        },
         "overlayOnPreviousTrack": {
           "type": "boolean"
         },
@@ -5384,8 +5676,18 @@
           "type": "number"
         },
         "static": {
-          "description": "Whether to disable [Zooming and Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning), __Default:__ `false`.",
-          "type": "boolean"
+          "anyOf": [
+            {
+              "description": "Whether to disable [Zooming and Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning), __Default:__ `false`.",
+              "type": "boolean"
+            },
+            {
+              "const": true,
+              "description": "Whether to disable [Zooming and Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning), __Default:__ `false`.",
+              "type": "boolean"
+            }
+          ],
+          "description": "Whether to disable [Zooming and Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning), __Default:__ `false`."
         },
         "stretch": {
           "type": "boolean"
@@ -5411,7 +5713,16 @@
           ]
         },
         "style": {
-          "$ref": "#/definitions/Style",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Style",
+              "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
+            },
+            {
+              "$ref": "#/definitions/DummyTrackStyle",
+              "description": "Defines how the track is styled"
+            }
+          ],
           "description": "Define the [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of multive views. Will be overwritten by the style of children elements (e.g., view, track)."
         },
         "subtitle": {
@@ -5439,6 +5750,11 @@
             "$ref": "#/definitions/Tooltip"
           },
           "type": "array"
+        },
+        "type": {
+          "const": "dummy-track",
+          "description": "Used to specify the dummy track",
+          "type": "string"
         },
         "visibility": {
           "items": {
@@ -5571,7 +5887,20 @@
           ]
         },
         "zoomLimits": {
-          "$ref": "#/definitions/ZoomLimits"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ZoomLimits"
+            },
+            {
+              "description": "Unused property for DummyTrack",
+              "items": {
+                "type": "null"
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
         }
       },
       "type": "object"
@@ -5794,6 +6123,15 @@
               "default": false,
               "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
               "type": "boolean"
+            },
+            "stretchGraphics": {
+              "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+              "type": "boolean"
+            },
+            "stretchGraphicsThreshold": {
+              "default": 1.5,
+              "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+              "type": "number"
             }
           },
           "type": "object"
@@ -5806,6 +6144,7 @@
           "type": "number"
         },
         "id": {
+          "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
           "type": "string"
         },
         "innerRadius": {
@@ -6152,6 +6491,15 @@
                   "default": false,
                   "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                   "type": "boolean"
+                },
+                "stretchGraphics": {
+                  "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                  "type": "boolean"
+                },
+                "stretchGraphicsThreshold": {
+                  "default": 1.5,
+                  "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -6164,6 +6512,7 @@
               "type": "number"
             },
             "id": {
+              "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
               "type": "string"
             },
             "innerRadius": {
@@ -6299,6 +6648,15 @@
                             "default": false,
                             "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                             "type": "boolean"
+                          },
+                          "stretchGraphics": {
+                            "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                            "type": "boolean"
+                          },
+                          "stretchGraphicsThreshold": {
+                            "default": 1.5,
+                            "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                            "type": "number"
                           }
                         },
                         "type": "object"
@@ -6311,6 +6669,7 @@
                         "type": "number"
                       },
                       "id": {
+                        "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
                         "type": "string"
                       },
                       "innerRadius": {
@@ -6911,6 +7270,15 @@
                   "default": false,
                   "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                   "type": "boolean"
+                },
+                "stretchGraphics": {
+                  "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                  "type": "boolean"
+                },
+                "stretchGraphicsThreshold": {
+                  "default": 1.5,
+                  "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -6923,6 +7291,7 @@
               "type": "number"
             },
             "id": {
+              "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
               "type": "string"
             },
             "innerRadius": {
@@ -7058,6 +7427,15 @@
                             "default": false,
                             "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                             "type": "boolean"
+                          },
+                          "stretchGraphics": {
+                            "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                            "type": "boolean"
+                          },
+                          "stretchGraphicsThreshold": {
+                            "default": 1.5,
+                            "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                            "type": "number"
                           }
                         },
                         "type": "object"
@@ -7070,6 +7448,7 @@
                         "type": "number"
                       },
                       "id": {
+                        "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
                         "type": "string"
                       },
                       "innerRadius": {
@@ -7618,6 +7997,10 @@
               "description": "Proportion of the radius of the center white space.\n\n__Default:__ `0.3`",
               "type": "number"
             },
+            "id": {
+              "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
+              "type": "string"
+            },
             "layout": {
               "$ref": "#/definitions/Layout",
               "description": "Specify the layout type of all tracks."
@@ -7719,6 +8102,15 @@
                             "default": false,
                             "description": "Render visual marks with less smooth curves to increase rendering performance. Only supported for `elliptical` `linkStyle` `withinLink` currently.",
                             "type": "boolean"
+                          },
+                          "stretchGraphics": {
+                            "description": "Performance rendering option. By default, certain marks ('bar', 'line', 'rect', 'area') are stretched when zooming in/out to improve rendering performance. No marks will be stretched in circular layouts.\n\nWhen this option is set to true, all marks will be stretched when zooming in/out. When this option is set to false, all marks will be rerendered when zooming in/out.",
+                            "type": "boolean"
+                          },
+                          "stretchGraphicsThreshold": {
+                            "default": 1.5,
+                            "description": "Threshold for stretching graphics. If the graphics are scaled larger than the threshold, then the graphic will be rerendered. If the graphics are scaled smaller than 1/threshold (e.g., 1/2), then the graphic will be rerendered. This is to prevent the graphics from being stretched too much.",
+                            "type": "number"
                           }
                         },
                         "type": "object"
@@ -7731,6 +8123,7 @@
                         "type": "number"
                       },
                       "id": {
+                        "description": "The ID of a view that is maintained for the use of JS API functions, e.g., positions of a view",
                         "type": "string"
                       },
                       "innerRadius": {
@@ -8606,6 +8999,7 @@
           "type": "number"
         },
         "id": {
+          "description": "Assigned to `uid` in a HiGlass view config, used for API and caching.",
           "type": "string"
         },
         "innerRadius": {
@@ -8787,6 +9181,9 @@
         },
         {
           "$ref": "#/definitions/TemplateTrack"
+        },
+        {
+          "$ref": "#/definitions/DummyTrack"
         }
       ]
     },
