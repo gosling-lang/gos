@@ -24,12 +24,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
-          pip install --upgrade hatch
-          hatch run test
+          pip install uv
+          uv pip install --system ".[all,dev]"
+          pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling
