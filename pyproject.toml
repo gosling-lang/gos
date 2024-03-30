@@ -26,14 +26,14 @@ urls = { homepage = "https://github.com/gosling-lang/gos" }
 dependencies = [
   "jsonschema>=3.0",
   "jinja2",
-  "pandas>=1.0,<2.0",
+  "pandas",
 ]
 
 [project.optional-dependencies]
 all = [
-  "servir>=0.0.3",
+  "servir>=0.2.1",
   "gosling-widget>=0.0.2",
-  "clodius>=0.20.0",
+  "clodius>=0.20.1",
 ]
 dev = [
   "pytest>=6.0",

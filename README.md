@@ -12,7 +12,6 @@ It is built on top of the [Gosling] JSON specification, providing a
 simplified interface for authoring interactive genomic visualizations.
 
 
-
 ## Installation
 
 > The **gos** API is under active development. Feedback is appreciated and welcomed.
