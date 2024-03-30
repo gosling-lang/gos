@@ -32,5 +32,5 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: |
           pip install uv
-          uv pip install --system ".[all,test]"
+          uv pip install --system ".[all,dev]"
           pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling

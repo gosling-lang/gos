@@ -25,8 +25,7 @@ dependencies = ["jsonschema>=3.0", "jinja2", "pandas"]
 
 [project.optional-dependencies]
 all = ["servir>=0.2.1", "gosling-widget>=0.0.2", "clodius>=0.20.1"]
-test = ["pytest>=6.0", "requests>=2.0"]
-docs = ["sphinx>=6.0", "numpydoc>=1.5", "furo"]
+dev = ["pytest>=6.0", "requests>=2.0", "sphinx>=6.0", "numpydoc>=1.5", "furo"]
 
 [tool.hatch.build]
 include = ["/gosling", "/tests"]
@@ -38,7 +37,7 @@ source = "vcs"
 version-file = "gosling/_version.py"
 
 [tool.hatch.envs.default]
-features = ["dev", "all", "docs"]
+features = ["all", "dev"]
 
 [tool.hatch.envs.default.scripts]
 test = "pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling"
