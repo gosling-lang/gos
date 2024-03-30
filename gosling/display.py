@@ -9,10 +9,7 @@ import jinja2
 from gosling.plugin_registry import PluginRegistry
 from gosling.schema import SCHEMA_VERSION, THEMES
 
-# TODO: This is kind of a mess. Gosling.js can be very finky with its
-# peer dependencies in various Jupyter-like environments. This is a
-# hacky way to get things working in JupyterLab, Jupyter Notebook,
-# VSCode, and Colab consistently.
+# TODO: Ideally we could use a single import but this seems to work ok.
 HTML_TEMPLATE = jinja2.Template(
     """
 <!DOCTYPE html>
