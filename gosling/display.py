@@ -23,57 +23,29 @@ HTML_TEMPLATE = jinja2.Template(
 <body>
   <div id="{{ output_div }}"></div>
   <script type="module">
-    async function loadScript(src) {
-        return new Promise(resolve => {
-            const script = document.createElement('script');
-            script.onload = resolve;
-            script.src = src;
-            script.async = false;
-            document.head.appendChild(script);
-        });
-    }
-    async function loadGosling() {
-        // Manually load scripts from window namespace since requirejs might not be
-        // available in all browser environments.
-        // https://github.com/DanielHreben/requirejs-toggle
-        if (!window.gosling) {
-            // https://github.com/DanielHreben/requirejs-toggle
-            window.__requirejsToggleBackup = {
-                define: window.define,
-                require: window.require,
-                requirejs: window.requirejs,
-            };
-            for (const field of Object.keys(window.__requirejsToggleBackup)) {
-                window[field] = undefined;
-            }
-            // load dependencies sequentially
-            const sources = [
-                "{{ react_url }}",
-                "{{ react_dom_url }}",
-                "{{ pixijs_url }}",
-                "{{ higlass_js_url }}",
-                "{{ gosling_url }}",
-            ];
-            for (const src of sources) await loadScript(src);
-            // restore requirejs after scripts have loaded
-            Object.assign(window, window.__requirejsToggleBackup);
-            delete window.__requirejsToggleBackup;
-        }
-        return window.gosling;
+    import { importWithMap } from "https://unpkg.com/dynamic-importmap@0.1.0";
+    let importMap = {
+      imports: {
+        "react": "https://esm.sh/react@18",
+        "react-dom": "https://esm.sh/react-dom@18",
+        "pixi": "https://esm.sh/pixi.js@6",
+        "higlass": "https://esm.sh/higlass@1.13?external=react,react-dom,pixi",
+        "gosling.js":
+          "https://esm.sh/gosling.js@0.11.0?external=react,react-dom,pixi,higlass",
+      },
     };
-    var el = document.getElementById('{{ output_div }}');
-    var spec = {{ spec }};
-    var opt = {{ embed_options }};
-    loadGosling()
-        .then(gosling => gosling.embed(el, spec, opt))
-        .catch(err => {
-            el.innerHTML = `\
-<div class="error">
-    <p>JavaScript Error: ${error.message}</p>
-    <p>This usually means there's a typo in your Gosling specification. See the javascript console for the full traceback.</p>
-</div>`;
-            throw error;
-        });
+    let gosling = await importWithMap("gosling.js", importMap);
+    let el = document.getElementById('{{ output_div }}');
+    let spec = {{ spec }};
+    let opt = {{ embed_options }};
+    gosling.embed(el, spec, opt).catch((err) => {
+      el.innerHTML = `\
+    <div class="error">
+        <p>JavaScript Error: ${error.message}</p>
+        <p>This usually means there's a typo in your Gosling specification. See the javascript console for the full traceback.</p>
+    </div>`;
+      throw error;
+    });
   </script>
 </body>
 </html>
