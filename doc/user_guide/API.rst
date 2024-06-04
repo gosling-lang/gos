@@ -98,12 +98,15 @@ Low-Level Schema Wrappers
    DomainChr
    DomainChrInterval
    DomainInterval
+   DummyTrack
+   DummyTrackStyle
    EventStyle
    ExonSplitTransform
    FieldType
    FilterTransform
    GenomicDomain
    GenomicLengthTransform
+   GffData
    GoslingSchema
    GoslingSpec
    IncludeFilter
