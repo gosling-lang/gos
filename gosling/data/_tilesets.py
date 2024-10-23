@@ -4,14 +4,23 @@ import functools
 import pathlib
 import typing
 from dataclasses import dataclass
+import hashlib
 
 
 @dataclass(frozen=True)
 class Tileset:
     filepath: pathlib.Path
-    tiles: typing.Callable[[typing.Sequence[str]], list[typing.Any]]
+    tiles_impl: typing.Callable[[typing.Sequence[str]], list[typing.Any]]
     info: typing.Callable[[], typing.Any]
+    uid: str
     type: None | str = None
+
+    def tiles(self, tile_ids: typing.Sequence[str]) -> list[typing.Any]:
+        return self.tiles_impl(tile_ids)
+
+
+def create_uid(filepath: pathlib.Path) -> str:
+    return hashlib.md5(str(filepath).encode()).hexdigest()[0:8]
 
 
 def beddb(filepath: pathlib.Path):
@@ -25,8 +34,9 @@ def beddb(filepath: pathlib.Path):
     return Tileset(
         filepath=filepath,
         type="beddb",
-        tiles=functools.partial(tiles, filepath),
+        tiles_impl=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
+        uid=create_uid(filepath),
     )
 
 
@@ -41,8 +51,9 @@ def bigwig(filepath: pathlib.Path):
     return Tileset(
         filepath=filepath,
         type="bigwig",
-        tiles=functools.partial(tiles, filepath),
+        tiles_impl=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
+        uid=create_uid(filepath),
     )
 
 
@@ -57,8 +68,9 @@ def multivec(filepath: pathlib.Path):
     return Tileset(
         filepath=filepath,
         type="multivec",
-        tiles=functools.partial(tiles, filepath),
+        tiles_impl=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
+        uid=create_uid(filepath),
     )
 
 
@@ -73,6 +85,7 @@ def cooler(filepath: pathlib.Path):
     return Tileset(
         filepath=filepath,
         type="cooler",
-        tiles=functools.partial(tiles, filepath),
+        tiles_impl=functools.partial(tiles, filepath),
         info=functools.partial(tileset_info, filepath),
+        uid=create_uid(filepath),
     )
