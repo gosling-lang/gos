@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "gosling"
 description = "Python bindings to generate Gosling visualizations"
 authors = [{ name = "Trevor Manz", email = "trevor.j.manz@gmail.com" }]
+requires-python = ">=3.9"
 license = { text = "MIT" }
 readme = "README.md"
 dynamic = ["version"]
