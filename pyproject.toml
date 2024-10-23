@@ -24,7 +24,7 @@ dev-dependencies = [
   "requests>=2.0",
   "servir>=0.2.1",
   "setuptools>=75.2.0",
-  "sphinx>=8.1.3",
+  "sphinx>=6,<7",
 ]
 
 [tool.hatch.build]
