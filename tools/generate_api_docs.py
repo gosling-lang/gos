@@ -13,7 +13,7 @@ sys.path.insert(0, ROOT_DIR)
 import gosling as gos
 import gosling.api as api
 
-API_FILENAME = join(ROOT_DIR, "doc", "user_guide", "API.rst")
+API_FILENAME = join(ROOT_DIR, "docs", "user_guide", "API.rst")
 
 API_TEMPLATE = """\
 .. _API:

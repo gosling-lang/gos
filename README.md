@@ -82,8 +82,12 @@ if you are looking for inspiration.
 
 ## Development
 
-```bash
-pip install -e '.[dev]'
+This project uses [uv](https://github.com/astral-sh/uv) for development.
+
+Run tests with:
+
+```sh
+uv run pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling
 ```
 
 The schema bindings (`gosling/schema/`) and docs (`doc/user_guide/API.rst`) are 
@@ -92,7 +96,7 @@ files directly.
 
 ```bash
 # generate gosling/schema/*
-python tools/generate_schema_wrapper.py <tag_name>
+uv run tools/generate_schema_wrapper.py <tag_name>
 ```
 
 ## Release
