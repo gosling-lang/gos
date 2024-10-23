@@ -22,7 +22,7 @@ def main():
         srcdir=SELF_DIR,
         confdir=SELF_DIR,
         outdir=SELF_DIR / "dist",
-        doctreedir=SELF_DIR / ".doctrees",
+        doctreedir=SELF_DIR / "dist" / ".doctrees",
         buildername="html",
     )
 
