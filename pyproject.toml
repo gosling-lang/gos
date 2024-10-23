@@ -17,6 +17,7 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Operating System :: OS Independent",
 ]
 dynamic = ["version"]
@@ -27,7 +28,13 @@ dependencies = ["jsonschema>=3.0", "jinja2", "pandas"]
 all = ["servir>=0.2.1", "gosling-widget>=0.0.2", "clodius>=0.20.1"]
 
 [tool.uv]
-dev-dependencies = ["pytest>=6.0", "requests>=2.0"]
+dev-dependencies = [
+  "clodius>=0.20.1",
+  "gosling-widget>=0.0.2",
+  "pytest>=6.0",
+  "requests>=2.0",
+  "servir>=0.2.1",
+]
 
 [tool.hatch.build]
 include = ["/gosling", "/tests"]
@@ -37,9 +44,6 @@ source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
 version-file = "gosling/_version.py"
-
-[tool.hatch.envs.default]
-features = ["dev", "all"]
 
 [tool.hatch.envs.default.scripts]
 test = "pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling"

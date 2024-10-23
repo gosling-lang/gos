@@ -304,7 +304,7 @@ wheels = [
 
 [[package]]
 name = "gosling"
-version = "0.2.2.dev2+g23caad9.d20241023"
+version = "0.2.2.dev3+g00507d4.d20241023"
 source = { editable = "." }
 dependencies = [
     { name = "jinja2" },
@@ -321,8 +321,11 @@ all = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "clodius" },
+    { name = "gosling-widget" },
     { name = "pytest" },
     { name = "requests" },
+    { name = "servir" },
 ]
 
 [package.metadata]
@@ -337,8 +340,11 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "clodius", specifier = ">=0.20.1" },
+    { name = "gosling-widget", specifier = ">=0.0.2" },
     { name = "pytest", specifier = ">=6.0" },
     { name = "requests", specifier = ">=2.0" },
+    { name = "servir", specifier = ">=0.2.1" },
 ]
 
 [[package]]

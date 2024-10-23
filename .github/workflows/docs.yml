@@ -23,12 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v3
         with:
-          python-version: "3.12"
+          version: "0.4.x"
       - run: |
-          python -m pip install --upgrade hatch
-          hatch run docs
+          uv run docs/build.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -36,7 +35,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: './docs/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
