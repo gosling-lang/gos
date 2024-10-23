@@ -8,18 +8,6 @@ description = "Python bindings to generate Gosling visualizations"
 authors = [{ name = "Trevor Manz", email = "trevor.j.manz@gmail.com" }]
 license = { text = "MIT" }
 readme = "README.md"
-classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Operating System :: OS Independent",
-]
 dynamic = ["version"]
 urls = { homepage = "https://github.com/gosling-lang/gos" }
 dependencies = ["jsonschema>=3.0", "jinja2", "pandas"]
