@@ -104,9 +104,10 @@ class GoslingDataServer:
 
 data_server = GoslingDataServer()
 
+
 def _create_loader(
     type_: str,
-    create_ts: typing.Callable[[pathlib.Path], tilesets.Tileset] | None = None
+    create_ts: typing.Callable[[pathlib.Path], tilesets.Tileset] | None = None,
 ):
     def load(url: pathlib.Path | str, **kwargs):
         """Adds resource to data_server if local file is detected."""
