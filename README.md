@@ -87,7 +87,7 @@ This project uses [uv](https://github.com/astral-sh/uv) for development.
 Run tests with:
 
 ```sh
-uv run pytest --ignore gosling/examples --ignore tools/altair --doctest-modules gosling
+uv run pytest
 ```
 
 The schema bindings (`gosling/schema/`) and docs (`doc/user_guide/API.rst`) are 
