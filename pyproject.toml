@@ -35,3 +35,10 @@ source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
 version-file = "gosling/_version.py"
+
+[tool.pytest.ini_options]
+addopts = [
+  "--ignore=gosling/examples",
+  "--ignore=tools/altair",
+  "--doctest-modules"
+]
