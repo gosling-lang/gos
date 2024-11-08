@@ -442,7 +442,7 @@ wheels = [
 
 [[package]]
 name = "gosling"
-version = "0.2.3.dev0+g66fd5e7.d20241108"
+version = "0.2.3.dev1+g0ab357a.d20241108"
 source = { editable = "." }
 dependencies = [
     { name = "jinja2" },
