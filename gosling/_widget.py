@@ -1,13 +1,20 @@
 import json
 import pathlib
 from typing import Any, Dict
+import warnings
 
 import anywidget
 import traitlets as t
 
+try:
+    _esm = pathlib.Path(__file__).parent / "static" / "widget.js"
+except FileNotFoundError:
+    warnings.warn("GoslingWidget: ESM not found. Must build frontend assets.")
+    _esm = None
+
 
 class GoslingWidget(anywidget.AnyWidget):
-    _esm = pathlib.Path(__file__).parent / "static" / "widget.js"
+    _esm = _esm
     _viewconf = t.Unicode("null").tag(sync=True)
 
     location = t.List(t.Union([t.Float(), t.Tuple()]), read_only=True).tag(sync=True)

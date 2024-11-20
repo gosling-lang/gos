@@ -45,5 +45,6 @@ path = "scripts/hatch_build.py"
 addopts = [
   "--ignore=gosling/examples",
   "--ignore=tools/altair",
+  "--ignore=scripts",
   "--doctest-modules",
 ]

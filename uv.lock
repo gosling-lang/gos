@@ -672,7 +672,7 @@ wheels = [
 
 [[package]]
 name = "gosling"
-version = "0.2.3.dev3+g39261f6.d20241120"
+version = "0.2.3.dev6+g038078b.d20241120"
 source = { editable = "." }
 dependencies = [
     { name = "anywidget" },
