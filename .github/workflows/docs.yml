@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DENO_SKIP_BUILD: "1"
+  SKIP_DENO_BUILD: "1"
 
 jobs:
 
