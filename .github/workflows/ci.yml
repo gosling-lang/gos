@@ -14,6 +14,7 @@ concurrency:
 env:
   PYTHONUNBUFFERED: "1"
   FORCE_COLOR: "1"
+  DENO_SKIP_BUILD: "1"
 
 jobs:
 
