@@ -6,10 +6,10 @@ import warnings
 import anywidget
 import traitlets as t
 
-try:
-    _esm = pathlib.Path(__file__).parent / "static" / "widget.js"
-except FileNotFoundError:
-    warnings.warn("GoslingWidget: ESM not found. Must build frontend assets.")
+_esm = pathlib.Path(__file__).parent / "static" / "widget.js"
+
+if not _esm.exists():
+    warnings.warn("Widget front-end code not found. Assuming running in CI.")
     _esm = None
 
 
