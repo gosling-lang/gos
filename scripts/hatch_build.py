@@ -9,8 +9,8 @@ from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 ROOT = pathlib.Path(__file__).parent / ".."
 
 
-class QuakBuildHook(BuildHookInterface):
-    """Hatchling plugin to build the quak frontend."""
+class GoslingWidgetBuildHook(BuildHookInterface):
+    """Hatchling plugin to build the gosling widget frontend."""
 
     PLUGIN_NAME = "gosling-widget"
 
