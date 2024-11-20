@@ -11,15 +11,15 @@ license = { text = "MIT" }
 readme = "README.md"
 dynamic = ["version"]
 urls = { homepage = "https://github.com/gosling-lang/gos" }
-dependencies = ["jsonschema>=3.0", "jinja2", "pandas"]
+dependencies = ["jsonschema>=3.0", "jinja2", "pandas", "anywidget>=0.9.13"]
 
 [project.optional-dependencies]
-all = ["servir>=0.2.1", "gosling-widget>=0.0.2", "clodius>=0.20.1"]
+all = ["servir>=0.2.1", "clodius>=0.20.1"]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "clodius>=0.20.1",
-  "gosling-widget>=0.0.2",
+  "jupyterlab>=4.3.1",
   "pytest>=6.0",
   "requests>=2.0",
   "servir>=0.2.1",
@@ -28,7 +28,9 @@ dev-dependencies = [
 ]
 
 [tool.hatch.build]
+only-packages = true
 include = ["/gosling", "/tests"]
+artifacts = ["gosling/static/widget.js", "scripts/hatch_build.py"]
 
 [tool.hatch.version]
 source = "vcs"
@@ -36,9 +38,13 @@ source = "vcs"
 [tool.hatch.build.hooks.vcs]
 version-file = "gosling/_version.py"
 
+[tool.hatch.build.hooks.custom]
+path = "scripts/hatch_build.py"
+
 [tool.pytest.ini_options]
 addopts = [
   "--ignore=gosling/examples",
   "--ignore=tools/altair",
-  "--doctest-modules"
+  "--ignore=scripts",
+  "--doctest-modules",
 ]

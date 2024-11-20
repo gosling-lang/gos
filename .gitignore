@@ -16,3 +16,4 @@ node_modules/
 _build/
 generated/
 gallery/
+gosling/static/
