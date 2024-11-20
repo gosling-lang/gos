@@ -1,0 +1,20 @@
+{
+	"lock": false,
+	"nodeModulesDir": "auto",
+	"tasks": {
+		"dev": "deno run -A --node-modules-dir npm:esbuild --bundle --minify --loader:.css=text --format=esm --outfile=gosling/static/widget.js frontend/widget.ts --sourcemap=inline --watch",
+		"build": "deno run -A --node-modules-dir npm:esbuild --bundle --minify --loader:.css=text --format=esm --outfile=gosling/static/widget.js frontend/widget.ts"
+	},
+	"imports": {
+		"@anywidget/types": "npm:@anywidget/types@^0.2.0",
+		"gosling.js": "npm:gosling.js@^0.17.0"
+	},
+	"fmt": {
+		"useTabs": true
+	},
+	"lint": {
+		"rules": {
+			"exclude": ["prefer-const"]
+		}
+	}
+}

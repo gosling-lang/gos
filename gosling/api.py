@@ -218,7 +218,7 @@ class View(_PropertiesMixin, core.Root):
 
     def widget(self):
         try:
-            from gosling_widget import GoslingWidget
+            from ._widget import GoslingWidget
         except ImportError:
             raise ImportError(
                 "The 'gosling-widget' package is required to use the widget() method."
