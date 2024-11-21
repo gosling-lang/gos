@@ -79,23 +79,47 @@ community examples in `gosling/examples/`. If you are interested in contributing
 feel free to submit a PR! Checkout the [existing JSON examples](http://gosling-lang.org/examples/)
 if you are looking for inspiration.
 
+## **Development**
 
-## Development
+The source code for **gos** is a hybrid of Python and TypeScript (used for the
+[anywidget](https://github.com/manzt/anywidget) component). It requires both:
 
-This project uses [uv](https://github.com/astral-sh/uv) for development.
+- [uv](https://github.com/astral-sh/uv) (for Python development)
+- [Deno](https://deno.land) (for building the widget)
 
-Run tests with:
+Please ensure both are installed before proceeding.
+
+**Tests**
+
+Run the test suite with:
 
 ```sh
 uv run pytest
 ```
 
-The schema bindings (`gosling/schema/`) and docs (`doc/user_guide/API.rst`) are 
-automatically generated using the following. Please do not edit these
-files directly.
+**Widget**
 
-```bash
-# generate gosling/schema/*
+The widgets implementation is split between `./gosling/_widget.py` (the Python
+component) and `./frontend/widget.ts` (the TypeScript component). 
+
+To modify the widget's behavior in the front end, edit `./frontend/widget.ts`
+and compile with:
+
+```sh
+deno task build
+```
+
+Use `deno task dev` to watch for changes and recompile automatically.
+
+**Auto-generate Schema Bindings**
+
+A large portion of the Python code is automatically generated from the Gosling
+schema to ensure the Python bindings stay up to date. Schema bindings
+(`gosling/schema/`) and documentation (`doc/user_guide/API.rst`) are generated
+automatically. Do not edit these files manually. To regenerate them, use:
+
+```sh
+# Generate gosling/schema/*
 uv run tools/generate_schema_wrapper.py <tag_name>
 ```
 
