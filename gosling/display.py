@@ -53,9 +53,9 @@ def get_gosling_import_map(
         "imports": {
             "react": f"https://esm.sh/react@{react_version}",
             "react-dom": f"https://esm.sh/react-dom@{react_version}",
-            "pixi": f"https://esm.sh/pixi.js@{pixijs_version}",
-            "higlass": f"https://esm.sh/higlass@{higlass_version}?external=react,react-dom,pixi",
-            "gosling.js": f"https://esm.sh/gosling.js@{gosling_version}?external=react,react-dom,pixi,higlass",
+            "pixi": f"https://esm.sh/pixi.js@{pixijs_version}?bundle",
+            "higlass": f"https://esm.sh/higlass@{higlass_version}?external=react,react-dom,pixi&bundle",
+            "gosling.js": f"https://esm.sh/gosling.js@{gosling_version}?external=react,react-dom,pixi,higlass&bundle",
         }
     }
 
