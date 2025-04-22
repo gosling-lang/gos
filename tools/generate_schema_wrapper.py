@@ -7,11 +7,9 @@ from urllib import request
 import textwrap
 from typing import Optional, TypeVar
 
-import generate_api_docs  # noqa: E402
-
 # import schemapi from here
 here = pathlib.Path(__file__)
-sys.path.insert(0, str(here.parent / 'altair' / 'tools'))
+sys.path.insert(0, str(here.parent / "altair" / "tools"))
 
 from schemapi import codegen
 from schemapi.codegen import CodeSnippet
@@ -138,6 +136,7 @@ class ValueSchemaGenerator(codegen.SchemaGenerator):
 
 GOSLING_URL_TEMPLATE = "https://raw.githubusercontent.com/gosling-lang/{library}/{version}/src/gosling-schema/{filename}"
 
+
 def schema_class(*args, **kwargs):
     return codegen.SchemaGenerator(*args, **kwargs).schema_class()
 
@@ -204,7 +203,7 @@ def copy_schemapi_util():
     Copy the schemapi utility and its test file into gosling/utils/
     """
     # copy the schemapi utility file
-    source_path = here.parent / 'altair' / 'tools' / "schemapi" / "schemapi.py"
+    source_path = here.parent / "altair" / "tools" / "schemapi" / "schemapi.py"
     destination_path = here.parent / ".." / "gosling" / "schemapi.py"
 
     if not destination_path.parent.exists():
@@ -292,7 +291,9 @@ def generate_channel_wrappers(schemafile, imports=None):
 
     contents.append(CHANNEL_MIXINS)
 
-    encoding_def = "SingleTrack" # ideally we should be able to use "Encoding" type here...
+    encoding_def = (
+        "SingleTrack"  # ideally we should be able to use "Encoding" type here...
+    )
     encoding = SchemaInfo(schema["definitions"][encoding_def], rootschema=schema)
 
     # Iterate over all properties defined on `SingleTrack` since encoding fields
@@ -309,8 +310,8 @@ def generate_channel_wrappers(schemafile, imports=None):
             definitions = [s.ref for s in propschema.anyOf if s.is_reference()]
             if not any("ChannelValue" in d for d in definitions):
                 definitions = []
-        elif prop == 'tooltip':
-            definitions = [propschema.items['$ref']]
+        elif prop == "tooltip":
+            definitions = [propschema.items["$ref"]]
         else:
             definitions = []
 
@@ -473,4 +474,3 @@ if __name__ == "__main__":
 
     copy_schemapi_util()
     main(tag_name=sys.argv[1])
-    generate_api_docs.write_api_file()

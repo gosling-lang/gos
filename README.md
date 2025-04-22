@@ -126,8 +126,10 @@ Gosling schema to keep the bindings in sync. This includes both the bindings in
 Do not edit these files manually. Instead, regenerate them using:
 
 ```sh
-# Regenerate gosling/schema/* and update API docs
+# Update gosling/schema/*
 uv run tools/generate_schema_wrapper.py <tag_name>
+# Update API docs
+uv run tools/generate_api_docs.py
 ```
 
 Use a `tag_name` that corresponds to a valid [Gosling.js
