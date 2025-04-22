@@ -48,3 +48,6 @@ addopts = [
   "--ignore=scripts",
   "--doctest-modules",
 ]
+
+[tool.uv]
+required-version = ">=0.5.0"
