@@ -79,6 +79,11 @@ community examples in `gosling/examples/`. If you are interested in contributing
 feel free to submit a PR! Checkout the [existing JSON examples](http://gosling-lang.org/examples/)
 if you are looking for inspiration.
 
+## Changelog
+
+Check the [GitHub Releases](https://github.com/gosling-lang/gos/releases)
+for a detailed changelog.
+
 ## **Development**
 
 The source code for **gos** is a hybrid of Python and TypeScript (used for the
@@ -113,24 +118,55 @@ Use `deno task dev` to watch for changes and recompile automatically.
 
 **Auto-generate Schema Bindings**
 
-A large portion of the Python code is automatically generated from the Gosling
-schema to ensure the Python bindings stay up to date. Schema bindings
-(`gosling/schema/`) and documentation (`doc/user_guide/API.rst`) are generated
-automatically. Do not edit these files manually. To regenerate them, use:
+Much of the Python code in this repository is automatically generated from the
+Gosling schema to keep the bindings in sync. This includes both the bindings in
+`gosling/schema/` and the corresponding API documentation in
+`doc/user_guide/API.rst`.
+
+Do not edit these files manually. Instead, regenerate them using:
 
 ```sh
-# Generate gosling/schema/*
+# Regenerate gosling/schema/* and update API docs
 uv run tools/generate_schema_wrapper.py <tag_name>
 ```
 
+Use a `tag_name` that corresponds to a valid [Gosling.js
+Release](https://github.com/gosling-lang/gosling.js/releases) (e.g.,
+`v0.12.3`).
+
+You must commit the changes and create a new release. Schema updates usually
+require at least a minor version bump, but the exact versioning is up to the
+maintainer.
+
 ## Release
 
-```bash
-git checkout main && git pull
-git commit -m "v0.[minor].[patch]"
-git tag -a v0.[minor].[patch] -m "v0.[minor].[patch]"
-git push --follow-tags
-```
+Releases are managed via the GitHub UI. The release **tag determines the
+package version** published to PyPI.
+
+[Draft a new release](https://github.com/gosling-lang/gos/releases/new):
+
+1. **Create a tag**
+
+   - Click _"Choose a tag"_, then **type a new tag** in the format
+     `v[major].[minor].[patch]` to create it.
+   - _Note_: The UI is not obvious about this. You can create a tag here, not
+     just select one.
+
+2. **Generate release notes**
+
+   - Click _"Generate Release Notes"_ to auto-summarize changes from merged PRs.
+   - Edit to exclude irrelevant changes for end users (e.g., docs or CI).
+
+3. **Document significant changes**
+
+   - Add migration steps or noteworthy updates.
+   - Ensure PR titles are clear and consistent.
+
+4. **Publish the release**
+
+   - Click _Publish release_ to make it public.
+   - This triggers a [workflow](.github/workflows/release.yml) that builds the
+   package and publishes it to PyPI using the new tag.
 
 ## Design & Implementation
 
