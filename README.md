@@ -7,14 +7,14 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gosling-lang/gos/main?filepath=notebooks%2Fmultiple-coordinated-views.ipynb)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gosling-lang/gos/blob/main/notebooks/multiple-coordinated-views.ipynb)
 
-**gos** is a declarative genomics visualization library for Python.
-It is built on top of the [Gosling] JSON specification, providing a
-simplified interface for authoring interactive genomic visualizations.
-
+**gos** is a declarative genomics visualization library for Python. It is built
+on top of the [Gosling] JSON specification, providing a simplified interface for
+authoring interactive genomic visualizations.
 
 ## Installation
 
-> The **gos** API is under active development. Feedback is appreciated and welcomed.
+> The **gos** API is under active development. Feedback is appreciated and
+> welcomed.
 
 ```bash
 pip install gosling[all]
@@ -22,7 +22,8 @@ pip install gosling[all]
 
 ## Documentation
 
-See the [Documentation Site](https://gosling-lang.github.io/gos) for more information.
+See the [Documentation Site](https://gosling-lang.github.io/gos) for more
+information.
 
 ## Example
 
@@ -74,15 +75,17 @@ gos.vertical(heatmap, bars, lines).properties(
 
 ## Example Gallery
 
-We have started a [gallery](https://gosling-lang.github.io/gos/gallery/index.html) of
-community examples in `gosling/examples/`. If you are interested in contributing, please
-feel free to submit a PR! Checkout the [existing JSON examples](http://gosling-lang.org/examples/)
-if you are looking for inspiration.
+We have started a
+[gallery](https://gosling-lang.github.io/gos/gallery/index.html) of community
+examples in `gosling/examples/`. If you are interested in contributing, please
+feel free to submit a PR! Checkout the
+[existing JSON examples](http://gosling-lang.org/examples/) if you are looking
+for inspiration.
 
 ## Changelog
 
-Check the [GitHub Releases](https://github.com/gosling-lang/gos/releases)
-for a detailed changelog.
+Check the [GitHub Releases](https://github.com/gosling-lang/gos/releases) for a
+detailed changelog.
 
 ## **Development**
 
@@ -102,10 +105,18 @@ Run the test suite with:
 uv run pytest
 ```
 
+**Notebooks**
+
+To try out the library in the example `notebooks/`, launch Jupyter Lab with:
+
+```sh
+uv run jupyter lab
+```
+
 **Widget**
 
 The widgets implementation is split between `./gosling/_widget.py` (the Python
-component) and `./frontend/widget.ts` (the TypeScript component). 
+component) and `./frontend/widget.ts` (the TypeScript component).
 
 To modify the widget's behavior in the front end, edit `./frontend/widget.ts`
 and compile with:
@@ -115,6 +126,17 @@ deno task build
 ```
 
 Use `deno task dev` to watch for changes and recompile automatically.
+
+**Docs**
+
+To build and preview the documentation locally:
+
+```sh
+uv run docs/build.py
+uv run python -m http.server -d docs/dist
+```
+
+Open your browser to http://localhost:8000 to view the generated docs.
 
 **Auto-generate Schema Bindings**
 
@@ -132,8 +154,8 @@ uv run tools/generate_schema_wrapper.py <tag_name>
 uv run tools/generate_api_docs.py
 ```
 
-Use a `tag_name` that corresponds to a valid [Gosling.js
-Release](https://github.com/gosling-lang/gosling.js/releases) (e.g.,
+Use a `tag_name` that corresponds to a valid
+[Gosling.js Release](https://github.com/gosling-lang/gosling.js/releases) (e.g.,
 `v0.12.3`).
 
 You must commit the changes and create a new release. Schema updates usually
@@ -142,8 +164,8 @@ maintainer.
 
 ## Release
 
-Releases are managed via the GitHub UI. The release **tag determines the
-package version** published to PyPI.
+Releases are managed via the GitHub UI. The release **tag determines the package
+version** published to PyPI.
 
 [Draft a new release](https://github.com/gosling-lang/gos/releases/new):
 
@@ -168,16 +190,16 @@ package version** published to PyPI.
 
    - Click _Publish release_ to make it public.
    - This triggers a [workflow](.github/workflows/release.yml) that builds the
-   package and publishes it to PyPI using the new tag.
+     package and publishes it to PyPI using the new tag.
 
 ## Design & Implementation
 
 gos is inspired by and borrows heavily from [Altair] both in project philosophy
-and implementation. The internal Python API is auto-generated from the
-[Gosling] specification using code adapted directly from Altair to generate
-[Vega-Lite] bindings. This design choice guarantees that visualizations are
-type-checked in complete concordance with the [Gosling] specification, and that
-the Python API remains consistent with the evolving schema over time. Special thanks to
+and implementation. The internal Python API is auto-generated from the [Gosling]
+specification using code adapted directly from Altair to generate [Vega-Lite]
+bindings. This design choice guarantees that visualizations are type-checked in
+complete concordance with the [Gosling] specification, and that the Python API
+remains consistent with the evolving schema over time. Special thanks to
 [Jake Vanderplas](https://github.com/jakevdp) and others on
 [`schemapi`](https://github.com/altair-viz/altair/tree/master/tools/schemapi).
 
