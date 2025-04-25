@@ -27,7 +27,7 @@ information.
 
 ## Example
 
-<img src="https://github.com/gosling-lang/gos/raw/main/doc/_static/example.gif" alt="Gosling visualization"/>
+<img src="https://raw.githubusercontent.com/gosling-lang/gos/main/docs/_static/example.gif" alt="Gosling visualization"/>
 
 ```python
 import gosling as gos
