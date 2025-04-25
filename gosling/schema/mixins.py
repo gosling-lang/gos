@@ -378,15 +378,15 @@ class MarkMethodMixin(object):
             copy.style = core.Style(**kwds)
         return copy
 
-    def mark_header(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
-                    brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
-                    enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
-                    linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
-                    linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined, outline=Undefined,
-                    outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
-                    textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
-                    textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
-        """Set the track's mark to 'header'
+    def mark__header(self: T, align=Undefined, background=Undefined, backgroundOpacity=Undefined,
+                     brush=Undefined, curve=Undefined, dashed=Undefined, dx=Undefined, dy=Undefined,
+                     enableSmoothPath=Undefined, inlineLegend=Undefined, legendTitle=Undefined,
+                     linePattern=Undefined, linkConnectionType=Undefined, linkMinHeight=Undefined,
+                     linkStyle=Undefined, matrixExtent=Undefined, mouseOver=Undefined,
+                     outline=Undefined, outlineWidth=Undefined, select=Undefined, textAnchor=Undefined,
+                     textFontSize=Undefined, textFontWeight=Undefined, textStroke=Undefined,
+                     textStrokeWidth=Undefined, withinLinkVerticalLines=Undefined, **kwds) -> T:
+        """Set the track's mark to '_header'
     
         For information on additional arguments, see :class:`Style`
         """
@@ -401,7 +401,7 @@ class MarkMethodMixin(object):
                     textStrokeWidth=textStrokeWidth, withinLinkVerticalLines=withinLinkVerticalLines,
                     **kwds)
         copy = self.copy()
-        copy.mark = "header"
+        copy.mark = "_header"
         if any(val is not Undefined for val in kwds.values()):
             copy.style = core.Style(**kwds)
         return copy

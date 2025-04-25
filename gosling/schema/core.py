@@ -912,7 +912,7 @@ class Mark(GoslingSchema):
     """Mark schema wrapper
 
     enum('point', 'line', 'area', 'bar', 'rect', 'text', 'withinLink', 'betweenLink', 'rule',
-    'triangleLeft', 'triangleRight', 'triangleBottom', 'brush', 'header')
+    'triangleLeft', 'triangleRight', 'triangleBottom', 'brush', '_header')
     """
     _schema = {'$ref': '#/definitions/Mark'}
     _rootschema = GoslingSchema._rootschema
@@ -1235,6 +1235,8 @@ class OverlaidTracks(GoslingSchema):
         views](http://gosling-lang.org/docs/user-interaction#linking-views)
     mark : :class:`Mark`
 
+    mouseEvents : anyOf(boolean, :class:`MouseEventsDeep`)
+
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
@@ -1242,8 +1244,6 @@ class OverlaidTracks(GoslingSchema):
     outerRadius : float
         Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
-
-    overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
         internal
@@ -1326,15 +1326,15 @@ class OverlaidTracks(GoslingSchema):
                  data=Undefined, dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
                  experimental=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
                  innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
-                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
-                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
-                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
-                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
-                 style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
-                 tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined,
-                 x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
-                 y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined,
-                 ye=Undefined, zoomLimits=Undefined, **kwds):
+                 mouseEvents=Undefined, opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 overlayOnPreviousTrack=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
+                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
+                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined,
+                 width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined, xAxis=Undefined,
+                 xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined, y1=Undefined,
+                 y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(OverlaidTracks, self).__init__(alignment=alignment, tracks=tracks,
                                              _assignedHeight=_assignedHeight,
                                              _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
@@ -1344,14 +1344,14 @@ class OverlaidTracks(GoslingSchema):
                                              displacement=displacement, endAngle=endAngle,
                                              experimental=experimental, flipY=flipY, height=height,
                                              id=id, innerRadius=innerRadius, layout=layout,
-                                             linkingId=linkingId, mark=mark, opacity=opacity,
-                                             orientation=orientation, outerRadius=outerRadius,
+                                             linkingId=linkingId, mark=mark, mouseEvents=mouseEvents,
+                                             opacity=opacity, orientation=orientation,
+                                             outerRadius=outerRadius,
                                              overlayOnPreviousTrack=overlayOnPreviousTrack,
-                                             overrideTemplate=overrideTemplate, prerelease=prerelease,
-                                             row=row, size=size, spacing=spacing, startAngle=startAngle,
-                                             static=static, stretch=stretch, stroke=stroke,
-                                             strokeWidth=strokeWidth, style=style, subtitle=subtitle,
-                                             text=text, title=title, tooltip=tooltip,
+                                             prerelease=prerelease, row=row, size=size, spacing=spacing,
+                                             startAngle=startAngle, static=static, stretch=stretch,
+                                             stroke=stroke, strokeWidth=strokeWidth, style=style,
+                                             subtitle=subtitle, text=text, title=title, tooltip=tooltip,
                                              visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
                                              xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
                                              y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
@@ -1417,6 +1417,8 @@ class PartialTrack(GoslingSchema):
         views](http://gosling-lang.org/docs/user-interaction#linking-views)
     mark : :class:`Mark`
 
+    mouseEvents : anyOf(boolean, :class:`MouseEventsDeep`)
+
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
@@ -1424,8 +1426,6 @@ class PartialTrack(GoslingSchema):
     outerRadius : float
         Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
-
-    overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
         internal
@@ -1511,9 +1511,9 @@ class PartialTrack(GoslingSchema):
                  centerRadius=Undefined, color=Undefined, data=Undefined, dataTransform=Undefined,
                  displacement=Undefined, encoding=Undefined, endAngle=Undefined, experimental=Undefined,
                  flipY=Undefined, height=Undefined, id=Undefined, innerRadius=Undefined,
-                 layout=Undefined, linkingId=Undefined, mark=Undefined, opacity=Undefined,
-                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
-                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 layout=Undefined, linkingId=Undefined, mark=Undefined, mouseEvents=Undefined,
+                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 overlayOnPreviousTrack=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
                  spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
                  stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
                  template=Undefined, text=Undefined, title=Undefined, tooltip=Undefined, type=Undefined,
@@ -1530,18 +1530,18 @@ class PartialTrack(GoslingSchema):
                                            encoding=encoding, endAngle=endAngle,
                                            experimental=experimental, flipY=flipY, height=height, id=id,
                                            innerRadius=innerRadius, layout=layout, linkingId=linkingId,
-                                           mark=mark, opacity=opacity, orientation=orientation,
-                                           outerRadius=outerRadius,
+                                           mark=mark, mouseEvents=mouseEvents, opacity=opacity,
+                                           orientation=orientation, outerRadius=outerRadius,
                                            overlayOnPreviousTrack=overlayOnPreviousTrack,
-                                           overrideTemplate=overrideTemplate, prerelease=prerelease,
-                                           row=row, size=size, spacing=spacing, startAngle=startAngle,
-                                           static=static, stretch=stretch, stroke=stroke,
-                                           strokeWidth=strokeWidth, style=style, subtitle=subtitle,
-                                           template=template, text=text, title=title, tooltip=tooltip,
-                                           type=type, visibility=visibility, width=width, x=x, x1=x1,
-                                           x1e=x1e, xAxis=xAxis, xDomain=xDomain, xOffset=xOffset,
-                                           xe=xe, y=y, y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset,
-                                           ye=ye, zoomLimits=zoomLimits, **kwds)
+                                           prerelease=prerelease, row=row, size=size, spacing=spacing,
+                                           startAngle=startAngle, static=static, stretch=stretch,
+                                           stroke=stroke, strokeWidth=strokeWidth, style=style,
+                                           subtitle=subtitle, template=template, text=text, title=title,
+                                           tooltip=tooltip, type=type, visibility=visibility,
+                                           width=width, x=x, x1=x1, x1e=x1e, xAxis=xAxis,
+                                           xDomain=xDomain, xOffset=xOffset, xe=xe, y=y, y1=y1, y1e=y1e,
+                                           yDomain=yDomain, yOffset=yOffset, ye=ye,
+                                           zoomLimits=zoomLimits, **kwds)
 
 
 class Range(GoslingSchema):
@@ -1996,129 +1996,14 @@ class Tooltip(GoslingSchema):
 class Track(GoslingSchema):
     """Track schema wrapper
 
-    anyOf(:class:`SingleTrack`, :class:`OverlaidTrack`, :class:`DataTrack`,
-    :class:`TemplateTrack`, :class:`DummyTrack`)
+    anyOf(:class:`SingleTrack`, :class:`OverlaidTrack`, :class:`TemplateTrack`,
+    :class:`DummyTrack`)
     """
     _schema = {'$ref': '#/definitions/Track'}
     _rootschema = GoslingSchema._rootschema
 
     def __init__(self, *args, **kwds):
         super(Track, self).__init__(*args, **kwds)
-
-
-class DataTrack(Track):
-    """DataTrack schema wrapper
-
-    Mapping(required=[data])
-    Partial specification of `BasicSingleTrack` to use default visual encoding predefined by
-    data type.
-
-    Attributes
-    ----------
-
-    data : :class:`DataDeep`
-
-    _assignedHeight : float
-
-    _assignedWidth : float
-        Internal: Used for responsive spec
-    _invalidTrack : boolean
-        internal
-    _renderingId : string
-        internal
-    assembly : :class:`Assembly`
-        A string that specifies the genome builds to use. Currently support `"hg38"`,
-        `"hg19"`, `"hg18"`, `"hg17"`, `"hg16"`, `"mm10"`, `"mm9"`, and `"unknown"`.
-
-        __Note:__: with `"unknown"` assembly, genomic axes do not show chrN: in labels.
-    centerRadius : float
-        Proportion of the radius of the center white space.
-
-        __Default:__ `0.3`
-    endAngle : float
-        Specify the end angle (in the range of [0, 360]) of circular tracks (`{"layout":
-        "circular"}`).
-    height : float
-        Specify the track height in pixels.
-    id : string
-        Assigned to `uid` in a HiGlass view config, used for API and caching.
-    innerRadius : float
-        Specify the inner radius of tracks when (`{"layout": "circular"}`).
-    layout : :class:`Layout`
-        Specify the layout type of all tracks.
-    linkingId : string
-        Specify an ID for [linking multiple
-        views](http://gosling-lang.org/docs/user-interaction#linking-views)
-    orientation : :class:`Orientation`
-        Specify the orientation.
-    outerRadius : float
-        Specify the outer radius of tracks when `{"layout": "circular"}`.
-    overlayOnPreviousTrack : boolean
-
-    prerelease : Mapping(required=[])
-        internal
-    spacing : float
-        The size of the gap (1) between tracks, (2) between views, and (3) of the origin of
-        circular tracks. The effect of this property depends on where on the spec you
-        specify the `spacing`.
-
-        In a linear layout, this value is used in pixels, while in a circular layout, this
-        value is used relative to the height of the tracks or views.
-    startAngle : float
-        Specify the start angle (in the range of [0, 360]) of circular tracks (`{"layout":
-        "circular"}`).
-    static : boolean
-        Whether to disable [Zooming and
-        Panning](http://gosling-lang.org/docs/user-interaction#zooming-and-panning),
-        __Default:__ `false`.
-    style : :class:`Style`
-        Define the
-        [style](http://gosling-lang.org/docs/visual-channel#style-related-properties) of
-        multive views. Will be overwritten by the style of children elements (e.g., view,
-        track).
-    subtitle : string
-
-    title : string
-        If defined, will show the textual label on the left-top corner of a track.
-    width : float
-        Specify the track width in pixels.
-    xAxis : :class:`AxisPosition`
-        not supported
-    xDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-        Specify the visible region of genomic x-axis
-    xOffset : float
-        Specify the x offset of views in the unit of pixels
-    yDomain : anyOf(:class:`DomainInterval`, :class:`DomainChrInterval`, :class:`DomainChr`)
-        Specify the visible region of genomic y-axis
-    yOffset : float
-        Specify the y offset of views in the unit of pixels
-    zoomLimits : :class:`ZoomLimits`
-
-    """
-    _schema = {'$ref': '#/definitions/DataTrack'}
-    _rootschema = GoslingSchema._rootschema
-
-    def __init__(self, data=Undefined, _assignedHeight=Undefined, _assignedWidth=Undefined,
-                 _invalidTrack=Undefined, _renderingId=Undefined, assembly=Undefined,
-                 centerRadius=Undefined, endAngle=Undefined, height=Undefined, id=Undefined,
-                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, orientation=Undefined,
-                 outerRadius=Undefined, overlayOnPreviousTrack=Undefined, prerelease=Undefined,
-                 spacing=Undefined, startAngle=Undefined, static=Undefined, style=Undefined,
-                 subtitle=Undefined, title=Undefined, width=Undefined, xAxis=Undefined,
-                 xDomain=Undefined, xOffset=Undefined, yDomain=Undefined, yOffset=Undefined,
-                 zoomLimits=Undefined, **kwds):
-        super(DataTrack, self).__init__(data=data, _assignedHeight=_assignedHeight,
-                                        _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
-                                        _renderingId=_renderingId, assembly=assembly,
-                                        centerRadius=centerRadius, endAngle=endAngle, height=height,
-                                        id=id, innerRadius=innerRadius, layout=layout,
-                                        linkingId=linkingId, orientation=orientation,
-                                        outerRadius=outerRadius,
-                                        overlayOnPreviousTrack=overlayOnPreviousTrack,
-                                        prerelease=prerelease, spacing=spacing, startAngle=startAngle,
-                                        static=static, style=style, subtitle=subtitle, title=title,
-                                        width=width, xAxis=xAxis, xDomain=xDomain, xOffset=xOffset,
-                                        yDomain=yDomain, yOffset=yOffset, zoomLimits=zoomLimits, **kwds)
 
 
 class DummyTrack(Track):
@@ -2232,6 +2117,8 @@ class OverlaidTrack(Track):
         views](http://gosling-lang.org/docs/user-interaction#linking-views)
     mark : :class:`Mark`
 
+    mouseEvents : anyOf(boolean, :class:`MouseEventsDeep`)
+
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
@@ -2239,8 +2126,6 @@ class OverlaidTrack(Track):
     outerRadius : float
         Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
-
-    overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
         internal
@@ -2323,15 +2208,15 @@ class OverlaidTrack(Track):
                  dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
                  experimental=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
                  innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mark=Undefined,
-                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
-                 overlayOnPreviousTrack=Undefined, overrideTemplate=Undefined, prerelease=Undefined,
-                 row=Undefined, size=Undefined, spacing=Undefined, startAngle=Undefined,
-                 static=Undefined, stretch=Undefined, stroke=Undefined, strokeWidth=Undefined,
-                 style=Undefined, subtitle=Undefined, text=Undefined, title=Undefined,
-                 tooltip=Undefined, visibility=Undefined, width=Undefined, x=Undefined, x1=Undefined,
-                 x1e=Undefined, xAxis=Undefined, xDomain=Undefined, xOffset=Undefined, xe=Undefined,
-                 y=Undefined, y1=Undefined, y1e=Undefined, yDomain=Undefined, yOffset=Undefined,
-                 ye=Undefined, zoomLimits=Undefined, **kwds):
+                 mouseEvents=Undefined, opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 overlayOnPreviousTrack=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
+                 stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
+                 text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined,
+                 width=Undefined, x=Undefined, x1=Undefined, x1e=Undefined, xAxis=Undefined,
+                 xDomain=Undefined, xOffset=Undefined, xe=Undefined, y=Undefined, y1=Undefined,
+                 y1e=Undefined, yDomain=Undefined, yOffset=Undefined, ye=Undefined,
+                 zoomLimits=Undefined, **kwds):
         super(OverlaidTrack, self).__init__(_overlay=_overlay, _assignedHeight=_assignedHeight,
                                             _assignedWidth=_assignedWidth, _invalidTrack=_invalidTrack,
                                             _renderingId=_renderingId, assembly=assembly,
@@ -2340,14 +2225,14 @@ class OverlaidTrack(Track):
                                             displacement=displacement, endAngle=endAngle,
                                             experimental=experimental, flipY=flipY, height=height,
                                             id=id, innerRadius=innerRadius, layout=layout,
-                                            linkingId=linkingId, mark=mark, opacity=opacity,
-                                            orientation=orientation, outerRadius=outerRadius,
+                                            linkingId=linkingId, mark=mark, mouseEvents=mouseEvents,
+                                            opacity=opacity, orientation=orientation,
+                                            outerRadius=outerRadius,
                                             overlayOnPreviousTrack=overlayOnPreviousTrack,
-                                            overrideTemplate=overrideTemplate, prerelease=prerelease,
-                                            row=row, size=size, spacing=spacing, startAngle=startAngle,
-                                            static=static, stretch=stretch, stroke=stroke,
-                                            strokeWidth=strokeWidth, style=style, subtitle=subtitle,
-                                            text=text, title=title, tooltip=tooltip,
+                                            prerelease=prerelease, row=row, size=size, spacing=spacing,
+                                            startAngle=startAngle, static=static, stretch=stretch,
+                                            stroke=stroke, strokeWidth=strokeWidth, style=style,
+                                            subtitle=subtitle, text=text, title=title, tooltip=tooltip,
                                             visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
                                             xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
                                             y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
@@ -2409,6 +2294,8 @@ class SingleTrack(Track):
     linkingId : string
         Specify an ID for [linking multiple
         views](http://gosling-lang.org/docs/user-interaction#linking-views)
+    mouseEvents : anyOf(boolean, :class:`MouseEventsDeep`)
+
     opacity : anyOf(:class:`Opacity`, :class:`ChannelValue`)
 
     orientation : :class:`Orientation`
@@ -2416,8 +2303,6 @@ class SingleTrack(Track):
     outerRadius : float
         Specify the outer radius of tracks when `{"layout": "circular"}`.
     overlayOnPreviousTrack : boolean
-
-    overrideTemplate : boolean
 
     prerelease : Mapping(required=[])
         internal
@@ -2499,9 +2384,9 @@ class SingleTrack(Track):
                  assembly=Undefined, baselineY=Undefined, centerRadius=Undefined, color=Undefined,
                  dataTransform=Undefined, displacement=Undefined, endAngle=Undefined,
                  experimental=Undefined, flipY=Undefined, height=Undefined, id=Undefined,
-                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, opacity=Undefined,
-                 orientation=Undefined, outerRadius=Undefined, overlayOnPreviousTrack=Undefined,
-                 overrideTemplate=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
+                 innerRadius=Undefined, layout=Undefined, linkingId=Undefined, mouseEvents=Undefined,
+                 opacity=Undefined, orientation=Undefined, outerRadius=Undefined,
+                 overlayOnPreviousTrack=Undefined, prerelease=Undefined, row=Undefined, size=Undefined,
                  spacing=Undefined, startAngle=Undefined, static=Undefined, stretch=Undefined,
                  stroke=Undefined, strokeWidth=Undefined, style=Undefined, subtitle=Undefined,
                  text=Undefined, title=Undefined, tooltip=Undefined, visibility=Undefined,
@@ -2516,14 +2401,13 @@ class SingleTrack(Track):
                                           dataTransform=dataTransform, displacement=displacement,
                                           endAngle=endAngle, experimental=experimental, flipY=flipY,
                                           height=height, id=id, innerRadius=innerRadius, layout=layout,
-                                          linkingId=linkingId, opacity=opacity, orientation=orientation,
-                                          outerRadius=outerRadius,
+                                          linkingId=linkingId, mouseEvents=mouseEvents, opacity=opacity,
+                                          orientation=orientation, outerRadius=outerRadius,
                                           overlayOnPreviousTrack=overlayOnPreviousTrack,
-                                          overrideTemplate=overrideTemplate, prerelease=prerelease,
-                                          row=row, size=size, spacing=spacing, startAngle=startAngle,
-                                          static=static, stretch=stretch, stroke=stroke,
-                                          strokeWidth=strokeWidth, style=style, subtitle=subtitle,
-                                          text=text, title=title, tooltip=tooltip,
+                                          prerelease=prerelease, row=row, size=size, spacing=spacing,
+                                          startAngle=startAngle, static=static, stretch=stretch,
+                                          stroke=stroke, strokeWidth=strokeWidth, style=style,
+                                          subtitle=subtitle, text=text, title=title, tooltip=tooltip,
                                           visibility=visibility, width=width, x=x, x1=x1, x1e=x1e,
                                           xAxis=xAxis, xDomain=xDomain, xOffset=xOffset, xe=xe, y=y,
                                           y1=y1, y1e=y1e, yDomain=yDomain, yOffset=yOffset, ye=ye,
