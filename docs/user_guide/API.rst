@@ -89,7 +89,6 @@ Low-Level Schema Wrappers
    CoverageTransform
    CsvData
    DataDeep
-   DataTrack
    DataTransform
    Datum
    DisplaceTransform
