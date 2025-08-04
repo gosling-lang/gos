@@ -24,7 +24,7 @@ dev = [
   "requests>=2.0",
   "servir>=0.2.1",
   "setuptools>=75.2.0",
-  "sphinx>=6,<7",
+  "sphinx>=6,<8",
 ]
 
 [tool.hatch.build]
